@@ -6,8 +6,13 @@ pub mod problem1to10;
 mod tests {
     use crate::problem1to10::p001;
     #[test]
-    fn test_prob_1() {
+    fn test_p001() {
         assert_eq!(p001::version1(10), 23);
         assert_eq!(p001::version2(10), 23);
+    }
+    use crate::problem1to10::p002;
+    #[test]
+    fn test_p002() {
+        assert_eq!(p002::version1(10), 44);
     }
 }
