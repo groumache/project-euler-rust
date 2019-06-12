@@ -62,4 +62,20 @@ pub mod p003 {
         }
         prime_fact
     }
+    pub fn v2(number: i32) -> i32 {
+        let sqrt_number = (number as f64).sqrt() as i32;
+        let divisors: Vec<i32> = (2..sqrt_number+1)
+            .filter(|x| number % x == 0)
+            .rev()
+            .collect();
+        let factors: Vec<i32> = divisors.clone();
+        let mut prime_fact = 0;
+        for div in divisors.iter() {
+            if factors.iter().all(|x| div % x != 0 || div == x) {
+                prime_fact = *div;
+                break;
+            }
+        }
+        prime_fact
+    }
 }

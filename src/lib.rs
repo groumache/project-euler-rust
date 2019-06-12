@@ -19,5 +19,6 @@ mod tests {
     #[test]
     fn test_p003() {
         assert_eq!(p003::v1(13195), 29);
+        assert_eq!(p003::v2(13195), 29);
     }
 }
