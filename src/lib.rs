@@ -36,4 +36,8 @@ mod tests {
     fn test_p007() {
         assert_eq!(p007::v1(6), 13);
     }
+    #[test]
+    fn test_p008() {
+        assert_eq!(p008::v1(4), 5832);
+    }
 }
