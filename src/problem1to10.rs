@@ -153,7 +153,7 @@ pub mod p005 {
     }
 }
 
-// Problem 6:
+// Problem 6: Sum Square Difference
 //  Find the difference between the sum of the squares and the square of the sum of
 //  the numbers from 1 to 'n'.
 pub mod p006 {
@@ -161,5 +161,22 @@ pub mod p006 {
         let sum_square: i32 = (1..n+1).map(|x| x*x).sum();
         let sum: i32 = (1..n+1).sum();
         (sum_square - sum.pow(2)).abs()
+    }
+}
+
+// Problem 7: n-th prime
+//  Find the n-th prime number
+pub mod p007 {
+    pub fn v1(n: i32) -> i32 {
+        let mut counter = 1;
+        let mut number = 2;
+        while counter != n {
+            number += 1;
+            // if number.isprime()
+            if (2..number).all(|x| number % x != 0) {
+                counter += 1;
+            }
+        }
+        number
     }
 }
