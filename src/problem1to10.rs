@@ -106,6 +106,7 @@ pub mod p003 {
 // Problem 4: Largest palindrome product
 //  Find the largest palindrome made from the product of two 3-digit numbers.
 pub mod p004 {
+    // (1.) loop to find product (2.) check if palyndrome
     pub fn v1(nb_digits_factors: i32) -> i32 {
         let base = 10 as i32;
         let exp = (nb_digits_factors - 1) as u32;
@@ -123,5 +124,42 @@ pub mod p004 {
             }
         }
         largest_palyndrome
+    }
+}
+
+// Problem 5: Smallest multiple
+//  Smallest positive number that is divisible by all of the numbers from 1 to 'n'?
+pub mod p005 {
+    // 
+    pub fn v1(n: i32) -> i32 {
+        let n = n as usize;
+        let half = n / 2 + 1;
+        let mut sieve: Vec<bool> = vec!(true; n+1);
+        for i in 2..half {
+            if sieve[i] {
+                for j in (2*i..n+1).step_by(i) {
+                    sieve[j] = false;
+                }
+            }
+        }
+        let mut smallest_product = 1;
+        for i in 2..n+1 {
+            if sieve[i] {
+                let repeat = (n as f64).log(i as f64);
+                smallest_product *= i.pow(repeat as u32);
+            }
+        }
+        smallest_product as i32
+    }
+}
+
+// Problem 6:
+//  Find the difference between the sum of the squares and the square of the sum of
+//  the numbers from 1 to 'n'.
+pub mod p006 {
+    pub fn v1(n: i32) -> i32 {
+        let sum_square: i32 = (1..n+1).map(|x| x*x).sum();
+        let sum: i32 = (1..n+1).sum();
+        (sum_square - sum.pow(2)).abs()
     }
 }
