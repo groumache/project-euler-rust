@@ -20,5 +20,11 @@ mod tests {
     fn test_p003() {
         assert_eq!(p003::v1(13195), 29);
         assert_eq!(p003::v2(13195), 29);
+        assert_eq!(p003::v3(13195), 29);
+    }
+    use crate::problem1to10::p004;
+    #[test]
+    fn test_p004() {
+        assert_eq!(p004::v1(2), 9009);
     }
 }
