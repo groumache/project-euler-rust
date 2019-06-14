@@ -49,17 +49,21 @@ mod tests {
         assert_eq!(p008::v1(4), 5832);
     }
     #[test]
-    // #[ignore]
+    #[ignore]
     fn test_p009_v1() {
         let abc = p009::v1();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
     }
     #[test]
-    // #[ignore]
+    #[ignore]
     fn test_p009_v2() {
         let abc = p009::v2();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
+    }
+    #[test]
+    fn test_p010() {
+        assert_eq!(p010::v1(10), 17);
     }
 }

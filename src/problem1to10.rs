@@ -281,3 +281,25 @@ pub mod p009 {
     }
 }
 
+// Problem 10: Summation of primes
+//  Find the sum of all the primes below 'n'
+pub mod p010 {
+    pub fn v1(n: i32) -> i32 {
+        let n = n as usize;
+        let mut sieve: Vec<bool> = vec!(true; n+1);
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if sieve[i] {
+                for j in (2*i..n+1).step_by(i) {
+                    sieve[j] = false;
+                }
+            }
+        }
+        let mut sum = 0;
+        for i in 2..n+1 {
+            if sieve[i] { sum += i; }
+        }
+        sum as i32
+    }
+}
+
