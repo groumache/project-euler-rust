@@ -1,9 +1,10 @@
 pub mod problem1to10;
+pub mod problem11to21;
 
 // There are 2 tests for p_009 in order to see (in practice) if v2 is actually
 // faster than v1 without actually measuring time or anything.
 #[cfg(test)]
-mod tests {
+mod tests_1to10 {
     use crate::problem1to10::*;
     #[test]
     #[ignore]
@@ -63,7 +64,19 @@ mod tests {
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
     }
     #[test]
+    #[ignore]
     fn test_p010() {
         assert_eq!(p010::v1(10), 17);
+    }
+}
+
+
+// No test for p011 because there is no example in the problem statement
+#[cfg(test)]
+mod tests_11to21 {
+    use crate::problem11to21::*;
+    #[test]
+    fn test_p012() {
+        assert_eq!(p012::v1(5), 28);
     }
 }
