@@ -236,3 +236,48 @@ pub mod p008 {
     }
 }
 
+// Problem 9: Special Pythagorean triplet
+//  There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+//  Find the product abc.
+pub mod p009 {
+    // iterate over a, b, c
+    pub fn v1() -> (i32, i32, i32) {
+        let mut a: i32 = 1;
+        let mut b: i32 = 1;
+        let mut c: i32 = 1;
+        loop {
+            if a.pow(2) + b.pow(2) == c.pow(2)
+                && a + b + c == 1000 { break; }
+            if a == b && b == c {
+                c += 1;
+                b = 1;
+                a = 1;
+            } else if b == a {
+                b += 1;
+                a = 1;
+            } else {
+                a += 1;
+            }
+        }
+        (a, b, c)
+    }
+    // iterate over a, b
+    pub fn v2() -> (i32, i32, i32) {
+        let mut a: i32 = 1;
+        let mut b: i32 = 1;
+        let mut c: i32 = 1;
+        loop {
+            if a.pow(2) + b.pow(2) == c.pow(2)
+                && a + b + c == 1000 { break; }
+            if b == a {
+                b += 1;
+                a = 1;
+            } else {
+                a += 1;
+            }
+            c = ((a.pow(2) + b.pow(2)) as f64).sqrt() as i32;
+        }
+        (a, b, c)
+    }
+}
+
