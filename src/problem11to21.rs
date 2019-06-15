@@ -212,3 +212,30 @@ pub mod p013 {
     }
 }
 
+// Problem 14: Longest Collatz sequence
+//  Which starting number, under one million, produces the longest chain?
+pub mod p014 {
+    pub fn v1(n: i32) -> i32 {
+        let mut start_number = 1;
+        let mut max_length = 1;
+        for curr in 2..n+1 {
+            let mut chain_length = 1;
+            let mut i = curr;
+            while i != 1 {
+                if i % 2 == 0 {
+                    i /= 2;
+                    chain_length += 1;
+                } else {
+                    i = 3 * i + 1;
+                    chain_length += 1;
+                }
+            }
+            if chain_length > max_length {
+                max_length = chain_length;
+                start_number = curr;
+            }
+        }
+        start_number
+    }
+}
+
