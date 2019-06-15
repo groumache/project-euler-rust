@@ -207,8 +207,7 @@ pub mod p013 {
                 first_digits += c.to_digit(10).unwrap() * base.pow(exp as u32);
             }
         }
-        first_digits = first_digits % base.pow(9);      // not sure if it's normal but I can't make the last calculation and return it in one go.
-        first_digits
+        first_digits % base.pow(9)
     }
 }
 
@@ -236,6 +235,17 @@ pub mod p014 {
             }
         }
         start_number
+    }
+}
+
+// Problem 15: Lattice paths
+//  How many such routes are there through a 'n x n' grid?
+pub mod p015 {
+    pub fn v1(n: i32) -> i32 {
+        // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
+        let n_fact: i32 = (2..n+1).product();
+        let two_n_fact: i32 = (2..(2*n+1)).product();
+        two_n_fact / (n_fact * n_fact)
     }
 }
 

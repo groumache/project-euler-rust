@@ -23,6 +23,8 @@ mod tests_1to10 {
         assert_eq!(p003::v1(13195), 29);
         assert_eq!(p003::v2(13195), 29);
         assert_eq!(p003::v3(13195), 29);
+        assert_eq!(p003::v4(13195), 29);
+        assert_eq!(p003::v5(13195), 29);
     }
     #[test]
     #[ignore]
@@ -85,5 +87,10 @@ mod tests_11to21 {
     #[ignore]
     fn test_p014() {
         assert_eq!(p014::v1(10), 9);
+    }
+    #[test]
+    #[ignore]
+    fn test_p015() {
+        assert_eq!(p015::v1(2), 6);
     }
 }

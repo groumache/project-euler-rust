@@ -101,6 +101,24 @@ pub mod p003 {
         }
         prime_fact as i32
     }
+    pub fn v4(number: i32) -> i32 {
+            let divisors: Vec<i32> = (2..number+1)
+                .filter(|x| number % x == 0)
+                .rev()
+                .collect();
+            *divisors.iter()
+                .filter(|x| divisors.iter().all(|y| *x % y != 0 || *x == y))
+                .max().unwrap()
+    }
+    pub fn v5(number: i32) -> i32 {
+        let divide_number = |x: i32| number % x == 0;
+        let is_prime = |x: i32| { for i in 2..x { if x % i == 0 { return false; } } true }; // could loop only up to: x.sqrt() + 1
+        let max = (2..number+1)
+            .filter(|x| divide_number(*x))       // too bad I can't just write: .filter( divide_number )
+            .filter(|x| is_prime(*x))
+            .max().unwrap();
+        max
+    }
 }
 
 // Problem 4: Largest palindrome product
