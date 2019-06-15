@@ -71,11 +71,12 @@ mod tests_1to10 {
 }
 
 
-// No test for p011 because there is no example in the problem statement
+// No test for p011 and p013 because there is no example in the problem statement.
 #[cfg(test)]
 mod tests_11to21 {
     use crate::problem11to21::*;
     #[test]
+    #[ignore]
     fn test_p012() {
         assert_eq!(p012::v1(5), 28);
     }
