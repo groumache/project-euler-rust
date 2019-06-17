@@ -1,7 +1,6 @@
 // Problem 11: Largest product in a grid
-//  Find the greatest product of four adjacent numbers in
-//  the same direction (up, down, left, right, or diagonally)
-//  in the 20×20 grid.
+//   Find the greatest product of four adjacent numbers in the same direction
+//   (up, down, left, right, or diagonally) in the 20×20 grid.
 pub mod p011 {
     pub fn v1() -> u32 {
         let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08".to_string()
@@ -74,7 +73,7 @@ pub mod p011 {
 }
 
 // Problem 12: Highly divisible triangular number
-//  Find the first triangle number to have over 'n' divisors
+//   Find the first triangle number to have over 'n' divisors
 pub mod p012 {
     pub fn v1(n: u32) -> u32 {
         let mut triangular = 1;
@@ -93,7 +92,7 @@ pub mod p012 {
 }
 
 // Problem 13: Large sum
-//  Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+//   Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
 pub mod p013 {
     pub fn v1() -> u32 {
         let base: u32 = 10;         // need 'base' because: 10.pow() gives an error and (10 as u32) is not supported or something -- it's probably optimized by the compiler anyway
@@ -212,9 +211,9 @@ pub mod p013 {
 }
 
 // Problem 14: Longest Collatz sequence
-//  Which starting number, under one million, produces the longest chain?
+//   Which starting number, under 'n', produces the longest chain?
 pub mod p014 {
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
         let mut start_number = 1;
         let mut max_length = 1;
         for curr in 2..n+1 {
@@ -239,13 +238,88 @@ pub mod p014 {
 }
 
 // Problem 15: Lattice paths
-//  How many such routes are there through a 'n x n' grid?
+//   How many such routes are there through a 'n x n' grid?
 pub mod p015 {
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
-        let n_fact: i32 = (2..n+1).product();
-        let two_n_fact: i32 = (2..(2*n+1)).product();
+        let n_fact: u32 = (2..n+1).product();
+        let two_n_fact: u32 = (2..(2*n+1)).product();
         two_n_fact / (n_fact * n_fact)
     }
 }
 
+// Problem 16: Power digit sum
+//   Find the sum of the digits of the number 2^n.
+pub mod p016 {
+    pub fn v1(n: u32) -> u32 {
+        let base: u32 = 2;                                          // need 'base' because: 2.pow() doesn't work
+        let number = base.pow(n).to_string();       // base.pow(n).to_string().chars().to_digit(10).unwrap().sum()  ===>  to_digit() doesn't work on char iterator
+        let mut sum = 0;
+        for c in number.chars() {
+            sum += c.to_digit(10).unwrap();
+        }
+        sum
+    }
+}
+
+// Problem 17: Number letter counts
+//   Find the number of letters used to write all the numbers from 1 to 'n' in words (in english).
+pub mod p017 {
+    pub fn v1(n: u32) -> u32 {
+        let letters_0to19 = |num: u32| {
+            match num {
+                1 | 2 | 6 | 10 => 3,
+                0 | 4 | 5 | 9 => 4,
+                3 | 7 | 8 => 5,
+                11 | 12 => 6,
+                15 | 16 => 7,
+                13 | 14 | 18 | 19 => 8,
+                17 => 9,
+                _ => panic!(),
+            }
+        };
+        let letters_0to99 = |num: u32| {
+            match num {
+                0...19 => letters_0to19(num),
+                40 | 50 | 60 => 5,
+                41...49 | 51...59 | 61...69 => 5 + letters_0to19(num % 20),
+                20 | 30 | 80 | 90 => 6,
+                21...29 | 31...39 | 81...89 | 91...99 => 6 + letters_0to19(num % 20),
+                70 => 7,
+                71...79 => 7 + letters_0to19(num % 20),
+                _ => panic!(),
+            }
+        };
+        let letters_0to999 = |num: u32| {
+            let hundreds = num / 100;
+            match num {
+                0...99 => letters_0to99(num),
+                100 | 200 | 300 | 400 | 500 | 600 | 700
+                    | 800 | 900 => 7 + letters_0to19(hundreds),
+                101...999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
+                _ => panic!(),
+            }
+        };
+        let letters_0to1million = |num: u32| {
+            let n_letters: u32;
+            let thousands = num / 1000;
+            if thousands > 0 && num % 1000 == 0 {
+                n_letters = match num {
+                    1000_000 => 10,
+                    _ => 8 + letters_0to999(thousands),
+                }
+            } else {
+                n_letters = match num {
+                    0...999 => letters_0to999(num),
+                    _ => 8 + letters_0to999(thousands) + letters_0to999(num % 1000),
+                }
+            }
+            n_letters
+        };
+        let mut n_letters = 0;
+        for i in 1..n+1 {
+            n_letters += letters_0to1million(i);
+        }
+        n_letters
+    }
+}

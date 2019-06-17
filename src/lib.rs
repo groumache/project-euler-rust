@@ -1,8 +1,7 @@
 pub mod problem1to10;
 pub mod problem11to21;
 
-// There are 2 tests for p_009 in order to see (in practice) if v2 is actually
-// faster than v1 without actually measuring time or anything.
+// there are 2 tests for p009: v1 & v2
 #[cfg(test)]
 mod tests_1to10 {
     use crate::problem1to10::*;
@@ -92,5 +91,15 @@ mod tests_11to21 {
     #[ignore]
     fn test_p015() {
         assert_eq!(p015::v1(2), 6);
+    }
+    #[test]
+    #[ignore]
+    fn test_p016() {
+        assert_eq!(p016::v1(15), 26);
+    }
+    #[test]
+    #[ignore]
+    fn test_p017() {
+        assert_eq!(p017::v1(5), 19);
     }
 }

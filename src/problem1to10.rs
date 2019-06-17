@@ -1,16 +1,36 @@
 // Problem 1: Multiples of 3 and 5
-//  Find the sum of all the multiples of 3 or 5 below 1000.
+//   Find the sum of all the multiples of 3 or 5 below 1000.
+// Problem 2: Even Fibonacci numbers
+//   Find the sum of the even-valued terms.
+// Problem 3: Largest prime factor
+//   Find the largest prime factor of n.
+// Problem 4: Largest palindrome product
+//   Find the largest palindrome made from the product of two 3-digit numbers.
+// Problem 5: Smallest multiple
+//   Smallest positive number that is divisible by all of the numbers from 1 to n?
+// Problem 6: Sum Square Difference
+//   Find the difference between the sum of the squares and the square of the sum of
+//   the numbers from 1 to n.
+// Problem 7: n-th prime
+//   Find the n-th prime number
+// Problem 8: Largest product in a series
+//   Find the n adjacent digits that have the greatest product.
+// Problem 9: Special Pythagorean triplet
+//   There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+//   Find the product abc.
+// Problem 10: Summation of primes
+//   Find the sum of all the primes below n
 pub mod p001 {
     // Functionnal programming -- O(n)
     //  (3 + 6 + ...) + (5 + 10 + ...).except(x % 3 == 0)
-    pub fn v1(limit: i32) -> i32 {
-        let sum3: i32 = (3..limit).step_by(3).sum();
-        let sum5: i32 = (5..limit).filter(|x| x % 3 != 0).step_by(5).sum();
+    pub fn v1(limit: u32) -> u32 {
+        let sum3: u32 = (3..limit).step_by(3).sum();
+        let sum5: u32 = (5..limit).filter(|x| x % 3 != 0).step_by(5).sum();
         sum3 + sum5
     }
     // Math formula -- O(1)
     //  (3 + 6 + ...) + (5 + 10 + ...) - (15 + 30 + ...)
-    pub fn v2(limit: i32) -> i32 {
+    pub fn v2(limit: u32) -> u32 {
         let nb3 = (limit - 1) / 3;
         let sum3 = 3 * nb3 * (1 + nb3) / 2; 
         let nb5 = (limit - 1) / 5;
@@ -21,11 +41,9 @@ pub mod p001 {
     }
 }
 
-// Problem 2: Even Fibonacci numbers
-//  Find the sum of the even-valued terms.
 pub mod p002 {
     // Fibonnacci iterations -- O(n)
-    pub fn v1(nb_terms: i32) -> i32 {
+    pub fn v1(nb_terms: u32) -> u32 {
         let mut curr = 1;
         let mut next = 2;
         let mut even_sum = 0;
@@ -41,22 +59,20 @@ pub mod p002 {
     }
 }
 
-// Problem 3: Largest prime factor
-//  Find the largest prime factor.
 pub mod p003 {
     // (1.) find factors (2.) find primes (3.) find largest
-    pub fn v1(number: i32) -> i32 {
-        let divisors: Vec<i32> = (2..number+1)
-            .filter(|x| number % x == 0)
+    pub fn v1(n: u32) -> u32 {
+        let divisors: Vec<u32> = (2..n+1)
+            .filter(|x| n % x == 0)
             .collect();
-        let factors: Vec<i32> = divisors.clone();
+        let factors: Vec<u32> = divisors.clone();
         let mut prime: Vec<bool> = vec!(true; divisors.len());
         for (i, div) in divisors.iter().enumerate() {
             for x in factors.iter() {
                 if div % x == 0 && div != x { prime[i] = false; }
             }
         }
-        let mut prime_fact: i32 = 0;
+        let mut prime_fact: u32 = 0;
         for (i, div) in divisors.iter().enumerate() {
             if prime[i] {
                 prime_fact = *div;
@@ -65,12 +81,12 @@ pub mod p003 {
         prime_fact
     }
     // (1.) find factors (2.) find largest prime
-    pub fn v2(number: i32) -> i32 {
-        let divisors: Vec<i32> = (2..number+1)
-            .filter(|x| number % x == 0)
+    pub fn v2(n: u32) -> u32 {
+        let divisors: Vec<u32> = (2..n+1)
+            .filter(|x| n % x == 0)
             .rev()
             .collect();
-        let factors: Vec<i32> = divisors.clone();
+        let factors: Vec<u32> = divisors.clone();
         let mut prime_fact = 0;
         for div in divisors.iter() {
             if factors.iter().all(|x| div % x != 0 || div == x) {
@@ -81,9 +97,9 @@ pub mod p003 {
         prime_fact
     }
     // (1.) find primes (2.) find largest factor
-    pub fn v3(number: i32) -> i32 {
-        let mut sieve: Vec<bool> = vec!(true; (number+1) as usize);
-        let num = number as usize;
+    pub fn v3(n: u32) -> u32 {
+        let mut sieve: Vec<bool> = vec!(true; (n+1) as usize);
+        let num = n as usize;
         let half = num / 2 + 1;
         for i in 2..half {
             if sieve[i] {
@@ -99,21 +115,21 @@ pub mod p003 {
                 break;
             }
         }
-        prime_fact as i32
+        prime_fact as u32
     }
-    pub fn v4(number: i32) -> i32 {
-            let divisors: Vec<i32> = (2..number+1)
-                .filter(|x| number % x == 0)
+    pub fn v4(n: u32) -> u32 {
+            let divisors: Vec<u32> = (2..n+1)
+                .filter(|x| n % x == 0)
                 .rev()
                 .collect();
             *divisors.iter()
                 .filter(|x| divisors.iter().all(|y| *x % y != 0 || *x == y))
                 .max().unwrap()
     }
-    pub fn v5(number: i32) -> i32 {
-        let divide_number = |x: i32| number % x == 0;
-        let is_prime = |x: i32| { for i in 2..x { if x % i == 0 { return false; } } true }; // could loop only up to: x.sqrt() + 1
-        let max = (2..number+1)
+    pub fn v5(n: u32) -> u32 {
+        let divide_number = |x: u32| n % x == 0;
+        let is_prime = |x: u32| { for i in 2..x { if x % i == 0 { return false; } } true }; // could loop only up to: x.sqrt() + 1
+        let max = (2..n+1)
             .filter(|x| divide_number(*x))       // too bad I can't just write: .filter( divide_number )
             .filter(|x| is_prime(*x))
             .max().unwrap();
@@ -121,12 +137,10 @@ pub mod p003 {
     }
 }
 
-// Problem 4: Largest palindrome product
-//  Find the largest palindrome made from the product of two 3-digit numbers.
 pub mod p004 {
     // (1.) loop to find product (2.) check if palyndrome
-    pub fn v1(nb_digits_factors: i32) -> i32 {
-        let base = 10 as i32;
+    pub fn v1(nb_digits_factors: u32) -> u32 {
+        let base = 10 as u32;
         let exp = (nb_digits_factors - 1) as u32;
         let min = base.pow(exp);
         let max = base.pow(exp+1);
@@ -145,11 +159,9 @@ pub mod p004 {
     }
 }
 
-// Problem 5: Smallest multiple
-//  Smallest positive number that is divisible by all of the numbers from 1 to 'n'?
 pub mod p005 {
     // 
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
         let n = n as usize;
         let half = n / 2 + 1;
         let mut sieve: Vec<bool> = vec!(true; n+1);
@@ -167,25 +179,21 @@ pub mod p005 {
                 smallest_product *= i.pow(repeat as u32);
             }
         }
-        smallest_product as i32
+        smallest_product as u32
     }
 }
 
-// Problem 6: Sum Square Difference
-//  Find the difference between the sum of the squares and the square of the sum of
-//  the numbers from 1 to 'n'.
 pub mod p006 {
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
+        let n: i32 = n as i32;
         let sum_square: i32 = (1..n+1).map(|x| x*x).sum();
         let sum: i32 = (1..n+1).sum();
-        (sum_square - sum.pow(2)).abs()
+        (sum_square - sum.pow(2)).abs() as u32
     }
 }
 
-// Problem 7: n-th prime
-//  Find the n-th prime number
 pub mod p007 {
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
         let mut counter = 1;
         let mut number = 2;
         while counter != n {
@@ -199,8 +207,6 @@ pub mod p007 {
     }
 }
 
-// Problem 8: Largest product in a series
-//  Find the 'n' adjacent digits that have the greatest product.
 pub mod p008 {
     fn substring(str: &String, start: usize, len: usize) -> String {
         let mut sub_string: String = String::new();
@@ -254,15 +260,12 @@ pub mod p008 {
     }
 }
 
-// Problem 9: Special Pythagorean triplet
-//  There exists exactly one Pythagorean triplet for which a + b + c = 1000.
-//  Find the product abc.
 pub mod p009 {
     // iterate over a, b, c
-    pub fn v1() -> (i32, i32, i32) {
-        let mut a: i32 = 1;
-        let mut b: i32 = 1;
-        let mut c: i32 = 1;
+    pub fn v1() -> (u32, u32, u32) {
+        let mut a: u32 = 1;
+        let mut b: u32 = 1;
+        let mut c: u32 = 1;
         loop {
             if a.pow(2) + b.pow(2) == c.pow(2)
                 && a + b + c == 1000 { break; }
@@ -280,10 +283,10 @@ pub mod p009 {
         (a, b, c)
     }
     // iterate over a, b
-    pub fn v2() -> (i32, i32, i32) {
-        let mut a: i32 = 1;
-        let mut b: i32 = 1;
-        let mut c: i32 = 1;
+    pub fn v2() -> (u32, u32, u32) {
+        let mut a: u32 = 1;
+        let mut b: u32 = 1;
+        let mut c: u32 = 1;
         loop {
             if a.pow(2) + b.pow(2) == c.pow(2)
                 && a + b + c == 1000 { break; }
@@ -293,16 +296,14 @@ pub mod p009 {
             } else {
                 a += 1;
             }
-            c = ((a.pow(2) + b.pow(2)) as f64).sqrt() as i32;
+            c = ((a.pow(2) + b.pow(2)) as f64).sqrt() as u32;
         }
         (a, b, c)
     }
 }
 
-// Problem 10: Summation of primes
-//  Find the sum of all the primes below 'n'
 pub mod p010 {
-    pub fn v1(n: i32) -> i32 {
+    pub fn v1(n: u32) -> u32 {
         let n = n as usize;
         let mut sieve: Vec<bool> = vec!(true; n+1);
         let half = n / 2 + 1;
@@ -317,7 +318,7 @@ pub mod p010 {
         for i in 2..n+1 {
             if sieve[i] { sum += i; }
         }
-        sum as i32
+        sum as u32
     }
 }
 
