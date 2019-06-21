@@ -23,3 +23,64 @@ pub mod p021 {
     }
 }
 
+// Problem 22: Names scores
+//   What is the total of all the name scores in the file?
+pub mod p022 {
+    use std::fs;
+    pub fn v1() -> u32 {
+        let filename = "p022_names.txt";
+        let contents = fs::read_to_string(filename)
+            .expect("Problem with reading the file");
+        let vec_names: Vec<&str> = contents.split(',').collect();
+        // remove quote (") from the names
+        //for name in vec_names { name = name.chars().filter(|c| *c == '"').collect(); }
+        let mut vec_names: Vec<String> = vec_names.iter()
+            .map(|s| s
+                .to_string()
+                .chars()
+                .filter(|c| *c != '"')
+                .collect())
+            .collect();
+        vec_names.sort();               // I don't understand why I can't just write '.sort()' just above this line (below '.collect()')  -->  Try to figure this out later.
+        let letter_value = |l: char| -> u32 {
+            match l {
+                'a' => 1,
+                'b' => 2,
+                'c' => 3,
+                'd' => 4,
+                'e' => 5,
+                'f' => 6,
+                'g' => 7,
+                'h' => 8,
+                'i' => 9,
+                'j' => 10,
+                'k' => 11,
+                'l' => 12,
+                'm' => 13,
+                'n' => 14,
+                'o' => 15,
+                'p' => 16,
+                'q' => 17,
+                'r' => 18,
+                's' => 19,
+                't' => 20,
+                'u' => 21,
+                'v' => 22,
+                'w' => 23,
+                'x' => 24,
+                'y' => 25,
+                'z' => 26,
+                _ => panic!(),
+            }
+        };
+        let mut total_score: u32 = 0;
+        for (i, name) in vec_names.iter().enumerate() {
+            let mut score_name: u32 = 0;
+            for c in name.chars() { score_name += letter_value(c); }
+            let pos = (i + 1) as u32;
+            total_score += score_name * pos;
+        }
+        total_score
+    }
+}
+

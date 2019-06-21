@@ -1,2 +1,5 @@
 /target
 **/*.rs.bk
+
+# there's no point in tracking this file
+p022_names.txt
