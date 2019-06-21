@@ -109,7 +109,7 @@ mod tests_11to20 {
     }
 }
 
-#[cfg(test)]
-mod tests_21to30 {
-    use crate::problem21to30::*;
-}
+// #[cfg(test)]
+// mod tests_21to30 {
+//     use crate::problem21to30::*;
+// }
