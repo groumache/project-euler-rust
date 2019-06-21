@@ -1,5 +1,6 @@
 pub mod problem1to10;
-pub mod problem11to21;
+pub mod problem11to20;
+pub mod problem21to30;
 
 // there are 2 tests for p009: v1 & v2
 #[cfg(test)]
@@ -71,11 +72,10 @@ mod tests_1to10 {
     }
 }
 
-
 // No test for p011, p013, p018, p019 because there aren't any example in the problem statements.
 #[cfg(test)]
-mod tests_11to21 {
-    use crate::problem11to21::*;
+mod tests_11to20 {
+    use crate::problem11to20::*;
     #[test]
     #[ignore]
     fn test_p012() {
@@ -107,4 +107,9 @@ mod tests_11to21 {
     fn test_p020() {
         assert_eq!(p020::v1(10), 27);
     }
+}
+
+#[cfg(test)]
+mod tests_21to30 {
+    use crate::problem21to30::*;
 }

@@ -1,6 +1,24 @@
 // Problem 11: Largest product in a grid
 //   Find the greatest product of four adjacent numbers in the same direction
 //   (up, down, left, right, or diagonally) in the 20×20 grid.
+// Problem 12: Highly divisible triangular number
+//   Find the first triangle number to have over 'n' divisors
+// Problem 13: Large sum
+//   Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+// Problem 14: Longest Collatz sequence
+//   Which starting number, under 'n', produces the longest chain?
+// Problem 15: Lattice paths
+//   How many such routes are there through a 'n x n' grid?
+// Problem 16: Power digit sum
+//   Find the sum of the digits of the number 2^n.
+// Problem 17: Number letter counts
+//   Find the number of letters used to write all the numbers from 1 to 'n' in words (in english).
+// Problem 18: Maximum path sum I
+//   Find the maximum total from top to bottom of the triangle below.
+// Problem 19: Counting Sundays
+//   How many Sundays fell on the first of the month from 1 Jan 1901 to 31 Dec 2000 ?
+// Problem 20: Factorial digit sum
+//   Find the sum of the digits in the number n!
 pub mod p011 {
     pub fn v1() -> u32 {
         let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08".to_string()
@@ -72,8 +90,6 @@ pub mod p011 {
     }
 }
 
-// Problem 12: Highly divisible triangular number
-//   Find the first triangle number to have over 'n' divisors
 pub mod p012 {
     pub fn v1(n: u32) -> u32 {
         let mut triangular = 1;
@@ -91,8 +107,6 @@ pub mod p012 {
     }
 }
 
-// Problem 13: Large sum
-//   Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
 pub mod p013 {
     pub fn v1() -> u32 {
         let base: u32 = 10;         // need 'base' because: 10.pow() gives an error and (10 as u32) is not supported or something -- it's probably optimized by the compiler anyway
@@ -210,8 +224,6 @@ pub mod p013 {
     }
 }
 
-// Problem 14: Longest Collatz sequence
-//   Which starting number, under 'n', produces the longest chain?
 pub mod p014 {
     pub fn v1(n: u32) -> u32 {
         let mut start_number = 1;
@@ -237,8 +249,6 @@ pub mod p014 {
     }
 }
 
-// Problem 15: Lattice paths
-//   How many such routes are there through a 'n x n' grid?
 pub mod p015 {
     pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
@@ -248,8 +258,6 @@ pub mod p015 {
     }
 }
 
-// Problem 16: Power digit sum
-//   Find the sum of the digits of the number 2^n.
 pub mod p016 {
     pub fn v1(n: u32) -> u32 {
         let base: u32 = 2;                                          // need 'base' because: 2.pow() doesn't work
@@ -262,8 +270,6 @@ pub mod p016 {
     }
 }
 
-// Problem 17: Number letter counts
-//   Find the number of letters used to write all the numbers from 1 to 'n' in words (in english).
 pub mod p017 {
     pub fn v1(n: u32) -> u32 {
         let letters_0to19 = |num: u32| {
@@ -324,8 +330,6 @@ pub mod p017 {
     }
 }
 
-// Problem 18: Maximum path sum I
-//   Find the maximum total from top to bottom of the triangle below.
 pub mod p018 {
     pub fn v1() -> u32 {
         let triangle_string: String = "75".to_string()
@@ -380,8 +384,6 @@ pub mod p018 {
     }
 }
 
-// Problem 19: Counting Sundays
-//   How many Sundays fell on the first of the month from 1 Jan 1901 to 31 Dec 2000 ?
 pub mod p019 {
     struct Date {
         year: u32,
@@ -440,8 +442,6 @@ pub mod p019 {
     }
 }
 
-// Problem 20: Factorial digit sum
-//   Find the sum of the digits in the number n!
 pub mod p020 {
     pub fn v1(n: u32) -> u32 {
         let fact: u32 = (2..n+1).product();
@@ -453,4 +453,3 @@ pub mod p020 {
         // sum = fact.to_string().chars().to_digit(10).unwrap().sum();
     }
 }
-
