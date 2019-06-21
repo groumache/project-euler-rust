@@ -72,7 +72,7 @@ mod tests_1to10 {
 }
 
 
-// No test for p011 and p013 because there aren't any example in the problem statements.
+// No test for p011, p013, p018, p019 because there aren't any example in the problem statements.
 #[cfg(test)]
 mod tests_11to21 {
     use crate::problem11to21::*;
@@ -101,5 +101,10 @@ mod tests_11to21 {
     #[ignore]
     fn test_p017() {
         assert_eq!(p017::v1(5), 19);
+    }
+    #[test]
+    #[ignore]
+    fn test_p020() {
+        assert_eq!(p020::v1(10), 27);
     }
 }

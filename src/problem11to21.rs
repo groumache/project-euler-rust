@@ -379,3 +379,78 @@ pub mod p018 {
         *triangle.last().unwrap().iter().max().unwrap()
     }
 }
+
+// Problem 19: Counting Sundays
+//   How many Sundays fell on the first of the month from 1 Jan 1901 to 31 Dec 2000 ?
+pub mod p019 {
+    struct Date {
+        year: u32,
+        month: u32,
+        day: u32,
+    }
+    impl PartialEq for Date {
+        fn eq(&self, other: &Self) -> bool {
+            self.year == other.year && self.month == other.month
+                && self.day == other.day
+        }
+    }
+    pub fn v1() -> u32 {
+        let days_since_1900 = |date: &Date| -> u32 {
+            let mut n_days: u32;
+            n_days = date.day - 1; // day passed this month
+            // number of days in the months passed
+            n_days += match date.month {
+                1 => 0,
+                2 => 31,
+                3 => 31 + 28,
+                4 => 2*31 + 28,
+                5 => 2*31 + 28 + 30,
+                6 => 3*31 + 28 + 30,
+                7 => 3*31 + 28 + 2*30,
+                8 => 4*31 + 28 + 2*30,
+                9 => 5*31 + 28 + 2*30,
+                10 => 5*31 + 28 + 3*30,
+                11 => 6*31 + 28 + 3*30,
+                12 => 6*31 + 28 + 4*30,
+                _ => panic!(),
+            };
+            if date.year % 4 == 0 && date.month > 2 { n_days += 1; }
+            // number of days in the years passed since 1900
+            let n_years = date.year - 1900;
+            n_days += n_years * 365;
+            let n_leap_years = n_years / 4;
+            n_days += n_leap_years - 1; // -1 because 1900 is no leap year
+            n_days
+        };
+        let new_century: Date = Date { year: 2001, month: 1, day: 1 };
+        let mut curr_date: Date = Date { year: 1901, month: 1, day: 1 };
+        let mut counter: u32 = 0;
+        while curr_date != new_century {
+            let days_passed = days_since_1900(&curr_date);
+            if days_passed % 7 == 0 { counter += 1; }
+            // update curr_date
+            if curr_date.month > 12 {
+                curr_date.year += 1;
+                curr_date.month = 1;
+            } else {
+                curr_date.month += 1;
+            }
+        }
+        counter
+    }
+}
+
+// Problem 20: Factorial digit sum
+//   Find the sum of the digits in the number n!
+pub mod p020 {
+    pub fn v1(n: u32) -> u32 {
+        let fact: u32 = (2..n+1).product();
+        let mut sum: u32 = 0;
+        for c in fact.to_string().chars() {
+            sum += c.to_digit(10).unwrap();
+        }
+        sum
+        // sum = fact.to_string().chars().to_digit(10).unwrap().sum();
+    }
+}
+
