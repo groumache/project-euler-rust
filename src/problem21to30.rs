@@ -122,3 +122,41 @@ pub mod p023 {
     }
 }
 
+// Problem 24: Lexicographic permutations
+//   What is the millionth lexicographic permutation of the digits 
+//   0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
+pub mod p024 {
+    // this version does not compute all the permutations but find
+    // which elements should be shifted and where
+    pub fn v1() -> Vec<u32> {
+        /*
+            0 1 2 3 4 5 6 7 8 9 -- len = 10
+                --> 2 0 1 3 4 5 6 7 8 9, permutation n°(2 * 9!)
+            0 1 3 4 5 6 7 8 9   -- len = 9
+                --> 8 0 1 3 4 5 6 7 9, permutation n°(6 * 8! + 2 * 9!)
+            ...
+            1 000 000  / 9!  = 2.7
+            1 000 000  % 9!  = 274 240
+            274 240    / 8!  = 6.8
+            274 240    % 8!  = 32 320
+            ...
+        */
+        let n_element = 10;
+        let mut perm = 1_000_000;
+        let mut permutations: Vec<u32> = Vec::new();
+        // find which element we have to shift
+        for i in (1..n_element+1).rev() {
+            let factorial: u32 = (1..i+1).product();
+            permutations.push(perm / factorial);
+            perm = perm % factorial;
+        }
+        // compute the permutations
+        let mut elements: Vec<u32> = (0..10).collect();
+        let mut final_perm: Vec<u32> = Vec::new();
+        for i in permutations.iter() {
+            final_perm.push(elements.remove(*i as usize));
+        }
+        final_perm
+    }
+}
+
