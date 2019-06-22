@@ -160,3 +160,23 @@ pub mod p024 {
     }
 }
 
+// Problem 25: 1000-digit Fibonacci number
+//   What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
+pub mod p025 {
+    pub fn v1() -> u32 {
+        let mut counter = 3;
+        let mut prev = 1;
+        let mut curr = 2;
+        loop {
+            if (curr as f64).log10() >= 1000 as f64 {
+                break;
+            }
+            let temp = curr;
+            curr += prev;
+            prev = temp;
+            counter += 1;
+        }
+        counter
+    }
+}
+
