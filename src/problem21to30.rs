@@ -84,3 +84,41 @@ pub mod p022 {
     }
 }
 
+// Problem 23: Non-abundant sums
+//   Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
+pub mod p023 {
+    pub fn v1() -> u32 {
+        let divisors = |n: u32| -> Vec<u32> {
+            let half = n / 2 + 1;
+            let mut div: Vec<u32> = Vec::new();
+            for i in 1..half {
+                if n % i == 0 { div.push(i); }
+            }
+            div
+        };
+        let mut abundant_numbers: Vec<u32> = Vec::new();
+        let mut sum_abundant_num: Vec<u32> = Vec::new();
+        let mut not_sum_abundant_num: Vec<u32> = Vec::new();
+        let limit: u32 = 28123 + 1; // it says "greater than", not "greater or equal"
+        // find abundant numbers
+        for i in 1..limit {
+            if i < divisors(i).iter().sum() { abundant_numbers.push(i); }
+        }
+        // find the sum of each pair of abundant number
+        for i in &abundant_numbers {
+            for j in &abundant_numbers {
+                sum_abundant_num.push(i + j);
+            }
+        }
+        // find numbers that cannot be written as the sum of two abundant numbers
+        //   can be replaced by:
+        //   not_sum_abundant_num = (1..limit).filter(|n| !sum_abundant_num.contains(n)).collect();
+        for i in 1..limit {
+            if !sum_abundant_num.contains(&i) {
+                not_sum_abundant_num.push(i);
+            }
+        }
+        not_sum_abundant_num.iter().sum()
+    }
+}
+
