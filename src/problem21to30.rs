@@ -285,3 +285,37 @@ pub mod p027 {
     }
 }
 
+// Problem 28: Number spiral diagonals
+//   What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral ?
+pub mod p028 {
+    enum Direction {      //      AN ENUM MIGHT BE BETTER  ===>  Direction::right  or  Direction::left  or  ...
+        Right,
+        Left,
+        Up,
+        Down,
+    }
+    pub fn v1() -> u32 {
+        let mut sum: u32 = 0;
+        let mut point: (i32, i32) = (0, 0);
+        let mut dir: Direction = Direction::Right;
+        let mut num: u32 = 1;
+        while point != (500, 500) { // correspond to a 1001 x 1001 spiral
+            if point.0 == -point.1 && point.0 <= 0 { dir = Direction::Right; }
+            else if point.0 == -point.1 && point.0 >= 0 { dir = Direction::Left; }
+            else if point.0 ==  point.1 && point.0 <= 0 { dir = Direction::Up; }
+            else if (point.0 + 1) == point.1  { dir = Direction::Down; }
+
+            if point.0.abs() == point.1.abs() { sum += num; }
+            num += 1;
+
+            match dir {
+                Direction::Down => point.1 -= 1,
+                Direction::Left => point.0 -= 1,
+                Direction::Right => point.0 += 1,
+                Direction::Up => point.1 += 1,
+            };
+        }
+        sum + num // add the last element to the sum
+    }
+}
+
