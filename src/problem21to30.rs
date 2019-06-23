@@ -180,3 +180,74 @@ pub mod p025 {
     }
 }
 
+// Problem 26: Reciprocal cycles
+//   Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
+pub mod p026 {
+    fn all_primes_below(n: u32) -> Vec<u32> {
+        let mut sieve: Vec<bool> = vec!(true; (n+1) as usize);
+        let num = n as usize;
+        let half = num / 2 + 1;
+        //                                                                                      sieve[0..1] = false;
+        sieve[0] = false;
+        sieve[1] = false;
+        for i in 2..half {
+            if sieve[i] {
+                for j in (2*i..num+1).step_by(i) {
+                    sieve[j] = false;
+                }
+            }
+        }
+        let mut list_primes: Vec<u32> = Vec::new();
+        for (num, prime) in sieve.iter().enumerate() {
+            if *prime { list_primes.push(num as u32); }
+        }
+        list_primes
+    }
+    // does not work if cycle possesses sub-cycles, i.e. [01 01 2] [01 01 2] ...
+    pub fn v1() -> u32 {
+        // largest period possible for 1/n is n-1 -- only need to check primes
+        let n = 1000;
+        let mut max_d = 0;
+        let mut length_max_cycle = 0;
+        let primes = all_primes_below(n);
+        for i in primes {
+            let frac: f64 = 1.0 / (i as f64); // frac = 1 / i   (why does it have to be so complicated...)
+            let log = frac.log10() as u32;
+            let mut digits: Vec<u8> = Vec::new();
+            // we're supposed to observe a repetition of the cycle at least once
+            for j in 1..2*n {
+                let base: u32 = 10;
+                let digit_position: f64 = base.pow(j - log) as f64;
+                let digit: u8 = ((frac * digit_position) % 10 as f64) as u8;
+                digits.push(digit);
+            }
+            // find cycle.length
+            let mut cycle_length = 0;
+            let last_digit: u8 = *digits.last().unwrap();
+            let mut last_occurence = digits.len() - 1;
+            for (j, digit) in digits.iter().rev().enumerate() {
+                if *digit == last_digit && j < last_occurence { // find a second occurence of the digit
+                    let mut eq_cycles = true;
+                    for k in j..digits.len() { // check if that means that we've found a repetition of the cycle
+                        if digits[k] != digits[j-k] {
+                            eq_cycles = false;
+                            break;
+                        }
+                    }
+                    if eq_cycles {
+                        cycle_length = digits.len() - j;
+                        break;
+                    } else {
+                        last_occurence = j;
+                    }
+                }
+            }
+            if cycle_length > length_max_cycle {
+                length_max_cycle = cycle_length;
+                max_d = i;
+            }
+        }
+        max_d
+    }
+}
+
