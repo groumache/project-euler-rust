@@ -251,3 +251,37 @@ pub mod p026 {
     }
 }
 
+// Problem 27: Quadratic primes
+//   Find the product of the coefficients, a and b, for n^2 + a n + b,
+//   where |a| < 1000 and |b| ≤ 1000 that produces the maximum number
+//   of primes for consecutive values of n, starting with n = 0.
+pub mod p027 {
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 {
+                return false;
+            }
+        }
+        true
+    }
+    pub fn v1() -> u32 {
+        let max_coeff = 1000;
+        let mut n_primes = 0;
+        let mut max_prod = 0;
+        for a in 0..max_coeff {
+            for b in 0..max_coeff {
+                let mut n: u32 = 0;
+                while is_prime(n.pow(2) + a * n + b) {
+                    n += 1;
+                }
+                if n > n_primes {
+                    n_primes = n;
+                    max_prod = a * b;
+                }
+            }
+        }
+        max_prod
+    }
+}
+
