@@ -335,4 +335,25 @@ pub mod p029 {
     }
 }
 
-
+// Problem 30: Digit fifth powers
+//   Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+pub mod p030 {
+    // max 5 digits because 5 * 9^5 > 99 999 and 6 * 9^6 < 999 999
+    pub fn v1() -> u32 {
+        let limit: u32 = 100_000;
+        let mut sum = 0;
+        let mut digits: [u32; 5] = [0; 5];
+        for num in 10..limit {
+            for i in 0..5 {
+                let base: u32 = 10;
+                digits[i] = num / base.pow(i as u32) % 10;
+            }
+            // if digits.iter().map(|x| x.pow(5)).sum() == num {       ===>  Go figure why this doesn't work...     even: digits.iter().map(|x| x.pow(5)).sum() as u32 == num   doesn't work.
+            let sum_digits: u32 = digits.iter().map(|x| x.pow(5)).sum();
+            if sum_digits == num {
+                sum += num;
+            }
+        }
+        sum
+    }
+}
