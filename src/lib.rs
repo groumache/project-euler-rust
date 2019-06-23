@@ -1,6 +1,7 @@
 pub mod problem1to10;
 pub mod problem11to20;
 pub mod problem21to30;
+pub mod problem31to40;
 
 // there are 2 tests for p009: v1 & v2
 #[cfg(test)]
@@ -108,8 +109,3 @@ mod tests_11to20 {
         assert_eq!(p020::v1(10), 27);
     }
 }
-
-// #[cfg(test)]
-// mod tests_21to30 {
-//     use crate::problem21to30::*;
-// }
