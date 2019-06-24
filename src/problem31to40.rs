@@ -327,4 +327,55 @@ pub mod p036 {
     }
 }
 
+// Problem 37: Truncatable primes
+//   Find the sum of the only eleven primes that are both truncatable from left to
+//   right and right to left.
+pub mod p037 {
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_number(digits: &Vec<u32>) -> u32 {
+        let mut num: u32 = 0;
+        let base: u32 = 10;
+        for (i, d) in digits.iter().enumerate() {
+            num += d * base.pow(i as u32);
+        }
+        num
+    }
+    pub fn v1() -> u32 {
+        let n_truncatable = 11;
+        let mut truncatables: Vec<u32> = Vec::new();
+        for i in 11.. {
+            let mut num = i;
+            let mut trunc: bool = true;
+            while (num as f64).log10() >= 1.0 {
+                let mut digits: Vec<u32> = get_digits(i);
+                digits.remove(0);
+                num = get_number(&digits);
+                if !is_prime(num) {
+                    trunc = false;
+                    break;
+                }
+            }
+            if trunc { truncatables.push(i); }
+            if truncatables.len() == n_truncatable { break; }
+        }
+        //
+        truncatables.iter().sum()
+    }
+}
 
