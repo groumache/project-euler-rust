@@ -113,3 +113,79 @@ pub mod p032 {
     }
 }
 
+// Problem 33: Digit cancelling fractions
+pub mod p033 {
+    fn get_digits(n: u32) -> Vec<u8> {
+        let mut digits: Vec<u8> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u8 = (n / base.pow(i) % 10) as u8;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn no_double(digits1: &mut Vec<u8>, mut digits2: &mut Vec<u8>) -> bool {
+        let mut digits: Vec<u8> = digits1.clone();
+        digits.append(&mut digits2);
+        digits.sort();
+        let length = digits.len();
+        digits.dedup();
+        length == digits.len()
+    }
+    fn get_divisors(n: u32) -> Vec<u32> {
+        let mut divisors: Vec<u32> = Vec::new();
+        for i in 1..n+1 {
+            if n % i == 0 { divisors.push(i); }
+        }
+        divisors
+    }
+    fn get_gcd(n1: u32, n2: u32) -> u32 {
+        let mut gcd: u32 = 1;
+        let div1 = get_divisors(n1);
+        let div2 = get_divisors(n2);
+        for d in div1.iter() {
+            if div2.contains(d) { gcd *= d; }
+        }
+        gcd
+    }
+    pub fn v1() -> u32 {
+        let mut num: Vec<u8> = Vec::new();
+        let mut den: Vec<u8> = Vec::new();
+        for numerator in (11..99).filter(|n| n % 10 != 0) {
+            for denominator in (11..99).filter(|n| n % 10 != 0) {
+                let mut digits_num = get_digits(numerator);
+                let mut digits_den = get_digits(denominator);
+                if no_double(&mut digits_den, &mut digits_num) { continue; }
+                let mut common_digit: u8 = 0;
+                let mut other_d_num: u8 = 0;
+                let mut other_d_den: u8 = 0;
+                for digit in digits_num.iter() {
+                    if digits_den.contains(digit) {
+                        common_digit = *digit;
+                    } else {
+                        other_d_num = *digit;
+                    }
+                }
+                for digit in digits_den.iter() {
+                    if *digit != common_digit {
+                        other_d_den = *digit;
+                    }
+                }
+                let frac1 = numerator / denominator;
+                let frac2 = other_d_num / other_d_den;
+                if frac1 == frac2 as u32 {
+                    num.push(other_d_num);
+                    den.push(other_d_den);
+                }
+            }
+        }
+        let mut prod_num: u32 = 1;
+        let mut prod_den: u32 = 1;
+        for i in num.iter() { prod_num *= *i as u32; }
+        for i in den.iter() { prod_den *= *i as u32; }
+        let gcd: u32 = get_gcd(prod_num, prod_den);
+        prod_den / gcd
+    }
+}
+
