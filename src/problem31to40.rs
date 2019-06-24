@@ -1,4 +1,4 @@
-// Problem: Coin sums
+// Problem 31: Coin sums
 //   How many different ways can £2 be made using any number of coins ?
 pub mod p031 {
     struct Coins {
@@ -59,6 +59,57 @@ pub mod p031 {
             }
         }
         counter
+    }
+}
+
+// Problem 32: Pandigital products
+//   Find the sum of all products whose multiplicand/multiplier/product
+//   identity can be written as a 1 through 9 pandigital.
+pub mod p032 {
+    fn get_digits(n: u32) -> Vec<u8> {
+        let mut digits: Vec<u8> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u8 = (n / base.pow(i) % 10) as u8;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_divisors(n: u32) -> Vec<u32> {
+        let mut divisors: Vec<u32> = Vec::new();
+        for i in 1..n+1 {
+            if n % i == 0 { divisors.push(i); }
+        }
+        divisors
+    }
+    fn no_double(digits: &mut Vec<u8>) -> bool {
+        digits.sort();
+        let length = digits.len();
+        digits.dedup();
+        length == digits.len()
+    }
+    // Such a number can only have 4 digits
+    pub fn v1() -> u32 {
+        let mut sum: u32 = 0;
+        for num in 1234..9876+1 {
+            //                                                              let mut digits = get_digits(num).sort();
+            //                                                              if digits.len() != digits.dedup().len() { continue; }
+            let mut digits: Vec<u8> = get_digits(num);
+            if !no_double(&mut digits) { continue; }
+
+            let divisors: Vec<u32> = get_divisors(num);
+            for div in divisors {
+                let quotient = num / div;
+                let mut digits_div = get_digits(div);
+                let mut digits_quo = get_digits(quotient);
+                digits.append(&mut digits_div);
+                digits.append(&mut digits_quo);
+
+                if no_double(&mut digits) { sum += num; }
+            }
+        }
+        sum
     }
 }
 
