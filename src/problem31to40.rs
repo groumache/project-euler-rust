@@ -1,5 +1,28 @@
 // Problem 31: Coin sums
 //   How many different ways can £2 be made using any number of coins ?
+// Problem 32: Pandigital products
+//   Find the sum of all products whose multiplicand/multiplier/product
+//   identity can be written as a 1 through 9 pandigital.
+// Problem 33: Digit cancelling fractions
+// Problem 34: Digit factorials
+//   Find the sum of all numbers which are equal to the sum of the factorial of their digits.
+// Problem 35: Circular primes
+//   How many circular primes are there below one million?
+// Problem 36: Double-base palindromes
+//   Find the sum of all numbers, less than one million, which are palindromic in
+//   base 10 and base 2.
+// Problem 37: Truncatable primes
+//   Find the sum of the only eleven primes that are both truncatable from left to
+//   right and right to left.
+// Problem 38: Pandigital multiples
+//   What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
+//   concatenated product of an integer with (1,2, ... , n) where n > 1?
+// Problem 39: Integer right triangles
+//   For which value of p ≤ 1000, is the number of solutions maximised?
+// Problem 40: Champernowne's constant
+//   If d_n represents the nth digit of the fractional part of 0.1 2 3 ... 9 10 11 ...,
+//   find the value of the following expression:
+//   d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
 pub mod p031 {
     struct Coins {
         pound2: u8,
@@ -62,9 +85,6 @@ pub mod p031 {
     }
 }
 
-// Problem 32: Pandigital products
-//   Find the sum of all products whose multiplicand/multiplier/product
-//   identity can be written as a 1 through 9 pandigital.
 pub mod p032 {
     fn get_digits(n: u32) -> Vec<u8> {
         let mut digits: Vec<u8> = Vec::new();
@@ -113,7 +133,6 @@ pub mod p032 {
     }
 }
 
-// Problem 33: Digit cancelling fractions
 pub mod p033 {
     fn get_digits(n: u32) -> Vec<u8> {
         let mut digits: Vec<u8> = Vec::new();
@@ -189,8 +208,6 @@ pub mod p033 {
     }
 }
 
-// Problem 34: Digit factorials
-//   Find the sum of all numbers which are equal to the sum of the factorial of their digits.
 pub mod p034 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
@@ -219,8 +236,6 @@ pub mod p034 {
     }
 }
 
-// Problem 35: Circular primes
-//   How many circular primes are there below one million?
 pub mod p035 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
@@ -282,9 +297,6 @@ pub mod p035 {
     }
 }
 
-// Problem 36: Double-base palindromes
-//   Find the sum of all numbers, less than one million, which are palindromic in
-//   base 10 and base 2.
 pub mod p036 {
     fn get_digits_10(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
@@ -327,9 +339,6 @@ pub mod p036 {
     }
 }
 
-// Problem 37: Truncatable primes
-//   Find the sum of the only eleven primes that are both truncatable from left to
-//   right and right to left.
 pub mod p037 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
@@ -379,9 +388,6 @@ pub mod p037 {
     }
 }
 
-// Problem 38: Pandigital multiples
-//   What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
-//   concatenated product of an integer with (1,2, ... , n) where n > 1?
 pub mod p038 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
@@ -430,8 +436,6 @@ pub mod p038 {
     }
 }
 
-// Problem 39: Integer right triangles
-//   For which value of p ≤ 1000, is the number of solutions maximised?
 pub mod p039 {
     pub fn v1() -> u32 {
         let max_p = 1001;
@@ -460,10 +464,6 @@ pub mod p039 {
     }
 }
 
-// Problem 40: Champernowne's constant
-//   If d_n represents the nth digit of the fractional part of 0.1 2 3 ... 9 10 11 ...,
-//   find the value of the following expression:
-//   d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
 pub mod p040 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();

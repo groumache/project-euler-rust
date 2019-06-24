@@ -2,6 +2,7 @@ pub mod problem1to10;
 pub mod problem11to20;
 pub mod problem21to30;
 pub mod problem31to40;
+pub mod problem41to50;
 
 // there are 2 tests for p009: v1 & v2
 #[cfg(test)]
