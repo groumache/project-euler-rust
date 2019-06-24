@@ -189,3 +189,33 @@ pub mod p033 {
     }
 }
 
+// Problem 34: Digit factorials
+//   Find the sum of all numbers which are equal to the sum of the factorial of their digits.
+pub mod p034 {
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn fact(n: u32) -> u32 {
+        if n == 0 { return 1; }
+        (1..n+1).product()
+    }
+    // max 7 digits as (9!) * 8 has 7 digits
+    pub fn v1() -> u32 {
+        let mut sum: u32 = 0;
+        let max = 7 * fact(9);
+        for i in 11..max {
+            let digits = get_digits(i);
+            let sum_fact_digits: u32 = digits.iter().map(|d| fact(*d)).sum();
+            if sum_fact_digits == i { sum += i; }
+        }
+        sum
+    }
+}
+
