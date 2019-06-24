@@ -430,3 +430,33 @@ pub mod p038 {
     }
 }
 
+// Problem 39: Integer right triangles
+//   For which value of p ≤ 1000, is the number of solutions maximised?
+pub mod p039 {
+    pub fn v1() -> u32 {
+        let max_p = 1001;
+        let mut p_solutions: Vec<u32> = vec!(0; max_p);
+        for a in 1..max_p {
+            for b in 1..max_p {
+                let a = a as f64;
+                let b = b as f64;
+                let c = (a.powi(2) + b.powi(2)).sqrt();
+                let p = a + b + c;
+                if c - c.floor() > 0.0 || p >= max_p as f64 {
+                    continue;
+                }
+                p_solutions[p as usize] += 1;
+            }
+        }
+        let mut max_p = 0;
+        let mut max_n: u32 = 0;
+        for (p, n) in p_solutions.iter().enumerate() {
+            if *n > max_n {
+                max_p = p;
+                max_n = *n;
+            }
+        }
+        max_p as u32
+    }
+}
+
