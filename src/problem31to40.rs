@@ -282,3 +282,49 @@ pub mod p035 {
     }
 }
 
+// Problem 36: Double-base palindromes
+//   Find the sum of all numbers, less than one million, which are palindromic in
+//   base 10 and base 2.
+pub mod p036 {
+    fn get_digits_10(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_digits_2(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log2() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 2;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn is_palyndromic(vec: Vec<u32>) -> bool {
+        for i in 0..vec.len() {
+            let last = vec.len() - 1;
+            if vec[i] != vec[last-i] { return false; }
+        }
+        true
+    }
+    pub fn v1() -> u32 {
+        let mut sum: u32 = 0;
+        let max = 1_000_000;
+        for i in 1..max {
+            let digits_10 = get_digits_10(i);
+            let digits_2 = get_digits_2(i);
+            if is_palyndromic(digits_10) && is_palyndromic(digits_2) {
+                sum += i;
+            }
+        }
+        sum
+    }
+}
+
+
