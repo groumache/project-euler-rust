@@ -379,3 +379,54 @@ pub mod p037 {
     }
 }
 
+// Problem 38: Pandigital multiples
+//   What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
+//   concatenated product of an integer with (1,2, ... , n) where n > 1?
+pub mod p038 {
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_number(digits: &Vec<u32>) -> u32 {
+        let mut num: u32 = 0;
+        let base: u32 = 10;
+        for (i, d) in digits.iter().enumerate() {
+            num += d * base.pow(i as u32);
+        }
+        num
+    }
+    fn no_double(digits: &mut Vec<u32>) -> bool {
+        digits.sort();
+        let length = digits.len();
+        digits.dedup();
+        length == digits.len()
+    }
+    // max 4 number
+    pub fn v1() -> u32 {
+        let mut max_pandigital = 0;
+        let max = 100_000;
+        for i in 2..max {
+            let mut digits: Vec<u32> = Vec::new();
+            // digits = get_pandigital()
+            for j in 1.. {
+                let num: u32 = i * j;
+                digits.append(&mut get_digits(num));
+                if digits.len() >= 9 { break; }
+            }
+            // digit.is_pandigital()
+            if digits.len() != 9 || !no_double(&mut digits) { continue; }
+            let new_pandigital = get_number(&mut digits);
+            if new_pandigital > max_pandigital {
+                max_pandigital = new_pandigital;
+            }
+        }
+        max_pandigital
+    }
+}
+
