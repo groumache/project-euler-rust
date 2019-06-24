@@ -219,3 +219,66 @@ pub mod p034 {
     }
 }
 
+// Problem 35: Circular primes
+//   How many circular primes are there below one million?
+pub mod p035 {
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_number(digits: &Vec<u32>) -> u32 {
+        let mut num: u32 = 0;
+        let base: u32 = 10;
+        for (i, d) in digits.iter().enumerate() {
+            num += d * base.pow(i as u32);
+        }
+        num
+    }
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    fn primes_below(n: u32) -> Vec<u32> {
+        let mut primes: Vec<u32> = Vec::new();
+        for i in 2..n {
+            if is_prime(i) {
+                primes.push(i);
+            }
+        }
+        primes
+    }
+    pub fn v1() -> u32 {
+        let mut counter = 0;
+        let max = 1_000_000;
+        let primes = primes_below(max);
+        let mut primes_checked: Vec<u32> = Vec::new();
+        for p in &primes {
+            let mut digits = get_digits(*p);
+            let mut circular_prime: bool = true;
+            primes_checked.push(*p);
+            // check if it's a circular prime
+            for _ in 0..digits.len() {
+                let d = digits.remove(0);
+                digits.push(d);
+                let num = get_number(&digits);
+                primes_checked.push(num);
+                if primes_checked.contains(&num) || !&primes.contains(&num) {
+                    circular_prime = false;
+                    break;
+                }
+            }
+            if circular_prime { counter += 1; }
+        }
+        counter
+    }
+}
+
