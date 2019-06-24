@@ -39,3 +39,66 @@ pub mod p041 {
     }
 }
 
+// Problem 42: Coded triangle numbers
+//   Using words.txt, a 16K text file containing nearly two-thousand
+//   common English words, how many are triangle words ?
+pub mod p042 {
+    use std::fs;
+    fn letter_value(l: char) -> u32 {
+        match l {
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+            'e' => 5,
+            'f' => 6,
+            'g' => 7,
+            'h' => 8,
+            'i' => 9,
+            'j' => 10,
+            'k' => 11,
+            'l' => 12,
+            'm' => 13,
+            'n' => 14,
+            'o' => 15,
+            'p' => 16,
+            'q' => 17,
+            'r' => 18,
+            's' => 19,
+            't' => 20,
+            'u' => 21,
+            'v' => 22,
+            'w' => 23,
+            'x' => 24,
+            'y' => 25,
+            'z' => 26,
+            _ => panic!(),
+        }
+    }
+    fn is_triangle_num(n: u32) -> bool {
+        for i in (1..).map(|n| n * (n + 1) / 2) {
+            if n == i { return true; }
+            else if n > i { break; }
+        }
+        false
+    }
+    pub fn v1() -> u32 {
+        let mut counter: u32 = 0;
+        let filename = "p042_words.txt";
+        let contents = fs::read_to_string(filename)
+            .expect("Problem with reading the file");
+        let words: Vec<&str> = contents.split(',').collect();
+        for w in words {
+            let w = w.to_string();
+            let mut w_value: u32 = 0;       // w_value = w.iter().map(|l| letter_value(l)).collect()  ===>  LOL -> that would be cool but it's a bit extreme
+            for l in w.chars().filter(|c| *c != '"') {
+                w_value += letter_value(l);
+            }
+            if is_triangle_num(w_value) {
+                counter += 1;
+            }
+        }
+        counter
+    }
+}
+
