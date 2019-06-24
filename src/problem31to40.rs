@@ -460,3 +460,40 @@ pub mod p039 {
     }
 }
 
+// Problem 40: Champernowne's constant
+//   If d_n represents the nth digit of the fractional part of 0.1 2 3 ... 9 10 11 ...,
+//   find the value of the following expression:
+//   d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
+pub mod p040 {
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    // no need to actually compute the fraction
+    pub fn v1() -> u32 {
+        let mut expression: u32 = 1;
+        let d_x: [u32; 7] = [1, 10, 100, 1000, 10_000, 100_000, 1_000_000];
+        let mut digit_num: u32 = 1;
+        for i in 1..1_000_000 {
+            let digits = get_digits(i);
+            for (j, digit) in digits.iter().enumerate() {
+                let x = digit_num + j as u32;
+                // could make it faster by checking if 'x == 10^y' with y being
+                // incremented until 'y == 7', then break;
+                if d_x.contains(&x) {
+                    expression *= digit;
+                }
+            }
+            digit_num += digits.len() as u32;
+        }
+        expression
+    }
+}
+
+
