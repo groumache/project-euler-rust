@@ -102,3 +102,102 @@ pub mod p042 {
     }
 }
 
+// Problem 43: Sub-string divisibility
+//   Find the sum of all 0 to 9 pandigital numbers with this property.
+pub mod p043 {
+    fn get_number(digits: &Vec<u32>) -> u32 {
+        let mut num: u32 = 0;
+        let base: u32 = 10;
+        for (i, d) in digits.iter().enumerate() {
+            num += d * base.pow(i as u32);
+        }
+        num
+    }
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn fact(n: u32) -> u32 {
+        if n == 0 { return 1; }
+        (1..n+1).product()
+    }
+    fn get_permutation<T>(items: Vec<T>, perm: u32) -> Option<Vec<T>> {
+        let mut perm = perm;
+        let mut items = items;
+        // check if permutation is possible
+        let n_element = items.len() as u32;
+        let n_possible_perm = fact(n_element);
+        if perm > n_possible_perm {
+            return None;
+        }
+        // find which element we have to shift
+        let mut permutations: Vec<u32> = Vec::new();
+        for i in (1..n_element+1).rev() {
+            let factorial: u32 = fact(i + 1);
+            permutations.push(perm / factorial);
+            perm = perm % factorial;
+        }
+        // compute the permutations
+        let mut final_perm: Vec<T> = Vec::new();
+        for i in permutations.iter() {
+            final_perm.push(items.remove(*i as usize));
+        }
+        Some(final_perm)
+    }
+    struct Pandigital10 {
+        perm: u32,
+        max: u32,
+    }
+    impl Iterator for Pandigital10 {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            self.perm += 1;
+            if self.perm == self.max {
+                return None;
+            }
+            let mut items: Vec<u32> = [0,1,2,3,4,5,6,7,8,9].to_vec();
+            items = get_permutation(items, self.perm).unwrap();
+            Some(get_number(&items))
+        }
+    }
+    fn pandigital() -> Pandigital10 {
+        Pandigital10 { perm: 0, max: fact(10) }
+    }
+    pub fn v1() -> u32 {
+        let mut sum_pandigital: u32 = 0;
+        for i in pandigital() { // this could be much more simple
+            let mut digits: Vec<u32> = get_digits(i);
+            digits.reverse();
+            let mut d234: Vec<u32> = Vec::new(); d234.push(digits[1]);
+            d234.push(digits[2]); d234.push(digits[3]);
+            let mut d345: Vec<u32> = Vec::new(); d345.push(digits[2]);
+            d345.push(digits[3]); d345.push(digits[4]);
+            let mut d456: Vec<u32> = Vec::new(); d456.push(digits[3]);
+            d456.push(digits[4]); d456.push(digits[5]);
+            let mut d567: Vec<u32> = Vec::new(); d567.push(digits[4]);
+            d567.push(digits[5]); d567.push(digits[6]);
+            let mut d678: Vec<u32> = Vec::new(); d678.push(digits[5]);
+            d678.push(digits[6]); d678.push(digits[7]);
+            let mut d789: Vec<u32> = Vec::new(); d789.push(digits[6]);
+            d789.push(digits[7]); d789.push(digits[8]);
+            let mut d8910: Vec<u32> = Vec::new(); d8910.push(digits[7]);
+            d8910.push(digits[8]);
+            if digits.len() > 9 { d8910.push(digits[9]); }
+
+            if get_number(&d234) % 2 == 0 && get_number(&d345) % 3 == 0
+                && get_number(&d456) % 5 == 0 && get_number(&d567) % 7 == 0
+                && get_number(&d678) % 11 == 0 && get_number(&d789) % 13 == 0
+                && get_number(&d8910) % 17 == 0 {
+                sum_pandigital += i;
+            }
+        }
+        sum_pandigital
+    }
+}
+
