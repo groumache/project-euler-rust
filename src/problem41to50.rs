@@ -201,3 +201,47 @@ pub mod p043 {
     }
 }
 
+// Problem 44: Pentagon numbers
+//   Find the pair of pentagonal numbers, Pj and Pk, for which their sum
+//   and difference are pentagonal and D = |Pk − Pj| is minimised; what
+//   is the value of D?
+pub mod p044 {
+    struct PentagonNum {
+        n: u32,
+    }
+    impl Iterator for PentagonNum {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            Some(n * (3 * n - 1) / 2)
+        }
+    }
+    fn pentagon() -> PentagonNum {
+        PentagonNum { n: 1, }
+    }
+    // could check with a 'formula' [O(1)] instead of [O(n)]
+    fn is_pentagon(n: u32) -> bool {
+        for i in pentagon() {
+            if n == i { return true; }
+            else if n > i { break; }
+        }
+        false
+    }
+    pub fn v1() -> (u32, u32) {
+        let mut pentagonal_num: (u32, u32) = (0, 0);
+        for i in pentagon() {
+            for j in pentagon() {
+                if j >= i { break; }
+                if is_pentagon(i - j) && is_pentagon(i + j) {
+                    pentagonal_num = (i, j);
+                }
+            }
+            if pentagonal_num != (0, 0) {
+                break;
+            }
+        }
+        pentagonal_num
+    }
+}
+
