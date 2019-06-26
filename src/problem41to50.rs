@@ -444,3 +444,17 @@ pub mod p047 {
     }
 }
 
+// Problem 48: Self powers
+//   Find the last ten digits of the series, 1^1 + 2^2 + ... + 1000^1000.
+pub mod p048 {
+    pub fn v1() -> u32 {
+        let mut ten_digits: u32 = 0;
+        let max: u32 = 1000;
+        for i in 1..max {
+            let base_10: u32 = 10;
+            ten_digits += i.pow(i) % base_10.pow(10);
+        }
+        ten_digits
+    }
+}
+
