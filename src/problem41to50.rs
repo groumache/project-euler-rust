@@ -245,3 +245,77 @@ pub mod p044 {
     }
 }
 
+// Problem 45: Triangular, pentagonal, and hexagonal
+//   Find the next triangle number that is also pentagonal and hexagonal.
+pub mod p045 {
+    struct TriangleNum {
+        n: u32,
+    }
+    impl Iterator for TriangleNum {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            Some(n * (n + 1) / 2)
+        }
+    }
+    fn triangle() -> TriangleNum {
+        TriangleNum { n: 1, }
+    }
+    struct PentagonNum {
+        n: u32,
+    }
+    impl Iterator for PentagonNum {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            Some(n * (3 * n - 1) / 2)
+        }
+    }
+    fn pentagon() -> PentagonNum {
+        PentagonNum { n: 1, }
+    }
+    // could check with a 'formula' [O(1)] instead of [O(n)]
+    fn is_pentagon(n: u32) -> bool {
+        for i in pentagon() {
+            if n == i { return true; }
+            else if n > i { break; }
+        }
+        false
+    }
+    struct HexagonalNum {
+        n: u32,
+    }
+    impl Iterator for HexagonalNum {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            Some(n * (2 * n - 1))
+        }
+    }
+    fn hexagon() -> HexagonalNum {
+        HexagonalNum { n: 1, }
+    }
+    // could check with a 'formula' [O(1)] instead of [O(n)]
+    fn is_hexagon(n: u32) -> bool {
+        for i in hexagon() {
+            if n == i { return true; }
+            else if n > i { break; }
+        }
+        false
+    }
+    pub fn v1() -> u32 {
+        let mut num: u32 = 0;
+        for i in triangle() {
+            if i == 40_755 { continue; } // i.e. 'next one'
+            else if is_pentagon(i) && is_hexagon(i) {
+                num = i;
+                break;
+            }
+        }
+        num
+    }
+}
+
