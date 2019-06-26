@@ -319,3 +319,58 @@ pub mod p045 {
     }
 }
 
+// Problem 46: Goldbach's other conjecture
+//   What is the smallest odd composite that cannot be written as the sum
+//   of a prime and twice a square?
+pub mod p046 {
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    struct Primes {
+        n: u32,
+        largest: u32,
+    }
+    impl Iterator for Primes {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            for i in self.largest.. {
+                if is_prime(i) {
+                    self.largest = i;
+                    break;
+                }
+            }
+            Some(self.largest)
+        }
+    }
+    fn primes() -> Primes {
+        Primes { n: 0, largest: 1 }
+    }
+    pub fn v1() -> u32 {                                            // Maybe write a short explanation
+        let mut smallest_odd_comp: u32 = 0;
+        for i in (33..).step_by(2) {
+            for p in primes() {
+                let mut equal: bool = false;
+                if p > i {
+                    smallest_odd_comp = i;
+                    break;
+                }
+                for j in 1.. {                                      // for j in (1..).map(|x| x.pow(2)) {
+                    let j = (j as u32).pow(2);
+                    if 2 * j + p > i { break; }
+                    else if 2 * j + p == i {
+                        equal = true;
+                        break;
+                    }
+                }
+                if equal { break; }
+            }
+        }
+        smallest_odd_comp
+    }
+}
