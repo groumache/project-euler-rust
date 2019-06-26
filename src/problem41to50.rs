@@ -374,3 +374,73 @@ pub mod p046 {
         smallest_odd_comp
     }
 }
+
+// Problem 47: Distinct primes factors
+//   Find the first four consecutive integers to have four distinct prime
+//   factors each. What is the first of these numbers?
+pub mod p047 {
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    struct Primes {
+        n: u32,
+        largest: u32,
+    }
+    impl Iterator for Primes {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let n = self.n;
+            self.n += 1;
+            for i in self.largest.. {
+                if is_prime(i) {
+                    self.largest = i;
+                    break;
+                }
+            }
+            Some(self.largest)
+        }
+    }
+    fn primes() -> Primes {
+        Primes { n: 0, largest: 1 }
+    }
+    fn prime_factors(n: u32) -> Vec<u32> {
+        let mut n = n;
+        let mut p_fact: Vec<u32> = Vec::new();
+        for i in primes() {
+            if n % i == 0 {
+                p_fact.push(i);
+                n = n / i;
+            }
+            if n == 1 { break; }
+        }
+        p_fact
+    }
+    fn no_double(v: &mut Vec<u32>) -> bool {
+        let length = v.len();
+        v.sort();                                                   //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.dedup();
+        if length != v.len() {
+            return false;
+        }
+        true
+    }
+    pub fn v1() -> u32 {
+        let mut first: u32 = 0;
+        for i in 1.. {
+            let mut p_fact: Vec<u32> = Vec::new();
+            for j in 0..4 {
+                p_fact.append(&mut prime_factors(i + j));
+            }
+            if no_double(&mut p_fact) {
+                first = i;
+                break;
+            }
+        }
+        first
+    }
+}
+
