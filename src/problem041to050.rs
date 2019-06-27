@@ -1,5 +1,28 @@
 // Problem 41: Pandigital prime
 //   What is the largest n-digit pandigital prime that exists?
+// Problem 42: Coded triangle numbers
+//   Using words.txt, a 16K text file containing nearly two-thousand
+//   common English words, how many are triangle words ?
+// Problem 43: Sub-string divisibility
+//   Find the sum of all 0 to 9 pandigital numbers with this property.
+// Problem 44: Pentagon numbers
+//   Find the pair of pentagonal numbers, Pj and Pk, for which their sum
+//   and difference are pentagonal and D = |Pk − Pj| is minimised; what
+//   is the value of D?
+// Problem 45: Triangular, pentagonal, and hexagonal
+//   Find the next triangle number that is also pentagonal and hexagonal.
+// Problem 46: Goldbach's other conjecture
+//   What is the smallest odd composite that cannot be written as the sum
+//   of a prime and twice a square?
+// Problem 47: Distinct primes factors
+//   Find the first four consecutive integers to have four distinct prime
+//   factors each. What is the first of these numbers?
+// Problem 48: Self powers
+//   Find the last ten digits of the series, 1^1 + 2^2 + ... + 1000^1000.
+// Problem 49: Prime permutations
+//   What 12-digit number do you form by concatenating the three terms in this sequence?
+// Problem 50: Consecutive prime sum
+//   Which prime, below one-million, can be written as the sum of the most consecutive primes?
 pub mod p041 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
@@ -39,9 +62,6 @@ pub mod p041 {
     }
 }
 
-// Problem 42: Coded triangle numbers
-//   Using words.txt, a 16K text file containing nearly two-thousand
-//   common English words, how many are triangle words ?
 pub mod p042 {
     use std::fs;
     fn letter_value(l: char) -> u32 {
@@ -102,8 +122,6 @@ pub mod p042 {
     }
 }
 
-// Problem 43: Sub-string divisibility
-//   Find the sum of all 0 to 9 pandigital numbers with this property.
 pub mod p043 {
     fn get_number(digits: &Vec<u32>) -> u32 {
         let mut num: u32 = 0;
@@ -201,10 +219,6 @@ pub mod p043 {
     }
 }
 
-// Problem 44: Pentagon numbers
-//   Find the pair of pentagonal numbers, Pj and Pk, for which their sum
-//   and difference are pentagonal and D = |Pk − Pj| is minimised; what
-//   is the value of D?
 pub mod p044 {
     struct PentagonNum {
         n: u32,
@@ -245,8 +259,6 @@ pub mod p044 {
     }
 }
 
-// Problem 45: Triangular, pentagonal, and hexagonal
-//   Find the next triangle number that is also pentagonal and hexagonal.
 pub mod p045 {
     struct TriangleNum {
         n: u32,
@@ -319,9 +331,6 @@ pub mod p045 {
     }
 }
 
-// Problem 46: Goldbach's other conjecture
-//   What is the smallest odd composite that cannot be written as the sum
-//   of a prime and twice a square?
 pub mod p046 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
@@ -374,9 +383,6 @@ pub mod p046 {
     }
 }
 
-// Problem 47: Distinct primes factors
-//   Find the first four consecutive integers to have four distinct prime
-//   factors each. What is the first of these numbers?
 pub mod p047 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
@@ -442,8 +448,6 @@ pub mod p047 {
     }
 }
 
-// Problem 48: Self powers
-//   Find the last ten digits of the series, 1^1 + 2^2 + ... + 1000^1000.
 pub mod p048 {
     pub fn v1() -> u32 {
         let mut ten_digits: u32 = 0;
@@ -456,8 +460,6 @@ pub mod p048 {
     }
 }
 
-// Problem 49: Prime permutations
-//   What 12-digit number do you form by concatenating the three terms in this sequence?
 pub mod p049 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
@@ -563,8 +565,6 @@ pub mod p049 {
     }
 }
 
-// Problem 50: Consecutive prime sum
-//   Which prime, below one-million, can be written as the sum of the most consecutive primes?
 pub mod p050 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
