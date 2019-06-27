@@ -1,8 +1,25 @@
+pub mod useful_func;
 pub mod problem001to010;
 pub mod problem011to020;
 pub mod problem021to030;
 pub mod problem031to040;
 pub mod problem041to050;
+
+#[cfg(test)]
+mod test_useful_func {
+    use crate::useful_func::*;
+    use prime_numbers::*;
+    #[test]
+    fn test_is_prime() {
+        assert_eq!(is_prime(0), false);
+        assert_eq!(is_prime(1), false);
+        assert_eq!(is_prime(2), true);
+        assert_eq!(is_prime(3), true);
+        assert_eq!(is_prime(4), false);
+        assert_eq!(is_prime(5), true);
+        assert_eq!(is_prime(17), true);
+    }
+}
 
 // there are 2 tests for p009: v1 & v2
 #[cfg(test)]
