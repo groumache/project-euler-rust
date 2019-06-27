@@ -16,7 +16,7 @@ pub mod prime_numbers {
         }
         primes
     }
-    pub struct PrimesIter { // 
+    pub struct PrimesIter {
         minimum: u32,
         maximum: u32,
         no_max: bool,
@@ -24,20 +24,23 @@ pub mod prime_numbers {
     impl Iterator for PrimesIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            for i in self.minimum.. {
-                if !self.no_max && i > self.maximum {
-                    return None;
-                }
+            if self.minimum < 2 { self.minimum = 2; }
+            if self.maximum < 2 { self.maximum = 2; }
+            let mut i: u32 = self.minimum;
+            while !self.no_max && i < self.maximum {
                 if is_prime(i) {
-                    self.minimum = i;
-                    break;
+                    self.minimum = i + 1;
+                    return Some(i);
                 }
+                i += 1;
             }
-            Some(self.minimum)
+            None
         }
     }
     impl DoubleEndedIterator for PrimesIter {
         fn next_back(&mut self) -> Option<u32> {
+            if self.minimum < 2 { self.minimum = 2; }
+            if self.maximum < 2 { self.maximum = 2; }
             let max = self.maximum;
             for i in (self.minimum..self.maximum).rev() {
                 if is_prime(i) {
