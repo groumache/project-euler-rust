@@ -337,7 +337,6 @@ pub mod p046 {
     impl Iterator for Primes {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let n = self.n;
             self.n += 1;
             for i in self.largest.. {
                 if is_prime(i) {
@@ -393,7 +392,6 @@ pub mod p047 {
     impl Iterator for Primes {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let n = self.n;
             self.n += 1;
             for i in self.largest.. {
                 if is_prime(i) {
@@ -455,6 +453,113 @@ pub mod p048 {
             ten_digits += i.pow(i) % base_10.pow(10);
         }
         ten_digits
+    }
+}
+
+// Problem 49: Prime permutations
+//   What 12-digit number do you form by concatenating the three terms in this sequence?
+pub mod p049 {
+    fn get_digits(n: u32) -> Vec<u32> {
+        let mut digits: Vec<u32> = Vec::new();
+        let length = (n as f64).log10() as u32 + 1;
+        for i in 0..length {
+            let base: u32 = 10;
+            let digit: u32 = n / base.pow(i) % 10;
+            digits.push(digit);
+        }
+        digits
+    }
+    fn get_number(digits: &Vec<u32>) -> u32 {
+        let mut num: u32 = 0;
+        let base: u32 = 10;
+        for (i, d) in digits.iter().enumerate() {
+            num += d * base.pow(i as u32);
+        }
+        num
+    }
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    struct Primes {
+        p: u32,
+        maximum: u32,
+        no_max: bool,
+    }
+    impl Iterator for Primes {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            for i in self.p.. {
+                if !self.no_max && i > self.maximum {
+                    return None;
+                }
+                if is_prime(i) {
+                    self.p = i;
+                    break;
+                }
+            }
+            Some(self.p)
+        }
+    }
+    fn primes(min: u32, max: u32) -> Primes {
+        Primes { p: min, maximum: max, no_max: false }
+    }
+    fn no_double(v: &mut Vec<u32>) -> bool {
+        let length = v.len();
+        v.sort();                                                   //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.dedup();
+        if length != v.len() {
+            return false;
+        }
+        true
+    }
+    fn is_permutation(v1: &mut Vec<u32>, v2: &mut Vec<u32>) -> bool {
+        v1.sort();
+        v2.sort();
+        if v1 == v2 { return true; }
+        false
+    }
+    pub fn v1() -> u32 {
+        // lots of code duplication...
+        // could be better with:
+        // (0.) initialize: p1/minimum = 1000, maximum = 10_000
+        // (1.) p1 = find_next_prime_with_no_double_digits(min: p1, max: maximum)
+        // (2.) p2 = find_next_prime_is_permutation(min/perm: p1, max: maximum)
+        // (3.) p3 = find_next_prime_is_permutation(min/perm: p2, max: maximum)
+        // (4.) if failure with steps (2.) or (3.), go back to step (1.)
+        let mut p1: u32 = 0;
+        let mut p2: u32 = 0;
+        let mut p3: u32 = 0;
+        let max: u32 = 10_000;
+        let min: u32 = 1000;
+        for i in primes(min, max) {
+            let mut digits1 = get_digits(i);
+            if !no_double(&mut digits1) { continue; }
+            p1 = i;
+            for j in primes(i, max) {
+                let mut digits2 = get_digits(j);
+                if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
+                    continue;
+                }
+                p2 = j;
+                for k in primes(j, max) {
+                    digits2 = get_digits(k);
+                    if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
+                        continue;
+                    }
+                    p3 = k;
+                }
+            }
+        }
+        let mut digits = get_digits(p1);
+        let mut digits2 = get_digits(p2);
+        digits.append(&mut digits2);
+        let mut digits2 = get_digits(p3);
+        digits.append(&mut digits2);
+        get_number(&mut digits)
     }
 }
 
