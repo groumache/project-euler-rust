@@ -1,13 +1,13 @@
-pub mod problem1to10;
-pub mod problem11to20;
-pub mod problem21to30;
-pub mod problem31to40;
-pub mod problem41to50;
+pub mod problem001to010;
+pub mod problem011to020;
+pub mod problem021to030;
+pub mod problem031to040;
+pub mod problem041to050;
 
 // there are 2 tests for p009: v1 & v2
 #[cfg(test)]
 mod tests_1to10 {
-    use crate::problem1to10::*;
+    use crate::problem001to010::*;
     #[test]
     #[ignore]
     fn test_p001() {
@@ -77,7 +77,7 @@ mod tests_1to10 {
 // No test for p011, p013, p018, p019 because there aren't any example in the problem statements.
 #[cfg(test)]
 mod tests_11to20 {
-    use crate::problem11to20::*;
+    use crate::problem011to020::*;
     #[test]
     #[ignore]
     fn test_p012() {
