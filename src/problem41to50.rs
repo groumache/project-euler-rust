@@ -563,3 +563,92 @@ pub mod p049 {
     }
 }
 
+// Problem 50: Consecutive prime sum
+//   Which prime, below one-million, can be written as the sum of the most consecutive primes?
+pub mod p050 {
+    fn is_prime(n: u32) -> bool {
+        let half = n / 2 + 1;
+        for i in 2..half {
+            if n % i == 0 { return false; }
+        }
+        true
+    }
+    struct Primes {
+        minimum: u32,
+        maximum: u32,
+        no_max: bool,
+    }
+    impl Iterator for Primes {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            for i in self.minimum.. {
+                if !self.no_max && i > self.maximum {
+                    return None;
+                }
+                if is_prime(i) {
+                    self.minimum = i;
+                    break;
+                }
+            }
+            Some(self.minimum)
+        }
+    }
+    /*
+        impl DoubleEndedIterator for Primes {
+            fn next_back(&mut self) -> Option<u32> {
+                let max = self.maximum;
+                for i in (self.minimum..self.maximum).rev() {
+                    if is_prime(i) {
+                        self.maximum = i;
+                        break;
+                    }
+                }
+                if max == self.maximum { return None; }
+                Some(self.maximum)
+            }        
+        }
+    */
+    fn primes(min: u32, max: u32) -> Primes {
+        Primes { minimum: min, maximum: max, no_max: false }
+    }
+    fn primes_below(n: u32) -> Vec<u32> {
+        let mut primes: Vec<u32> = Vec::new();
+        for i in 2..n {
+            if is_prime(i) {
+                primes.push(i);
+            }
+        }
+        primes
+    }
+    pub fn v1() -> u32 {
+        let mut prime: u32 = 0;
+        let mut sum_len: usize = 0;
+        let min = 1;
+        let max = 1_000_000;
+        for p in primes(min, max) {
+            let p_below: Vec<u32> = primes_below(p + 1);
+            let mut sum: u32 = 0;
+            let mut start: usize = 0;
+            let mut stop: usize = 0;
+            loop {
+                if sum == p {
+                    let length = stop - start + 1;
+                    if length > sum_len {
+                        prime = p;
+                        sum_len = length;
+                    }
+                    break;
+                }
+                else if sum > p {
+                    start += 1;
+                    stop = start;
+                    sum = 0;
+                } else { // sum < p
+                    sum += p_below[stop];
+                }
+            }
+        }
+        prime
+    }
+}
+
