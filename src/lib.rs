@@ -19,6 +19,12 @@ mod test_useful_func {
         assert_eq!(is_prime(5), true);
         assert_eq!(is_prime(17), true);
     }
+    #[test]
+    fn test_primes_below() {
+        assert_eq!(primes_below(2), [].to_vec());
+        assert_eq!(primes_below(3), [2].to_vec());
+        assert_eq!(primes_below(10), [2,3,5,7].to_vec());
+    }
 }
 
 // there are 2 tests for p009: v1 & v2

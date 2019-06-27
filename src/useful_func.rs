@@ -1,5 +1,6 @@
 pub mod prime_numbers {
     pub fn is_prime(n: u32) -> bool {
+        if n < 2 { return false; }
         let half = n / 2 + 1;
         for i in 2..half {
             if n % i == 0 { return false; }
