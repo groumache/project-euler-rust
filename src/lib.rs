@@ -221,14 +221,10 @@ mod tests_1to10 {
     }
     #[test]
     #[ignore]
-    fn test_p009_v1() {
+    fn test_p009() {
         let abc = p009::v1();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
-    }
-    #[test]
-    #[ignore]
-    fn test_p009_v2() {
         let abc = p009::v2();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
