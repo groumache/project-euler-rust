@@ -1,3 +1,8 @@
+// TODO:
+//  1. do not modify the vector received as argument in 'no_double'
+//  2. make 'no_double' generic (no_double<T>(v: & Vec<T>))
+
+
 pub mod useful_func;
 pub mod problem001to010;
 pub mod problem011to020;
@@ -8,72 +13,97 @@ pub mod problem041to050;
 #[cfg(test)]
 mod test_useful_func {
     use crate::useful_func::*;
-    use prime_numbers::*;
-    #[test]
-    #[ignore]
-    fn test_is_prime() {
-        assert_eq!(is_prime(0), false);
-        assert_eq!(is_prime(1), false);
-        assert_eq!(is_prime(2), true);
-        assert_eq!(is_prime(3), true);
-        assert_eq!(is_prime(4), false);
-        assert_eq!(is_prime(5), true);
-        assert_eq!(is_prime(17), true);
-    }
-    #[test]
-    #[ignore]
-    fn test_primes_below() {
-        assert_eq!(primes_below(2), [].to_vec());
-        assert_eq!(primes_below(3), [2].to_vec());
-        assert_eq!(primes_below(10), [2,3,5,7].to_vec());
-    }
-    #[test]
-    #[ignore]
-    fn test_primes_iterator1() {
-        let min = 0;
-        let max = 0;
-        let mut counter = 0;
-        for _ in primes_minmax(min, max) {
-            counter += 1;
+    mod prime_numbers_tests {
+        use super::prime_numbers::*;
+        #[test]
+        #[ignore]
+        fn test_is_prime() {
+            assert_eq!(is_prime(0), false);
+            assert_eq!(is_prime(1), false);
+            assert_eq!(is_prime(2), true);
+            assert_eq!(is_prime(3), true);
+            assert_eq!(is_prime(4), false);
+            assert_eq!(is_prime(5), true);
+            assert_eq!(is_prime(17), true);
         }
-        assert_eq!(counter, 0);
-    }
-    #[test]
-    #[ignore]
-    fn test_primes_iterator2() {
-        let min = 0;
-        let max = 10;
-        let mut primes: Vec<u32> = Vec::new();
-        for p in primes_minmax(min, max) {
-            primes.push(p);
+        #[test]
+        #[ignore]
+        fn test_primes_below() {
+            assert_eq!(primes_below(2), [].to_vec());
+            assert_eq!(primes_below(3), [2].to_vec());
+            assert_eq!(primes_below(10), [2,3,5,7].to_vec());
         }
-        assert_eq!(primes, [2,3,5,7].to_vec());
-    }
-    #[test]
-    #[ignore]
-    fn test_primes_iterator3() {
-        let min = 0;
-        let max = 10;
-        let mut counter = 0;
-        for p in primes_minmax(min, max).rev() {
-            counter += 1;
-            assert!(
-                match counter {
-                    1 => p == 7,
-                    2 => p == 5,
-                    3 => p == 3,
-                    4 => p == 2,
-                    _ => false,
-                }
-            )
+        #[test]
+        #[ignore]
+        fn test_primes_iterator1() {
+            let min = 0;
+            let max = 0;
+            let mut counter = 0;
+            for _ in primes_minmax(min, max) {
+                counter += 1;
+            }
+            assert_eq!(counter, 0);
+        }
+        #[test]
+        #[ignore]
+        fn test_primes_iterator2() {
+            let min = 0;
+            let max = 10;
+            let mut primes: Vec<u32> = Vec::new();
+            for p in primes_minmax(min, max) {
+                primes.push(p);
+            }
+            assert_eq!(primes, [2,3,5,7].to_vec());
+        }
+        #[test]
+        #[ignore]
+        fn test_primes_iterator3() {
+            let min = 0;
+            let max = 10;
+            let mut counter = 0;
+            for p in primes_minmax(min, max).rev() {
+                counter += 1;
+                assert!(
+                    match counter {
+                        1 => p == 7,
+                        2 => p == 5,
+                        3 => p == 3,
+                        4 => p == 2,
+                        _ => false,
+                    }
+                )
+            }
+        }
+        #[test]
+        #[ignore]
+        fn test_prime_factors() {
+            assert_eq!(prime_factors(2), [2].to_vec());
+            assert_eq!(prime_factors(7), [7].to_vec());
+            assert_eq!(prime_factors(12), [2,3].to_vec());
         }
     }
-    #[test]
-    // #[ignore]
-    fn test_prime_factors() {
-        assert_eq!(prime_factors(2), [2].to_vec());
-        assert_eq!(prime_factors(7), [7].to_vec());
-        assert_eq!(prime_factors(12), [2,3].to_vec());
+    mod digits_numbers_tests {
+        use super::digits_numbers::*;
+        #[test]
+        #[ignore]
+        fn test_get_digits() {
+            assert_eq!(get_digits(58), [8,5].to_vec());
+            assert_eq!(get_digits(0), [0].to_vec());
+        }
+        #[test]
+        #[ignore]
+        fn test_get_number() {
+            assert_eq!(get_number(& [7,5,3].to_vec()), 357);
+            assert_eq!(get_number(& [0].to_vec()), 0);
+        }
+        #[test]
+        #[ignore]
+        fn test_no_double() {
+            assert!(no_double(&mut [5,7,8].to_vec()));
+            assert!(no_double(&mut [0].to_vec()));
+            assert!(!no_double(&mut [5,5].to_vec()));
+            assert!(!no_double(&mut [4,8,4].to_vec()));
+        }
     }
 }
 
