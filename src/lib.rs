@@ -39,7 +39,7 @@ mod test_useful_func {
         assert_eq!(counter, 0);
     }
     #[test]
-    // #[ignore]
+    #[ignore]
     fn test_primes_iterator2() {
         let min = 0;
         let max = 10;
@@ -69,7 +69,7 @@ mod test_useful_func {
         }
     }
     #[test]
-    #[ignore]
+    // #[ignore]
     fn test_prime_factors() {
         assert_eq!(prime_factors(2), [2].to_vec());
         assert_eq!(prime_factors(7), [7].to_vec());

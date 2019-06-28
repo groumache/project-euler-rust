@@ -27,7 +27,8 @@ pub mod prime_numbers {
             if self.minimum < 2 { self.minimum = 2; }
             if self.maximum < 2 { self.maximum = 2; }
             let mut i: u32 = self.minimum;
-            while !self.no_max && i < self.maximum {
+            loop {
+                if !self.no_max && i >= self.maximum { break; }
                 if is_prime(i) {
                     self.minimum = i + 1;
                     return Some(i);
@@ -62,9 +63,11 @@ pub mod prime_numbers {
         let mut n = n;
         let mut p_fact: Vec<u32> = Vec::new();
         for i in primes_inf() {
-            if n % i == 0 {
-                p_fact.push(i);
+            while n % i == 0 {
                 n = n / i;
+                if p_fact.len() == 0 || *p_fact.last().unwrap() != i {
+                    p_fact.push(i);
+                }
             }
             if n == 1 { break; }
         }
