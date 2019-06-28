@@ -138,12 +138,17 @@ pub mod p003 {
     }
     pub fn v5(n: u32) -> u32 {
         let divide_number = |x: u32| n % x == 0;
-        let is_prime = |x: u32| { for i in 2..x { if x % i == 0 { return false; } } true }; // could loop only up to: x.sqrt() + 1
+        let is_prime = |x: u32| { for i in 2..x { if x % i == 0 { return false; } } true }; // doesn't have to loop only up to: x.sqrt() + 1
         let max = (2..n+1)
             .filter(|x| divide_number(*x))       // too bad I can't just write: .filter( divide_number )
             .filter(|x| is_prime(*x))
             .max().unwrap();
         max
+    }
+    use crate::useful_func::prime_numbers::*;
+    pub fn v6(n: u32) -> u32 {
+        let p_factors = prime_factors(n);
+        *p_factors.iter().max().unwrap()
     }
 }
 

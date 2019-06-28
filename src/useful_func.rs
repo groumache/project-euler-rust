@@ -188,4 +188,11 @@ pub mod other_func {
     pub fn fibonnacci_inf() -> FibonnacciIter {
         FibonnacciIter { curr: 1, next: 2 }
     }
+    pub fn factors(n: u32) -> Vec<u32> {
+        let mut fact: Vec<u32> = Vec::new();
+        for i in 1..n+1 {
+            if n % i == 0 { fact.push(i); }
+        }
+        fact
+    }
 }

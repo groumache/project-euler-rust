@@ -1,9 +1,3 @@
-// TODO:
-//  1. do not modify the vector received as argument in 'no_double'
-//  2. make 'no_double' generic (no_double<T>(v: & Vec<T>))
-//  3. make 'is_hexagonal', 'is_pentagonal', 'is_triangle' in O(1) instead of O(n)
-
-
 pub mod useful_func;
 pub mod problem001to010;
 pub mod problem011to020;
@@ -166,6 +160,12 @@ mod test_useful_func {
             }
             assert_eq!(v, [1,2,3,5,8].to_vec());
         }
+        #[test]
+        #[ignore]
+        fn test_factors() {
+            assert_eq!(factors(5), [1,5].to_vec());
+            assert_eq!(factors(12), [1,2,3,4,6,12].to_vec());
+        }
     }
 }
 
@@ -180,48 +180,49 @@ mod tests_1to10 {
         assert_eq!(p001::v2(10), 23);
     }
     #[test]
-    // #[ignore]
+    #[ignore]
     fn test_p002() { // Problem 2: Even Fibonacci numbers
         assert_eq!(p002::v1(10), 44);
         assert_eq!(p002::v2(10), 44);
     }
     #[test]
     #[ignore]
-    fn test_p003() {
+    fn test_p003() { // Problem 3: Largest prime factor
         assert_eq!(p003::v1(13195), 29);
         assert_eq!(p003::v2(13195), 29);
         assert_eq!(p003::v3(13195), 29);
         assert_eq!(p003::v4(13195), 29);
         assert_eq!(p003::v5(13195), 29);
+        assert_eq!(p003::v6(13195), 29);
     }
     #[test]
     #[ignore]
-    fn test_p004() {
+    fn test_p004() { // Problem 4: Largest palindrome product
         assert_eq!(p004::v1(2), 9009);
     }
     #[test]
     #[ignore]
-    fn test_p005() {
+    fn test_p005() { // Problem 5: Smallest multiple
         assert_eq!(p005::v1(10), 2520);
     }
     #[test]
     #[ignore]
-    fn test_p006() {
+    fn test_p006() { // Problem 6: Sum Square Difference
         assert_eq!(p006::v1(10), 2640);
     }
     #[test]
     #[ignore]
-    fn test_p007() {
+    fn test_p007() { // Problem 7: n-th prime
         assert_eq!(p007::v1(6), 13);
     }
     #[test]
     #[ignore]
-    fn test_p008() {
+    fn test_p008() { // Problem 8: Largest product in a series
         assert_eq!(p008::v1(4), 5832);
     }
     #[test]
     #[ignore]
-    fn test_p009() {
+    fn test_p009() { // Problem 9: Special Pythagorean triplet
         let abc = p009::v1();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
@@ -231,7 +232,7 @@ mod tests_1to10 {
     }
     #[test]
     #[ignore]
-    fn test_p010() {
+    fn test_p010() { // Problem 10: Summation of primes
         assert_eq!(p010::v1(10), 17);
     }
 }
