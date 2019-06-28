@@ -29,20 +29,20 @@ pub mod p001 {
         sum3 + sum5
     }
     // Math formula -- O(1)
-    //  (3 + 6 + ...) + (5 + 10 + ...) - (15 + 30 + ...)
+    //  \sum_{i = 1}^{n} = n * (n + 1) / 2
     pub fn v2(limit: u32) -> u32 {
-        let nb3 = (limit - 1) / 3;
-        let sum3 = 3 * nb3 * (1 + nb3) / 2; 
-        let nb5 = (limit - 1) / 5;
-        let sum5 = 5 * nb5 * (1 + nb5) / 2;
-        let nb3x5 = limit / (3 * 5);
-        let sum3x5 = (3 * 5) * nb3x5 * (1 + nb3x5) / 2;
+        let n3 = (limit - 1) / 3;
+        let sum3 = 3 * n3 * (n3 + 1) / 2; 
+        let n5 = (limit - 1) / 5;
+        let sum5 = 5 * n5 * (n5 + 1) / 2;
+        let n3x5 = limit / (3 * 5);
+        let sum3x5 = (3 * 5) * n3x5 * (n3x5 + 1) / 2;
         sum3 + sum5 - sum3x5
     }
 }
 
 pub mod p002 {
-    // Fibonnacci iterations -- O(n)
+    // Fibonnacci iterative algorithm -- O(n)
     pub fn v1(nb_terms: u32) -> u32 {
         let mut curr = 1;
         let mut next = 2;
@@ -51,11 +51,21 @@ pub mod p002 {
             let tmp = next;
             next = curr + next;
             curr = tmp;
-            if curr % 2 == 0 {
-                even_sum = even_sum + curr;
-            }
+            if curr % 2 == 0 { even_sum += curr; }
         }
         even_sum
+    }
+    // Fibonnacci Iterator -- O(n)
+    use crate::useful_func::other_func::*;
+    pub fn v2(nb_terms: u32) -> u32 {
+        let mut counter: u32 = 0;
+        let mut sum: u32 = 0;
+        for i in fibonnacci_inf() {
+            counter += 1;
+            if i % 2 == 0 { sum += i; }
+            if counter >= nb_terms { break; }
+        }
+        sum
     }
 }
 

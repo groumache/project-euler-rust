@@ -1,6 +1,7 @@
 // TODO:
 //  1. do not modify the vector received as argument in 'no_double'
 //  2. make 'no_double' generic (no_double<T>(v: & Vec<T>))
+//  3. make 'is_hexagonal', 'is_pentagonal', 'is_triangle' in O(1) instead of O(n)
 
 
 pub mod useful_func;
@@ -119,6 +120,12 @@ mod test_useful_func {
         }
         #[test]
         #[ignore]
+        fn test_is_triangle() {
+            assert!(is_triangle(1));
+            assert!(is_triangle(15));
+        }
+        #[test]
+        #[ignore]
         fn test_pentagon_inf() {
             let mut v: Vec<u32> = Vec::new();
             for i in pentagon_inf() {
@@ -149,6 +156,16 @@ mod test_useful_func {
             assert!(is_hexagon(1));
             assert!(is_hexagon(15));
         }
+        #[test]
+        #[ignore]
+        fn test_fibonnacci_iterator() {
+            let mut v: Vec<u32> = Vec::new();
+            for i in fibonnacci_inf() {
+                if i > 10 { break; }
+                v.push(i);
+            }
+            assert_eq!(v, [1,2,3,5,8].to_vec());
+        }
     }
 }
 
@@ -158,14 +175,15 @@ mod tests_1to10 {
     use crate::problem001to010::*;
     #[test]
     #[ignore]
-    fn test_p001() {
+    fn test_p001() { // Problem 1: Multiples of 3 and 5
         assert_eq!(p001::v1(10), 23);
         assert_eq!(p001::v2(10), 23);
     }
     #[test]
-    #[ignore]
-    fn test_p002() {
+    // #[ignore]
+    fn test_p002() { // Problem 2: Even Fibonacci numbers
         assert_eq!(p002::v1(10), 44);
+        assert_eq!(p002::v2(10), 44);
     }
     #[test]
     #[ignore]

@@ -120,6 +120,14 @@ pub mod other_func {
     pub fn triangle_inf() -> TriangleNum {
         TriangleNum { n: 1, }
     }
+    // could check with a 'formula' [O(1)] instead of [O(n)]
+    pub fn is_triangle(n: u32) -> bool {
+        for i in triangle_inf() {
+            if n == i { return true; }
+            else if i > n { break; }
+        }
+        false
+    }
     pub struct PentagonalNum {
         n: u32,
     }
@@ -163,5 +171,21 @@ pub mod other_func {
             else if i > n { break; }
         }
         false
+    }
+    pub struct FibonnacciIter {
+        curr: u32,
+        next: u32,
+    }
+    impl Iterator for FibonnacciIter {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let curr = self.curr;
+            self.curr = self.next;
+            self.next += curr;
+            Some(curr)
+        }
+    }
+    pub fn fibonnacci_inf() -> FibonnacciIter {
+        FibonnacciIter { curr: 1, next: 2 }
     }
 }
