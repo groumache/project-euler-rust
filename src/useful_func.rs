@@ -138,7 +138,7 @@ pub mod other_func {
     pub fn is_pentagon(n: u32) -> bool {
         for i in pentagon_inf() {
             if n == i { return true; }
-            else if n > i { break; }
+            else if i > n { break; }
         }
         false
     }
@@ -160,7 +160,7 @@ pub mod other_func {
     pub fn is_hexagon(n: u32) -> bool {
         for i in hexagon_inf() {
             if n == i { return true; }
-            else if n > i { break; }
+            else if i > n { break; }
         }
         false
     }

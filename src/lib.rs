@@ -105,6 +105,51 @@ mod test_useful_func {
             assert!(!no_double(&mut [4,8,4].to_vec()));
         }
     }
+    mod other_func_tests {
+        use super::other_func::*;
+        #[test]
+        #[ignore]
+        fn test_triangle_iterator() {
+            let mut v: Vec<u32> = Vec::new();
+            for i in triangle_inf() {
+                if i > 10 { break; }
+                v.push(i);
+            }
+            assert_eq!(v, [1,3,6,10].to_vec());
+        }
+        #[test]
+        #[ignore]
+        fn test_pentagon_inf() {
+            let mut v: Vec<u32> = Vec::new();
+            for i in pentagon_inf() {
+                if i > 10 { break; }
+                v.push(i);
+            }
+            assert_eq!(v, [1,5].to_vec());
+        }
+        #[test]
+        #[ignore]
+        fn test_is_pentagon() {
+            assert!(is_pentagon(1));
+            assert!(is_pentagon(12));
+        }
+        #[test]
+        #[ignore]
+        fn test_hexagon_inf() {
+            let mut v: Vec<u32> = Vec::new();
+            for i in hexagon_inf() {
+                if i > 10 { break; }
+                v.push(i);
+            }
+            assert_eq!(v, [1,6].to_vec());
+        }
+        #[test]
+        #[ignore]
+        fn test_is_hexagon() {
+            assert!(is_hexagon(1));
+            assert!(is_hexagon(15));
+        }
+    }
 }
 
 // there are 2 tests for p009: v1 & v2
