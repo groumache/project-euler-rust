@@ -21,7 +21,8 @@
 //   Find the sum of the digits in the number n!
 pub mod p011 {
     pub fn v1() -> u32 {
-        let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08".to_string()
+        let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08"
+            .to_string()
             + " 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00"
             + " 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65"
             + " 52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91"
@@ -61,7 +62,9 @@ pub mod p011 {
                     let index = row * length + (col + i);
                     mul *= grid_num[index];
                 }
-                if mul > largest_prod { largest_prod = mul; }
+                if mul > largest_prod {
+                    largest_prod = mul;
+                }
             }
         }
         // Vertical
@@ -72,7 +75,9 @@ pub mod p011 {
                     let index = (row + i) * length + col;
                     mul *= grid_num[index];
                 }
-                if mul > largest_prod { largest_prod = mul; }
+                if mul > largest_prod {
+                    largest_prod = mul;
+                }
             }
         }
         // Diagonal
@@ -83,7 +88,9 @@ pub mod p011 {
                     let index = (row + i) * length + (col + i);
                     mul *= grid_num[index];
                 }
-                if mul > largest_prod { largest_prod = mul; }
+                if mul > largest_prod {
+                    largest_prod = mul;
+                }
             }
         }
         largest_prod
@@ -96,10 +103,14 @@ pub mod p012 {
         let mut next_tri = 2;
         loop {
             let mut counter = 0;
-            for i in 1..triangular+1 {
-                if triangular % i == 0 { counter += 1; }
+            for i in 1..triangular + 1 {
+                if triangular % i == 0 {
+                    counter += 1;
+                }
             }
-            if counter >= n { break; }
+            if counter >= n {
+                break;
+            }
             triangular += next_tri;
             next_tri += 1;
         }
@@ -109,7 +120,7 @@ pub mod p012 {
 
 pub mod p013 {
     pub fn v1() -> u32 {
-        let base: u32 = 10;         // need 'base' because: 10.pow() gives an error and (10 as u32) is not supported or something -- it's probably optimized by the compiler anyway
+        let base: u32 = 10; // need 'base' because: 10.pow() gives an error and (10 as u32) is not supported or something -- it's probably optimized by the compiler anyway
         let number = "37107287533902102798797998220837590246510135740250".to_string()
             + "46376937677490009712648124896970078050417018260538"
             + "74324986199524741059474233309513058123726617309629"
@@ -216,7 +227,7 @@ pub mod p013 {
         for (i, c) in number.chars().enumerate() {
             let position = i % n_digits;
             if position > n_digits - n_first {
-                let exp = n_digits - position - 1;  // last digit: 50 - 49 - 1 = 0
+                let exp = n_digits - position - 1; // last digit: 50 - 49 - 1 = 0
                 first_digits += c.to_digit(10).unwrap() * base.pow(exp as u32);
             }
         }
@@ -228,7 +239,7 @@ pub mod p014 {
     pub fn v1(n: u32) -> u32 {
         let mut start_number = 1;
         let mut max_length = 1;
-        for curr in 2..n+1 {
+        for curr in 2..n + 1 {
             let mut chain_length = 1;
             let mut i = curr;
             while i != 1 {
@@ -252,16 +263,16 @@ pub mod p014 {
 pub mod p015 {
     pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
-        let n_fact: u32 = (2..n+1).product();
-        let two_n_fact: u32 = (2..(2*n+1)).product();
+        let n_fact: u32 = (2..n + 1).product();
+        let two_n_fact: u32 = (2..(2 * n + 1)).product();
         two_n_fact / (n_fact * n_fact)
     }
 }
 
 pub mod p016 {
     pub fn v1(n: u32) -> u32 {
-        let base: u32 = 2;                                          // need 'base' because: 2.pow() doesn't work
-        let number = base.pow(n).to_string();       // base.pow(n).to_string().chars().to_digit(10).unwrap().sum()  ===>  to_digit() doesn't work on char iterator
+        let base: u32 = 2; // need 'base' because: 2.pow() doesn't work
+        let number = base.pow(n).to_string(); // base.pow(n).to_string().chars().to_digit(10).unwrap().sum()  ===>  to_digit() doesn't work on char iterator
         let mut sum = 0;
         for c in number.chars() {
             sum += c.to_digit(10).unwrap();
@@ -272,36 +283,31 @@ pub mod p016 {
 
 pub mod p017 {
     pub fn v1(n: u32) -> u32 {
-        let letters_0to19 = |num: u32| {
-            match num {
-                1 | 2 | 6 | 10 => 3,
-                0 | 4 | 5 | 9 => 4,
-                3 | 7 | 8 => 5,
-                11 | 12 => 6,
-                15 | 16 => 7,
-                13 | 14 | 18 | 19 => 8,
-                17 => 9,
-                _ => panic!(),
-            }
+        let letters_0to19 = |num: u32| match num {
+            1 | 2 | 6 | 10 => 3,
+            0 | 4 | 5 | 9 => 4,
+            3 | 7 | 8 => 5,
+            11 | 12 => 6,
+            15 | 16 => 7,
+            13 | 14 | 18 | 19 => 8,
+            17 => 9,
+            _ => panic!(),
         };
-        let letters_0to99 = |num: u32| {
-            match num {
-                0...19 => letters_0to19(num),
-                40 | 50 | 60 => 5,
-                41...49 | 51...59 | 61...69 => 5 + letters_0to19(num % 20),
-                20 | 30 | 80 | 90 => 6,
-                21...29 | 31...39 | 81...89 | 91...99 => 6 + letters_0to19(num % 20),
-                70 => 7,
-                71...79 => 7 + letters_0to19(num % 20),
-                _ => panic!(),
-            }
+        let letters_0to99 = |num: u32| match num {
+            0...19 => letters_0to19(num),
+            40 | 50 | 60 => 5,
+            41...49 | 51...59 | 61...69 => 5 + letters_0to19(num % 20),
+            20 | 30 | 80 | 90 => 6,
+            21...29 | 31...39 | 81...89 | 91...99 => 6 + letters_0to19(num % 20),
+            70 => 7,
+            71...79 => 7 + letters_0to19(num % 20),
+            _ => panic!(),
         };
         let letters_0to999 = |num: u32| {
             let hundreds = num / 100;
             match num {
                 0...99 => letters_0to99(num),
-                100 | 200 | 300 | 400 | 500 | 600 | 700
-                    | 800 | 900 => 7 + letters_0to19(hundreds),
+                100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 => 7 + letters_0to19(hundreds),
                 101...999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
                 _ => panic!(),
             }
@@ -323,7 +329,7 @@ pub mod p017 {
             n_letters
         };
         let mut n_letters = 0;
-        for i in 1..n+1 {
+        for i in 1..n + 1 {
             n_letters += letters_0to1million(i);
         }
         n_letters
@@ -351,30 +357,30 @@ pub mod p018 {
         for (i, c) in triangle_string.chars().enumerate() {
             if i % 3 == 0 {
                 // unwrap safely by checking the length of triangle beforehand
-                if triangle.len() == 0 || triangle.last().unwrap().len() >= triangle.len(){
-                    triangle.push(vec!(c.to_digit(10).unwrap()));
+                if triangle.len() == 0 || triangle.last().unwrap().len() >= triangle.len() {
+                    triangle.push(vec![c.to_digit(10).unwrap()]);
                 } else {
                     let mut line = triangle.pop().unwrap();
                     line.push(c.to_digit(10).unwrap());
                 }
             } else if i % 3 == 1 {
                 let size = triangle.len();
-                let last_num = triangle[size-1].pop().unwrap();
-                triangle[size-1].push(last_num * 10 + c.to_digit(10).unwrap());
+                let last_num = triangle[size - 1].pop().unwrap();
+                triangle[size - 1].push(last_num * 10 + c.to_digit(10).unwrap());
             }
         }
         for i in 1..triangle.len() {
             for j in 0..i {
                 if j == 0 {
-                    triangle[i][j] += triangle[i-1][j];
+                    triangle[i][j] += triangle[i - 1][j];
                 } else if j == i {
-                    triangle[i][j] += triangle[i-1][j-1];
+                    triangle[i][j] += triangle[i - 1][j - 1];
                 } else {
                     let max: u32;
-                    if triangle[i-1][j] > triangle[i-1][j-1] {
-                        max = triangle[i-1][j];
+                    if triangle[i - 1][j] > triangle[i - 1][j - 1] {
+                        max = triangle[i - 1][j];
                     } else {
-                        max = triangle[i-1][j-1]
+                        max = triangle[i - 1][j - 1]
                     }
                     triangle[i][j] += max;
                 }
@@ -392,31 +398,32 @@ pub mod p019 {
     }
     impl PartialEq for Date {
         fn eq(&self, other: &Self) -> bool {
-            self.year == other.year && self.month == other.month
-                && self.day == other.day
+            self.year == other.year && self.month == other.month && self.day == other.day
         }
     }
     pub fn v1() -> u32 {
         let days_since_1900 = |date: &Date| -> u32 {
             let mut n_days: u32;
             n_days = date.day - 1; // day passed this month
-            // number of days in the months passed
+                                   // number of days in the months passed
             n_days += match date.month {
                 1 => 0,
                 2 => 31,
                 3 => 31 + 28,
-                4 => 2*31 + 28,
-                5 => 2*31 + 28 + 30,
-                6 => 3*31 + 28 + 30,
-                7 => 3*31 + 28 + 2*30,
-                8 => 4*31 + 28 + 2*30,
-                9 => 5*31 + 28 + 2*30,
-                10 => 5*31 + 28 + 3*30,
-                11 => 6*31 + 28 + 3*30,
-                12 => 6*31 + 28 + 4*30,
+                4 => 2 * 31 + 28,
+                5 => 2 * 31 + 28 + 30,
+                6 => 3 * 31 + 28 + 30,
+                7 => 3 * 31 + 28 + 2 * 30,
+                8 => 4 * 31 + 28 + 2 * 30,
+                9 => 5 * 31 + 28 + 2 * 30,
+                10 => 5 * 31 + 28 + 3 * 30,
+                11 => 6 * 31 + 28 + 3 * 30,
+                12 => 6 * 31 + 28 + 4 * 30,
                 _ => panic!(),
             };
-            if date.year % 4 == 0 && date.month > 2 { n_days += 1; }
+            if date.year % 4 == 0 && date.month > 2 {
+                n_days += 1;
+            }
             // number of days in the years passed since 1900
             let n_years = date.year - 1900;
             n_days += n_years * 365;
@@ -424,12 +431,22 @@ pub mod p019 {
             n_days += n_leap_years - 1; // -1 because 1900 is no leap year
             n_days
         };
-        let new_century: Date = Date { year: 2001, month: 1, day: 1 };
-        let mut curr_date: Date = Date { year: 1901, month: 1, day: 1 };
+        let new_century: Date = Date {
+            year: 2001,
+            month: 1,
+            day: 1,
+        };
+        let mut curr_date: Date = Date {
+            year: 1901,
+            month: 1,
+            day: 1,
+        };
         let mut counter: u32 = 0;
         while curr_date != new_century {
             let days_passed = days_since_1900(&curr_date);
-            if days_passed % 7 == 0 { counter += 1; }
+            if days_passed % 7 == 0 {
+                counter += 1;
+            }
             // update curr_date
             if curr_date.month > 12 {
                 curr_date.year += 1;
@@ -444,7 +461,7 @@ pub mod p019 {
 
 pub mod p020 {
     pub fn v1(n: u32) -> u32 {
-        let fact: u32 = (2..n+1).product();
+        let fact: u32 = (2..n + 1).product();
         let mut sum: u32 = 0;
         for c in fact.to_string().chars() {
             sum += c.to_digit(10).unwrap();

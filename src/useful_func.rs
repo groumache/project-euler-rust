@@ -1,9 +1,13 @@
 pub mod prime_numbers {
     pub fn is_prime(n: u32) -> bool {
-        if n < 2 { return false; }
+        if n < 2 {
+            return false;
+        }
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -24,11 +28,17 @@ pub mod prime_numbers {
     impl Iterator for PrimesIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            if self.minimum < 2 { self.minimum = 2; }
-            if self.maximum < 2 { self.maximum = 2; }
+            if self.minimum < 2 {
+                self.minimum = 2;
+            }
+            if self.maximum < 2 {
+                self.maximum = 2;
+            }
             let mut i: u32 = self.minimum;
             loop {
-                if !self.no_max && i >= self.maximum { break; }
+                if !self.no_max && i >= self.maximum {
+                    break;
+                }
                 if is_prime(i) {
                     self.minimum = i + 1;
                     return Some(i);
@@ -40,8 +50,12 @@ pub mod prime_numbers {
     }
     impl DoubleEndedIterator for PrimesIter {
         fn next_back(&mut self) -> Option<u32> {
-            if self.minimum < 2 { self.minimum = 2; }
-            if self.maximum < 2 { self.maximum = 2; }
+            if self.minimum < 2 {
+                self.minimum = 2;
+            }
+            if self.maximum < 2 {
+                self.maximum = 2;
+            }
             let max = self.maximum;
             for i in (self.minimum..self.maximum).rev() {
                 if is_prime(i) {
@@ -49,15 +63,25 @@ pub mod prime_numbers {
                     break;
                 }
             }
-            if max == self.maximum { return None; }
+            if max == self.maximum {
+                return None;
+            }
             Some(self.maximum)
-        }        
+        }
     }
     pub fn primes_minmax(min: u32, max: u32) -> PrimesIter {
-        PrimesIter { minimum: min, maximum: max, no_max: false }
+        PrimesIter {
+            minimum: min,
+            maximum: max,
+            no_max: false,
+        }
     }
     pub fn primes_inf() -> PrimesIter {
-        PrimesIter { minimum: 1, maximum: 1, no_max: true }
+        PrimesIter {
+            minimum: 1,
+            maximum: 1,
+            no_max: true,
+        }
     }
     pub fn prime_factors(n: u32) -> Vec<u32> {
         let mut n = n;
@@ -69,7 +93,9 @@ pub mod prime_numbers {
                     p_fact.push(i);
                 }
             }
-            if n == 1 { break; }
+            if n == 1 {
+                break;
+            }
         }
         p_fact
     }
@@ -96,7 +122,7 @@ pub mod digits_numbers {
     }
     pub fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort();                                                   //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
         v.dedup();
         if length != v.len() {
             return false;
@@ -118,13 +144,16 @@ pub mod other_func {
         }
     }
     pub fn triangle_inf() -> TriangleNum {
-        TriangleNum { n: 1, }
+        TriangleNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     pub fn is_triangle(n: u32) -> bool {
         for i in triangle_inf() {
-            if n == i { return true; }
-            else if i > n { break; }
+            if n == i {
+                return true;
+            } else if i > n {
+                break;
+            }
         }
         false
     }
@@ -140,13 +169,16 @@ pub mod other_func {
         }
     }
     pub fn pentagon_inf() -> PentagonalNum {
-        PentagonalNum { n: 1, }
+        PentagonalNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     pub fn is_pentagon(n: u32) -> bool {
         for i in pentagon_inf() {
-            if n == i { return true; }
-            else if i > n { break; }
+            if n == i {
+                return true;
+            } else if i > n {
+                break;
+            }
         }
         false
     }
@@ -162,13 +194,16 @@ pub mod other_func {
         }
     }
     pub fn hexagon_inf() -> HexagonalNum {
-        HexagonalNum { n: 1, }
+        HexagonalNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     pub fn is_hexagon(n: u32) -> bool {
         for i in hexagon_inf() {
-            if n == i { return true; }
-            else if i > n { break; }
+            if n == i {
+                return true;
+            } else if i > n {
+                break;
+            }
         }
         false
     }
@@ -190,8 +225,10 @@ pub mod other_func {
     }
     pub fn factors(n: u32) -> Vec<u32> {
         let mut fact: Vec<u32> = Vec::new();
-        for i in 1..n+1 {
-            if n % i == 0 { fact.push(i); }
+        for i in 1..n + 1 {
+            if n % i == 0 {
+                fact.push(i);
+            }
         }
         fact
     }

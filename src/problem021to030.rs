@@ -5,7 +5,7 @@
 // Problem 23: Non-abundant sums
 //   Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
 // Problem 24: Lexicographic permutations
-//   What is the millionth lexicographic permutation of the digits 
+//   What is the millionth lexicographic permutation of the digits
 //   0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
 // Problem 25: 1000-digit Fibonacci number
 //   What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
@@ -28,11 +28,14 @@ pub mod p021 {
             let half = n / 2 + 1;
             let mut div: Vec<u32> = Vec::new();
             for i in 1..half {
-                if n % i == 0 { div.push(i); }
+                if n % i == 0 {
+                    div.push(i);
+                }
             }
             div
         };
-        let d = |n: u32| -> u32 { // 'd' as defined in the statement
+        let d = |n: u32| -> u32 {
+            // 'd' as defined in the statement
             divisors(n).iter().sum()
         };
         let mut amicable_numbers: Vec<u32> = Vec::new();
@@ -49,19 +52,15 @@ pub mod p022 {
     use std::fs;
     pub fn v1() -> u32 {
         let filename = "p022_names.txt";
-        let contents = fs::read_to_string(filename)
-            .expect("Problem with reading the file");
+        let contents = fs::read_to_string(filename).expect("Problem with reading the file");
         let vec_names: Vec<&str> = contents.split(',').collect();
         // remove quote (") from the names
         //for name in vec_names { name = name.chars().filter(|c| *c == '"').collect(); }
-        let mut vec_names: Vec<String> = vec_names.iter()
-            .map(|s| s
-                .to_string()
-                .chars()
-                .filter(|c| *c != '"')
-                .collect())
+        let mut vec_names: Vec<String> = vec_names
+            .iter()
+            .map(|s| s.to_string().chars().filter(|c| *c != '"').collect())
             .collect();
-        vec_names.sort();               // I don't understand why I can't just write '.sort()' just above this line (below '.collect()')  -->  Try to figure this out later.
+        vec_names.sort(); // I don't understand why I can't just write '.sort()' just above this line (below '.collect()')  -->  Try to figure this out later.
         let letter_value = |l: char| -> u32 {
             match l {
                 'a' => 1,
@@ -96,7 +95,9 @@ pub mod p022 {
         let mut total_score: u32 = 0;
         for (i, name) in vec_names.iter().enumerate() {
             let mut score_name: u32 = 0;
-            for c in name.chars() { score_name += letter_value(c); }
+            for c in name.chars() {
+                score_name += letter_value(c);
+            }
             let pos = (i + 1) as u32;
             total_score += score_name * pos;
         }
@@ -110,7 +111,9 @@ pub mod p023 {
             let half = n / 2 + 1;
             let mut div: Vec<u32> = Vec::new();
             for i in 1..half {
-                if n % i == 0 { div.push(i); }
+                if n % i == 0 {
+                    div.push(i);
+                }
             }
             div
         };
@@ -118,9 +121,11 @@ pub mod p023 {
         let mut sum_abundant_num: Vec<u32> = Vec::new();
         let mut not_sum_abundant_num: Vec<u32> = Vec::new();
         let limit: u32 = 28123 + 1; // it says "greater than", not "greater or equal"
-        // find abundant numbers
+                                    // find abundant numbers
         for i in 1..limit {
-            if i < divisors(i).iter().sum() { abundant_numbers.push(i); }
+            if i < divisors(i).iter().sum() {
+                abundant_numbers.push(i);
+            }
         }
         // find the sum of each pair of abundant number
         for i in &abundant_numbers {
@@ -160,8 +165,8 @@ pub mod p024 {
         let mut perm = 1_000_000;
         let mut permutations: Vec<u32> = Vec::new();
         // find which element we have to shift
-        for i in (1..n_element+1).rev() {
-            let factorial: u32 = (1..i+1).product();
+        for i in (1..n_element + 1).rev() {
+            let factorial: u32 = (1..i + 1).product();
             permutations.push(perm / factorial);
             perm = perm % factorial;
         }
@@ -195,7 +200,7 @@ pub mod p025 {
 
 pub mod p026 {
     fn all_primes_below(n: u32) -> Vec<u32> {
-        let mut sieve: Vec<bool> = vec!(true; (n+1) as usize);
+        let mut sieve: Vec<bool> = vec![true; (n + 1) as usize];
         let num = n as usize;
         let half = num / 2 + 1;
         //                                                                                      sieve[0..1] = false;
@@ -203,14 +208,16 @@ pub mod p026 {
         sieve[1] = false;
         for i in 2..half {
             if sieve[i] {
-                for j in (2*i..num+1).step_by(i) {
+                for j in (2 * i..num + 1).step_by(i) {
                     sieve[j] = false;
                 }
             }
         }
         let mut list_primes: Vec<u32> = Vec::new();
         for (num, prime) in sieve.iter().enumerate() {
-            if *prime { list_primes.push(num as u32); }
+            if *prime {
+                list_primes.push(num as u32);
+            }
         }
         list_primes
     }
@@ -226,7 +233,7 @@ pub mod p026 {
             let log = frac.log10() as u32;
             let mut digits: Vec<u8> = Vec::new();
             // we're supposed to observe a repetition of the cycle at least once
-            for j in 1..2*n {
+            for j in 1..2 * n {
                 let base: u32 = 10;
                 let digit_position: f64 = base.pow(j - log) as f64;
                 let digit: u8 = ((frac * digit_position) % 10 as f64) as u8;
@@ -237,10 +244,12 @@ pub mod p026 {
             let last_digit: u8 = *digits.last().unwrap();
             let mut last_occurence = digits.len() - 1;
             for (j, digit) in digits.iter().rev().enumerate() {
-                if *digit == last_digit && j < last_occurence { // find a second occurence of the digit
+                if *digit == last_digit && j < last_occurence {
+                    // find a second occurence of the digit
                     let mut eq_cycles = true;
-                    for k in j..digits.len() { // check if that means that we've found a repetition of the cycle
-                        if digits[k] != digits[j-k] {
+                    for k in j..digits.len() {
+                        // check if that means that we've found a repetition of the cycle
+                        if digits[k] != digits[j - k] {
                             eq_cycles = false;
                             break;
                         }
@@ -293,7 +302,8 @@ pub mod p027 {
 }
 
 pub mod p028 {
-    enum Direction {      //      AN ENUM MIGHT BE BETTER  ===>  Direction::right  or  Direction::left  or  ...
+    enum Direction {
+        //      AN ENUM MIGHT BE BETTER  ===>  Direction::right  or  Direction::left  or  ...
         Right,
         Left,
         Up,
@@ -304,13 +314,21 @@ pub mod p028 {
         let mut point: (i32, i32) = (0, 0);
         let mut dir: Direction = Direction::Right;
         let mut num: u32 = 1;
-        while point != (500, 500) { // correspond to a 1001 x 1001 spiral
-            if point.0 == -point.1 && point.0 <= 0 { dir = Direction::Right; }
-            else if point.0 == -point.1 && point.0 >= 0 { dir = Direction::Left; }
-            else if point.0 ==  point.1 && point.0 <= 0 { dir = Direction::Up; }
-            else if (point.0 + 1) == point.1  { dir = Direction::Down; }
+        while point != (500, 500) {
+            // correspond to a 1001 x 1001 spiral
+            if point.0 == -point.1 && point.0 <= 0 {
+                dir = Direction::Right;
+            } else if point.0 == -point.1 && point.0 >= 0 {
+                dir = Direction::Left;
+            } else if point.0 == point.1 && point.0 <= 0 {
+                dir = Direction::Up;
+            } else if (point.0 + 1) == point.1 {
+                dir = Direction::Down;
+            }
 
-            if point.0.abs() == point.1.abs() { sum += num; }
+            if point.0.abs() == point.1.abs() {
+                sum += num;
+            }
             num += 1;
 
             match dir {
@@ -330,10 +348,12 @@ pub mod p029 {
         for a in 2..101 as u32 {
             for b in 2..101 as u32 {
                 let pow = a.pow(b);
-                if !sequence.contains(&pow) { sequence.push(pow); }
+                if !sequence.contains(&pow) {
+                    sequence.push(pow);
+                }
             }
         }
-        sequence.len() as u32       // maybe I should just return the type 'usize' (?)
+        sequence.len() as u32 // maybe I should just return the type 'usize' (?)
     }
 }
 

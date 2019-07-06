@@ -27,7 +27,9 @@ pub mod p041 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -97,20 +99,22 @@ pub mod p042 {
     }
     fn is_triangle_num(n: u32) -> bool {
         for i in (1..).map(|n| n * (n + 1) / 2) {
-            if n == i { return true; }
-            else if n > i { break; }
+            if n == i {
+                return true;
+            } else if n > i {
+                break;
+            }
         }
         false
     }
     pub fn v1() -> u32 {
         let mut counter: u32 = 0;
         let filename = "p042_words.txt";
-        let contents = fs::read_to_string(filename)
-            .expect("Problem with reading the file");
+        let contents = fs::read_to_string(filename).expect("Problem with reading the file");
         let words: Vec<&str> = contents.split(',').collect();
         for w in words {
             let w = w.to_string();
-            let mut w_value: u32 = 0;       // w_value = w.iter().map(|l| letter_value(l)).collect()  ===>  LOL -> that would be cool but it's a bit extreme
+            let mut w_value: u32 = 0; // w_value = w.iter().map(|l| letter_value(l)).collect()  ===>  LOL -> that would be cool but it's a bit extreme
             for l in w.chars().filter(|c| *c != '"') {
                 w_value += letter_value(l);
             }
@@ -142,8 +146,10 @@ pub mod p043 {
         digits
     }
     fn fact(n: u32) -> u32 {
-        if n == 0 { return 1; }
-        (1..n+1).product()
+        if n == 0 {
+            return 1;
+        }
+        (1..n + 1).product()
     }
     fn get_permutation<T>(items: Vec<T>, perm: u32) -> Option<Vec<T>> {
         let mut perm = perm;
@@ -156,7 +162,7 @@ pub mod p043 {
         }
         // find which element we have to shift
         let mut permutations: Vec<u32> = Vec::new();
-        for i in (1..n_element+1).rev() {
+        for i in (1..n_element + 1).rev() {
             let factorial: u32 = fact(i + 1);
             permutations.push(perm / factorial);
             perm = perm % factorial;
@@ -179,39 +185,62 @@ pub mod p043 {
             if self.perm == self.max {
                 return None;
             }
-            let mut items: Vec<u32> = [0,1,2,3,4,5,6,7,8,9].to_vec();
+            let mut items: Vec<u32> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].to_vec();
             items = get_permutation(items, self.perm).unwrap();
             Some(get_number(&items))
         }
     }
     fn pandigital() -> Pandigital10 {
-        Pandigital10 { perm: 0, max: fact(10) }
+        Pandigital10 {
+            perm: 0,
+            max: fact(10),
+        }
     }
     pub fn v1() -> u32 {
         let mut sum_pandigital: u32 = 0;
-        for i in pandigital() { // this could be much more simple
+        for i in pandigital() {
+            // this could be much more simple
             let mut digits: Vec<u32> = get_digits(i);
             digits.reverse();
-            let mut d234: Vec<u32> = Vec::new(); d234.push(digits[1]);
-            d234.push(digits[2]); d234.push(digits[3]);
-            let mut d345: Vec<u32> = Vec::new(); d345.push(digits[2]);
-            d345.push(digits[3]); d345.push(digits[4]);
-            let mut d456: Vec<u32> = Vec::new(); d456.push(digits[3]);
-            d456.push(digits[4]); d456.push(digits[5]);
-            let mut d567: Vec<u32> = Vec::new(); d567.push(digits[4]);
-            d567.push(digits[5]); d567.push(digits[6]);
-            let mut d678: Vec<u32> = Vec::new(); d678.push(digits[5]);
-            d678.push(digits[6]); d678.push(digits[7]);
-            let mut d789: Vec<u32> = Vec::new(); d789.push(digits[6]);
-            d789.push(digits[7]); d789.push(digits[8]);
-            let mut d8910: Vec<u32> = Vec::new(); d8910.push(digits[7]);
+            let mut d234: Vec<u32> = Vec::new();
+            d234.push(digits[1]);
+            d234.push(digits[2]);
+            d234.push(digits[3]);
+            let mut d345: Vec<u32> = Vec::new();
+            d345.push(digits[2]);
+            d345.push(digits[3]);
+            d345.push(digits[4]);
+            let mut d456: Vec<u32> = Vec::new();
+            d456.push(digits[3]);
+            d456.push(digits[4]);
+            d456.push(digits[5]);
+            let mut d567: Vec<u32> = Vec::new();
+            d567.push(digits[4]);
+            d567.push(digits[5]);
+            d567.push(digits[6]);
+            let mut d678: Vec<u32> = Vec::new();
+            d678.push(digits[5]);
+            d678.push(digits[6]);
+            d678.push(digits[7]);
+            let mut d789: Vec<u32> = Vec::new();
+            d789.push(digits[6]);
+            d789.push(digits[7]);
+            d789.push(digits[8]);
+            let mut d8910: Vec<u32> = Vec::new();
+            d8910.push(digits[7]);
             d8910.push(digits[8]);
-            if digits.len() > 9 { d8910.push(digits[9]); }
+            if digits.len() > 9 {
+                d8910.push(digits[9]);
+            }
 
-            if get_number(&d234) % 2 == 0 && get_number(&d345) % 3 == 0
-                && get_number(&d456) % 5 == 0 && get_number(&d567) % 7 == 0
-                && get_number(&d678) % 11 == 0 && get_number(&d789) % 13 == 0
-                && get_number(&d8910) % 17 == 0 {
+            if get_number(&d234) % 2 == 0
+                && get_number(&d345) % 3 == 0
+                && get_number(&d456) % 5 == 0
+                && get_number(&d567) % 7 == 0
+                && get_number(&d678) % 11 == 0
+                && get_number(&d789) % 13 == 0
+                && get_number(&d8910) % 17 == 0
+            {
                 sum_pandigital += i;
             }
         }
@@ -232,13 +261,16 @@ pub mod p044 {
         }
     }
     fn pentagon() -> PentagonNum {
-        PentagonNum { n: 1, }
+        PentagonNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     fn is_pentagon(n: u32) -> bool {
         for i in pentagon() {
-            if n == i { return true; }
-            else if n > i { break; }
+            if n == i {
+                return true;
+            } else if n > i {
+                break;
+            }
         }
         false
     }
@@ -246,7 +278,9 @@ pub mod p044 {
         let mut pentagonal_num: (u32, u32) = (0, 0);
         for i in pentagon() {
             for j in pentagon() {
-                if j >= i { break; }
+                if j >= i {
+                    break;
+                }
                 if is_pentagon(i - j) && is_pentagon(i + j) {
                     pentagonal_num = (i, j);
                 }
@@ -272,7 +306,7 @@ pub mod p045 {
         }
     }
     fn triangle() -> TriangleNum {
-        TriangleNum { n: 1, }
+        TriangleNum { n: 1 }
     }
     struct PentagonNum {
         n: u32,
@@ -286,13 +320,16 @@ pub mod p045 {
         }
     }
     fn pentagon() -> PentagonNum {
-        PentagonNum { n: 1, }
+        PentagonNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     fn is_pentagon(n: u32) -> bool {
         for i in pentagon() {
-            if n == i { return true; }
-            else if n > i { break; }
+            if n == i {
+                return true;
+            } else if n > i {
+                break;
+            }
         }
         false
     }
@@ -308,20 +345,26 @@ pub mod p045 {
         }
     }
     fn hexagon() -> HexagonalNum {
-        HexagonalNum { n: 1, }
+        HexagonalNum { n: 1 }
     }
     // could check with a 'formula' [O(1)] instead of [O(n)]
     fn is_hexagon(n: u32) -> bool {
         for i in hexagon() {
-            if n == i { return true; }
-            else if n > i { break; }
+            if n == i {
+                return true;
+            } else if n > i {
+                break;
+            }
         }
         false
     }
     pub fn v1() -> u32 {
         let mut num: u32 = 0;
         for i in triangle() {
-            if i == 40_755 { continue; } // i.e. 'next one'
+            if i == 40_755 {
+                continue;
+            }
+            // i.e. 'next one'
             else if is_pentagon(i) && is_hexagon(i) {
                 num = i;
                 break;
@@ -335,7 +378,9 @@ pub mod p046 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -359,7 +404,8 @@ pub mod p046 {
     fn primes() -> Primes {
         Primes { n: 0, largest: 1 }
     }
-    pub fn v1() -> u32 {                                            // Maybe write a short explanation
+    pub fn v1() -> u32 {
+        // Maybe write a short explanation
         let mut smallest_odd_comp: u32 = 0;
         for i in (33..).step_by(2) {
             for p in primes() {
@@ -368,15 +414,19 @@ pub mod p046 {
                     smallest_odd_comp = i;
                     break;
                 }
-                for j in 1.. {                                      // for j in (1..).map(|x| x.pow(2)) {
+                for j in 1.. {
+                    // for j in (1..).map(|x| x.pow(2)) {
                     let j = (j as u32).pow(2);
-                    if 2 * j + p > i { break; }
-                    else if 2 * j + p == i {
+                    if 2 * j + p > i {
+                        break;
+                    } else if 2 * j + p == i {
                         equal = true;
                         break;
                     }
                 }
-                if equal { break; }
+                if equal {
+                    break;
+                }
             }
         }
         smallest_odd_comp
@@ -387,7 +437,9 @@ pub mod p047 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -419,13 +471,15 @@ pub mod p047 {
                 p_fact.push(i);
                 n = n / i;
             }
-            if n == 1 { break; }
+            if n == 1 {
+                break;
+            }
         }
         p_fact
     }
     fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort();                                                   //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
         v.dedup();
         if length != v.len() {
             return false;
@@ -482,7 +536,9 @@ pub mod p049 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -507,11 +563,15 @@ pub mod p049 {
         }
     }
     fn primes(min: u32, max: u32) -> Primes {
-        Primes { p: min, maximum: max, no_max: false }
+        Primes {
+            p: min,
+            maximum: max,
+            no_max: false,
+        }
     }
     fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort();                                                   //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
         v.dedup();
         if length != v.len() {
             return false;
@@ -521,7 +581,9 @@ pub mod p049 {
     fn is_permutation(v1: &mut Vec<u32>, v2: &mut Vec<u32>) -> bool {
         v1.sort();
         v2.sort();
-        if v1 == v2 { return true; }
+        if v1 == v2 {
+            return true;
+        }
         false
     }
     pub fn v1() -> u32 {
@@ -539,7 +601,9 @@ pub mod p049 {
         let min: u32 = 1000;
         for i in primes(min, max) {
             let mut digits1 = get_digits(i);
-            if !no_double(&mut digits1) { continue; }
+            if !no_double(&mut digits1) {
+                continue;
+            }
             p1 = i;
             for j in primes(i, max) {
                 let mut digits2 = get_digits(j);
@@ -569,7 +633,9 @@ pub mod p050 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -605,11 +671,15 @@ pub mod p050 {
                 }
                 if max == self.maximum { return None; }
                 Some(self.maximum)
-            }        
+            }
         }
     */
     fn primes(min: u32, max: u32) -> Primes {
-        Primes { minimum: min, maximum: max, no_max: false }
+        Primes {
+            minimum: min,
+            maximum: max,
+            no_max: false,
+        }
     }
     fn primes_below(n: u32) -> Vec<u32> {
         let mut primes: Vec<u32> = Vec::new();
@@ -638,12 +708,12 @@ pub mod p050 {
                         sum_len = length;
                     }
                     break;
-                }
-                else if sum > p {
+                } else if sum > p {
                     start += 1;
                     stop = start;
                     sum = 0;
-                } else { // sum < p
+                } else {
+                    // sum < p
                     sum += p_below[stop];
                 }
             }
@@ -651,4 +721,3 @@ pub mod p050 {
         prime
     }
 }
-

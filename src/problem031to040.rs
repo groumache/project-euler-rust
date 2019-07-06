@@ -36,17 +36,39 @@ pub mod p031 {
     }
     impl PartialEq for Coins {
         fn eq(&self, other: &Self) -> bool {
-            self.pound2 == other.pound2 && self.pound1 == other.pound1
-                && self.p50 == other.p50 && self.p20 == other.p20
-                && self.p10 == other.p10 && self.p5 == other.p5
-                && self.p2 == other.p2 && self.p1 == other.p1
+            self.pound2 == other.pound2
+                && self.pound1 == other.pound1
+                && self.p50 == other.p50
+                && self.p20 == other.p20
+                && self.p10 == other.p10
+                && self.p5 == other.p5
+                && self.p2 == other.p2
+                && self.p1 == other.p1
         }
     }
     // We just try everything in an orderly manner.
     pub fn v1() -> u32 {
-        let mut counter: u32= 1;
-        let mut curr: Coins = Coins { pound2: 1, pound1: 0, p50: 0, p20: 0, p10: 0, p5: 0, p2: 0, p1: 0 };
-        let terminal = Coins { pound2: 0, pound1: 0, p50: 0, p20: 0, p10: 0, p5: 0, p2: 0, p1: 200 };
+        let mut counter: u32 = 1;
+        let mut curr: Coins = Coins {
+            pound2: 1,
+            pound1: 0,
+            p50: 0,
+            p20: 0,
+            p10: 0,
+            p5: 0,
+            p2: 0,
+            p1: 0,
+        };
+        let terminal = Coins {
+            pound2: 0,
+            pound1: 0,
+            p50: 0,
+            p20: 0,
+            p10: 0,
+            p5: 0,
+            p2: 0,
+            p1: 200,
+        };
         while curr != terminal {
             counter += 1;
             if curr.p2 != 0 {
@@ -66,7 +88,7 @@ pub mod p031 {
                 curr.p10 += 2;
                 curr.p20 -= 1;
                 continue;
-            } else if curr.p50 !=0 {
+            } else if curr.p50 != 0 {
                 curr.p10 += 1;
                 curr.p20 += 2;
                 curr.p50 -= 1;
@@ -98,8 +120,10 @@ pub mod p032 {
     }
     fn get_divisors(n: u32) -> Vec<u32> {
         let mut divisors: Vec<u32> = Vec::new();
-        for i in 1..n+1 {
-            if n % i == 0 { divisors.push(i); }
+        for i in 1..n + 1 {
+            if n % i == 0 {
+                divisors.push(i);
+            }
         }
         divisors
     }
@@ -112,11 +136,13 @@ pub mod p032 {
     // Such a number can only have 4 digits
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
-        for num in 1234..9876+1 {
+        for num in 1234..9876 + 1 {
             //                                                              let mut digits = get_digits(num).sort();
             //                                                              if digits.len() != digits.dedup().len() { continue; }
             let mut digits: Vec<u8> = get_digits(num);
-            if !no_double(&mut digits) { continue; }
+            if !no_double(&mut digits) {
+                continue;
+            }
 
             let divisors: Vec<u32> = get_divisors(num);
             for div in divisors {
@@ -126,7 +152,9 @@ pub mod p032 {
                 digits.append(&mut digits_div);
                 digits.append(&mut digits_quo);
 
-                if no_double(&mut digits) { sum += num; }
+                if no_double(&mut digits) {
+                    sum += num;
+                }
             }
         }
         sum
@@ -154,8 +182,10 @@ pub mod p033 {
     }
     fn get_divisors(n: u32) -> Vec<u32> {
         let mut divisors: Vec<u32> = Vec::new();
-        for i in 1..n+1 {
-            if n % i == 0 { divisors.push(i); }
+        for i in 1..n + 1 {
+            if n % i == 0 {
+                divisors.push(i);
+            }
         }
         divisors
     }
@@ -164,7 +194,9 @@ pub mod p033 {
         let div1 = get_divisors(n1);
         let div2 = get_divisors(n2);
         for d in div1.iter() {
-            if div2.contains(d) { gcd *= d; }
+            if div2.contains(d) {
+                gcd *= d;
+            }
         }
         gcd
     }
@@ -175,7 +207,9 @@ pub mod p033 {
             for denominator in (11..99).filter(|n| n % 10 != 0) {
                 let mut digits_num = get_digits(numerator);
                 let mut digits_den = get_digits(denominator);
-                if no_double(&mut digits_den, &mut digits_num) { continue; }
+                if no_double(&mut digits_den, &mut digits_num) {
+                    continue;
+                }
                 let mut common_digit: u8 = 0;
                 let mut other_d_num: u8 = 0;
                 let mut other_d_den: u8 = 0;
@@ -201,8 +235,12 @@ pub mod p033 {
         }
         let mut prod_num: u32 = 1;
         let mut prod_den: u32 = 1;
-        for i in num.iter() { prod_num *= *i as u32; }
-        for i in den.iter() { prod_den *= *i as u32; }
+        for i in num.iter() {
+            prod_num *= *i as u32;
+        }
+        for i in den.iter() {
+            prod_den *= *i as u32;
+        }
         let gcd: u32 = get_gcd(prod_num, prod_den);
         prod_den / gcd
     }
@@ -220,8 +258,10 @@ pub mod p034 {
         digits
     }
     fn fact(n: u32) -> u32 {
-        if n == 0 { return 1; }
-        (1..n+1).product()
+        if n == 0 {
+            return 1;
+        }
+        (1..n + 1).product()
     }
     // max 7 digits as (9!) * 8 has 7 digits
     pub fn v1() -> u32 {
@@ -230,7 +270,9 @@ pub mod p034 {
         for i in 11..max {
             let digits = get_digits(i);
             let sum_fact_digits: u32 = digits.iter().map(|d| fact(*d)).sum();
-            if sum_fact_digits == i { sum += i; }
+            if sum_fact_digits == i {
+                sum += i;
+            }
         }
         sum
     }
@@ -258,7 +300,9 @@ pub mod p035 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -291,7 +335,9 @@ pub mod p035 {
                     break;
                 }
             }
-            if circular_prime { counter += 1; }
+            if circular_prime {
+                counter += 1;
+            }
         }
         counter
     }
@@ -321,7 +367,9 @@ pub mod p036 {
     fn is_palyndromic(vec: Vec<u32>) -> bool {
         for i in 0..vec.len() {
             let last = vec.len() - 1;
-            if vec[i] != vec[last-i] { return false; }
+            if vec[i] != vec[last - i] {
+                return false;
+            }
         }
         true
     }
@@ -343,7 +391,9 @@ pub mod p037 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;
         for i in 2..half {
-            if n % i == 0 { return false; }
+            if n % i == 0 {
+                return false;
+            }
         }
         true
     }
@@ -380,8 +430,12 @@ pub mod p037 {
                     break;
                 }
             }
-            if trunc { truncatables.push(i); }
-            if truncatables.len() == n_truncatable { break; }
+            if trunc {
+                truncatables.push(i);
+            }
+            if truncatables.len() == n_truncatable {
+                break;
+            }
         }
         //
         truncatables.iter().sum()
@@ -423,10 +477,14 @@ pub mod p038 {
             for j in 1.. {
                 let num: u32 = i * j;
                 digits.append(&mut get_digits(num));
-                if digits.len() >= 9 { break; }
+                if digits.len() >= 9 {
+                    break;
+                }
             }
             // digit.is_pandigital()
-            if digits.len() != 9 || !no_double(&mut digits) { continue; }
+            if digits.len() != 9 || !no_double(&mut digits) {
+                continue;
+            }
             let new_pandigital = get_number(&mut digits);
             if new_pandigital > max_pandigital {
                 max_pandigital = new_pandigital;
@@ -439,7 +497,7 @@ pub mod p038 {
 pub mod p039 {
     pub fn v1() -> u32 {
         let max_p = 1001;
-        let mut p_solutions: Vec<u32> = vec!(0; max_p);
+        let mut p_solutions: Vec<u32> = vec![0; max_p];
         for a in 1..max_p {
             for b in 1..max_p {
                 let a = a as f64;
@@ -495,5 +553,3 @@ pub mod p040 {
         expression
     }
 }
-
-

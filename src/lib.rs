@@ -1,9 +1,9 @@
-pub mod useful_func;
 pub mod problem001to010;
 pub mod problem011to020;
 pub mod problem021to030;
 pub mod problem031to040;
 pub mod problem041to050;
+pub mod useful_func;
 
 #[cfg(test)]
 mod test_useful_func {
@@ -26,7 +26,7 @@ mod test_useful_func {
         fn test_primes_below() {
             assert_eq!(primes_below(2), [].to_vec());
             assert_eq!(primes_below(3), [2].to_vec());
-            assert_eq!(primes_below(10), [2,3,5,7].to_vec());
+            assert_eq!(primes_below(10), [2, 3, 5, 7].to_vec());
         }
         #[test]
         #[ignore]
@@ -48,7 +48,7 @@ mod test_useful_func {
             for p in primes_minmax(min, max) {
                 primes.push(p);
             }
-            assert_eq!(primes, [2,3,5,7].to_vec());
+            assert_eq!(primes, [2, 3, 5, 7].to_vec());
         }
         #[test]
         #[ignore]
@@ -58,15 +58,13 @@ mod test_useful_func {
             let mut counter = 0;
             for p in primes_minmax(min, max).rev() {
                 counter += 1;
-                assert!(
-                    match counter {
-                        1 => p == 7,
-                        2 => p == 5,
-                        3 => p == 3,
-                        4 => p == 2,
-                        _ => false,
-                    }
-                )
+                assert!(match counter {
+                    1 => p == 7,
+                    2 => p == 5,
+                    3 => p == 3,
+                    4 => p == 2,
+                    _ => false,
+                })
             }
         }
         #[test]
@@ -74,7 +72,7 @@ mod test_useful_func {
         fn test_prime_factors() {
             assert_eq!(prime_factors(2), [2].to_vec());
             assert_eq!(prime_factors(7), [7].to_vec());
-            assert_eq!(prime_factors(12), [2,3].to_vec());
+            assert_eq!(prime_factors(12), [2, 3].to_vec());
         }
     }
     mod digits_numbers_tests {
@@ -82,22 +80,22 @@ mod test_useful_func {
         #[test]
         #[ignore]
         fn test_get_digits() {
-            assert_eq!(get_digits(58), [8,5].to_vec());
+            assert_eq!(get_digits(58), [8, 5].to_vec());
             assert_eq!(get_digits(0), [0].to_vec());
         }
         #[test]
         #[ignore]
         fn test_get_number() {
-            assert_eq!(get_number(& [7,5,3].to_vec()), 357);
-            assert_eq!(get_number(& [0].to_vec()), 0);
+            assert_eq!(get_number(&[7, 5, 3].to_vec()), 357);
+            assert_eq!(get_number(&[0].to_vec()), 0);
         }
         #[test]
         #[ignore]
         fn test_no_double() {
-            assert!(no_double(&mut [5,7,8].to_vec()));
+            assert!(no_double(&mut [5, 7, 8].to_vec()));
             assert!(no_double(&mut [0].to_vec()));
-            assert!(!no_double(&mut [5,5].to_vec()));
-            assert!(!no_double(&mut [4,8,4].to_vec()));
+            assert!(!no_double(&mut [5, 5].to_vec()));
+            assert!(!no_double(&mut [4, 8, 4].to_vec()));
         }
     }
     mod other_func_tests {
@@ -107,10 +105,12 @@ mod test_useful_func {
         fn test_triangle_iterator() {
             let mut v: Vec<u32> = Vec::new();
             for i in triangle_inf() {
-                if i > 10 { break; }
+                if i > 10 {
+                    break;
+                }
                 v.push(i);
             }
-            assert_eq!(v, [1,3,6,10].to_vec());
+            assert_eq!(v, [1, 3, 6, 10].to_vec());
         }
         #[test]
         #[ignore]
@@ -123,10 +123,12 @@ mod test_useful_func {
         fn test_pentagon_inf() {
             let mut v: Vec<u32> = Vec::new();
             for i in pentagon_inf() {
-                if i > 10 { break; }
+                if i > 10 {
+                    break;
+                }
                 v.push(i);
             }
-            assert_eq!(v, [1,5].to_vec());
+            assert_eq!(v, [1, 5].to_vec());
         }
         #[test]
         #[ignore]
@@ -139,10 +141,12 @@ mod test_useful_func {
         fn test_hexagon_inf() {
             let mut v: Vec<u32> = Vec::new();
             for i in hexagon_inf() {
-                if i > 10 { break; }
+                if i > 10 {
+                    break;
+                }
                 v.push(i);
             }
-            assert_eq!(v, [1,6].to_vec());
+            assert_eq!(v, [1, 6].to_vec());
         }
         #[test]
         #[ignore]
@@ -155,16 +159,18 @@ mod test_useful_func {
         fn test_fibonnacci_iterator() {
             let mut v: Vec<u32> = Vec::new();
             for i in fibonnacci_inf() {
-                if i > 10 { break; }
+                if i > 10 {
+                    break;
+                }
                 v.push(i);
             }
-            assert_eq!(v, [1,2,3,5,8].to_vec());
+            assert_eq!(v, [1, 2, 3, 5, 8].to_vec());
         }
         #[test]
         #[ignore]
         fn test_factors() {
-            assert_eq!(factors(5), [1,5].to_vec());
-            assert_eq!(factors(12), [1,2,3,4,6,12].to_vec());
+            assert_eq!(factors(5), [1, 5].to_vec());
+            assert_eq!(factors(12), [1, 2, 3, 4, 6, 12].to_vec());
         }
     }
 }
@@ -175,19 +181,22 @@ mod tests_1to10 {
     use crate::problem001to010::*;
     #[test]
     #[ignore]
-    fn test_p001() { // Problem 1: Multiples of 3 and 5
+    fn test_p001() {
+        // Problem 1: Multiples of 3 and 5
         assert_eq!(p001::v1(10), 23);
         assert_eq!(p001::v2(10), 23);
     }
     #[test]
     #[ignore]
-    fn test_p002() { // Problem 2: Even Fibonacci numbers
+    fn test_p002() {
+        // Problem 2: Even Fibonacci numbers
         assert_eq!(p002::v1(10), 44);
         assert_eq!(p002::v2(10), 44);
     }
     #[test]
     #[ignore]
-    fn test_p003() { // Problem 3: Largest prime factor
+    fn test_p003() {
+        // Problem 3: Largest prime factor
         assert_eq!(p003::v1(13195), 29);
         assert_eq!(p003::v2(13195), 29);
         assert_eq!(p003::v3(13195), 29);
@@ -197,32 +206,38 @@ mod tests_1to10 {
     }
     #[test]
     #[ignore]
-    fn test_p004() { // Problem 4: Largest palindrome product
+    fn test_p004() {
+        // Problem 4: Largest palindrome product
         assert_eq!(p004::v1(2), 9009);
     }
     #[test]
     #[ignore]
-    fn test_p005() { // Problem 5: Smallest multiple
+    fn test_p005() {
+        // Problem 5: Smallest multiple
         assert_eq!(p005::v1(10), 2520);
     }
     #[test]
     #[ignore]
-    fn test_p006() { // Problem 6: Sum Square Difference
+    fn test_p006() {
+        // Problem 6: Sum Square Difference
         assert_eq!(p006::v1(10), 2640);
     }
     #[test]
     #[ignore]
-    fn test_p007() { // Problem 7: n-th prime
+    fn test_p007() {
+        // Problem 7: n-th prime
         assert_eq!(p007::v1(6), 13);
     }
     #[test]
     #[ignore]
-    fn test_p008() { // Problem 8: Largest product in a series
+    fn test_p008() {
+        // Problem 8: Largest product in a series
         assert_eq!(p008::v1(4), 5832);
     }
     #[test]
     #[ignore]
-    fn test_p009() { // Problem 9: Special Pythagorean triplet
+    fn test_p009() {
+        // Problem 9: Special Pythagorean triplet
         let abc = p009::v1();
         assert_eq!(abc.0.pow(2) + abc.1.pow(2), abc.2.pow(2));
         assert_eq!(abc.0 + abc.1 + abc.2, 1000);
@@ -232,7 +247,8 @@ mod tests_1to10 {
     }
     #[test]
     #[ignore]
-    fn test_p010() { // Problem 10: Summation of primes
+    fn test_p010() {
+        // Problem 10: Summation of primes
         assert_eq!(p010::v1(10), 17);
     }
 }
