@@ -23,6 +23,7 @@
 //   What 12-digit number do you form by concatenating the three terms in this sequence?
 // Problem 50: Consecutive prime sum
 //   Which prime, below one-million, can be written as the sum of the most consecutive primes?
+
 pub mod p041 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2 + 1;

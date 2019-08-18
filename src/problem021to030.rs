@@ -22,6 +22,7 @@
 //   for 2 ≤ a ≤ 100 and 2 ≤ b ≤ 100 ?
 // Problem 30: Digit fifth powers
 //   Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+
 pub mod p021 {
     pub fn v1(n: u32) -> u32 {
         let divisors = |n: u32| -> Vec<u32> {

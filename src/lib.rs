@@ -34,7 +34,7 @@ mod test_useful_func {
             let min = 0;
             let max = 0;
             let mut counter = 0;
-            for _ in primes_minmax(min, max) {
+            for _ in primes_range(min, max) {
                 counter += 1;
             }
             assert_eq!(counter, 0);
@@ -45,7 +45,7 @@ mod test_useful_func {
             let min = 0;
             let max = 10;
             let mut primes: Vec<u32> = Vec::new();
-            for p in primes_minmax(min, max) {
+            for p in primes_range(min, max) {
                 primes.push(p);
             }
             assert_eq!(primes, [2, 3, 5, 7].to_vec());
@@ -56,7 +56,7 @@ mod test_useful_func {
             let min = 0;
             let max = 10;
             let mut counter = 0;
-            for p in primes_minmax(min, max).rev() {
+            for p in primes_range(min, max).rev() {
                 counter += 1;
                 assert!(match counter {
                     1 => p == 7,
@@ -76,35 +76,35 @@ mod test_useful_func {
         }
     }
     mod digits_numbers_tests {
-        use super::digits_numbers::*;
+        use super::digits;
         #[test]
         #[ignore]
-        fn test_get_digits() {
-            assert_eq!(get_digits(58), [8, 5].to_vec());
-            assert_eq!(get_digits(0), [0].to_vec());
+        fn test_num_to_digits() {
+            assert_eq!(digits::num_to_digits(58), [8, 5].to_vec());
+            assert_eq!(digits::num_to_digits(0), [0].to_vec());
         }
         #[test]
         #[ignore]
-        fn test_get_number() {
-            assert_eq!(get_number(&[7, 5, 3].to_vec()), 357);
-            assert_eq!(get_number(&[0].to_vec()), 0);
+        fn test_digits_to_num() {
+            assert_eq!(digits::digits_to_num(&[7, 5, 3].to_vec()), 357);
+            assert_eq!(digits::digits_to_num(&[0].to_vec()), 0);
         }
         #[test]
         #[ignore]
         fn test_no_double() {
-            assert!(no_double(&mut [5, 7, 8].to_vec()));
-            assert!(no_double(&mut [0].to_vec()));
-            assert!(!no_double(&mut [5, 5].to_vec()));
-            assert!(!no_double(&mut [4, 8, 4].to_vec()));
+            assert!(digits::no_double(&mut [5, 7, 8].to_vec()));
+            assert!(digits::no_double(&mut [0].to_vec()));
+            assert!(! digits::no_double(&mut [5, 5].to_vec()));
+            assert!(! digits::no_double(&mut [4, 8, 4].to_vec()));
         }
     }
-    mod other_func_tests {
-        use super::other_func::*;
+    mod triangle_num_tests {
+        use super::triangle_num;
         #[test]
         #[ignore]
         fn test_triangle_iterator() {
             let mut v: Vec<u32> = Vec::new();
-            for i in triangle_inf() {
+            for i in triangle_num::triangles() {
                 if i > 10 {
                     break;
                 }
@@ -115,14 +115,21 @@ mod test_useful_func {
         #[test]
         #[ignore]
         fn test_is_triangle() {
-            assert!(is_triangle(1));
-            assert!(is_triangle(15));
+            assert!(triangle_num::is_triangle(1));
+            assert!(triangle_num::is_triangle(15));
         }
+
+    }
+    mod other_func_tests {
+        use super::fibonacci::fibonacci;
+        use super::pentagonal_num::{is_pentagon, pentagons};
+        use super::hexagonal_num::{is_hexagon, hexagons};
+        use super::other_func;
         #[test]
         #[ignore]
         fn test_pentagon_inf() {
             let mut v: Vec<u32> = Vec::new();
-            for i in pentagon_inf() {
+            for i in pentagons() {
                 if i > 10 {
                     break;
                 }
@@ -140,7 +147,7 @@ mod test_useful_func {
         #[ignore]
         fn test_hexagon_inf() {
             let mut v: Vec<u32> = Vec::new();
-            for i in hexagon_inf() {
+            for i in hexagons() {
                 if i > 10 {
                     break;
                 }
@@ -156,9 +163,9 @@ mod test_useful_func {
         }
         #[test]
         #[ignore]
-        fn test_fibonnacci_iterator() {
+        fn test_fibonacci_iterator() {
             let mut v: Vec<u32> = Vec::new();
-            for i in fibonnacci_inf() {
+            for i in fibonacci() {
                 if i > 10 {
                     break;
                 }
@@ -169,8 +176,8 @@ mod test_useful_func {
         #[test]
         #[ignore]
         fn test_factors() {
-            assert_eq!(factors(5), [1, 5].to_vec());
-            assert_eq!(factors(12), [1, 2, 3, 4, 6, 12].to_vec());
+            assert_eq!(other_func::factors(5), [1, 5].to_vec());
+            assert_eq!(other_func::factors(12), [1, 2, 3, 4, 6, 12].to_vec());
         }
     }
 }
@@ -191,7 +198,6 @@ mod tests_1to10 {
     fn test_p002() {
         // Problem 2: Even Fibonacci numbers
         assert_eq!(p002::v1(10), 44);
-        assert_eq!(p002::v2(10), 44);
     }
     #[test]
     #[ignore]

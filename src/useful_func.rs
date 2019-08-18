@@ -1,228 +1,286 @@
+// Useful functions to solve the Project Euler problems
+
 pub mod prime_numbers {
     pub fn is_prime(n: u32) -> bool {
         if n < 2 {
             return false;
         }
-        let half = n / 2 + 1;
-        for i in 2..half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
+
+        let sqrt_n: u32 = (n as f64).sqrt() as u32;
+        let divisor = (2..sqrt_n+1).find(|x| n % x == 0);
+
+        divisor == None
     }
     pub fn primes_below(n: u32) -> Vec<u32> {
-        let mut primes: Vec<u32> = Vec::new();
-        for i in 2..n {
-            if is_prime(i) {
-                primes.push(i);
-            }
-        }
-        primes
+        (2..n).filter(|x| is_prime(*x))
+            .collect()
     }
+    pub fn prime_factors(n: u32) -> Vec<u32> {
+        (2..n+1)
+            .filter(|x| n % x == 0)
+            .filter(|x| is_prime(*x))
+            .collect()
+    }
+
     pub struct PrimesIter {
         minimum: u32,
         maximum: u32,
-        no_max: bool,
     }
     impl Iterator for PrimesIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            if self.minimum < 2 {
-                self.minimum = 2;
+            let prime = (self.minimum..self.maximum).find(|x| is_prime(*x));
+
+            if prime != None {
+                self.minimum = prime.unwrap();
             }
-            if self.maximum < 2 {
-                self.maximum = 2;
-            }
-            let mut i: u32 = self.minimum;
-            loop {
-                if !self.no_max && i >= self.maximum {
-                    break;
-                }
-                if is_prime(i) {
-                    self.minimum = i + 1;
-                    return Some(i);
-                }
-                i += 1;
-            }
-            None
+            
+            prime
         }
     }
     impl DoubleEndedIterator for PrimesIter {
         fn next_back(&mut self) -> Option<u32> {
-            if self.minimum < 2 {
-                self.minimum = 2;
+            let prime = (self.minimum..self.maximum)
+                .rev()
+                .find(|x| is_prime(*x));
+            
+            if prime != None {
+                self.maximum = prime.unwrap();
             }
-            if self.maximum < 2 {
-                self.maximum = 2;
-            }
-            let max = self.maximum;
-            for i in (self.minimum..self.maximum).rev() {
-                if is_prime(i) {
-                    self.maximum = i;
-                    break;
-                }
-            }
-            if max == self.maximum {
-                return None;
-            }
-            Some(self.maximum)
+            
+            prime
         }
     }
-    pub fn primes_minmax(min: u32, max: u32) -> PrimesIter {
+
+    pub fn primes_range(min: u32, max: u32) -> PrimesIter {
         PrimesIter {
             minimum: min,
             maximum: max,
-            no_max: false,
         }
     }
-    pub fn primes_inf() -> PrimesIter {
+    pub fn primes() -> PrimesIter {
         PrimesIter {
-            minimum: 1,
-            maximum: 1,
-            no_max: true,
+            minimum: 2,
+            maximum: u32::max_value(),
         }
-    }
-    pub fn prime_factors(n: u32) -> Vec<u32> {
-        let mut n = n;
-        let mut p_fact: Vec<u32> = Vec::new();
-        for i in primes_inf() {
-            while n % i == 0 {
-                n = n / i;
-                if p_fact.len() == 0 || *p_fact.last().unwrap() != i {
-                    p_fact.push(i);
-                }
-            }
-            if n == 1 {
-                break;
-            }
-        }
-        p_fact
     }
 }
 
-pub mod digits_numbers {
-    pub fn get_digits(n: u32) -> Vec<u32> {
+pub mod fibonacci {
+    use super::other_func;
+
+    // n is a fibonacci number iff (5*n^2+4) or (5*n^2-4) is a square
+    pub fn is_fibonacci(n: u32) -> bool {
+        other_func::is_square(5*n.pow(2) + 4)
+            || other_func::is_square(5*n.pow(2) - 4)
+    }
+
+    pub struct FibonacciIter {
+        maximum: u32,
+        curr: u32,
+        next: u32,
+    }
+    impl Iterator for FibonacciIter {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let fib = self.curr;
+
+            let new_next = self.curr + self.next;
+            self.curr = self.next;
+            self.next = new_next;
+
+            if fib >= self.maximum {
+                None
+            } else {
+                Some(fib)
+            }
+        }
+    }
+
+    pub fn fibonacci_range(mut min: u32, mut max: u32) -> FibonacciIter {
+        if max < 2 {
+            min = 1;
+            max = 1;
+        }
+
+        let curr: u32 = (min..).find(|x| is_fibonacci(*x)).unwrap();
+        let next: u32 = (curr+1..).find(|x| is_fibonacci(*x)).unwrap();
+
+        FibonacciIter {
+            maximum: max,
+            curr: curr,
+            next: next,
+        }
+    }
+    pub fn fibonacci() -> FibonacciIter {
+        FibonacciIter {
+            maximum: u32::max_value(),
+            curr: 1,
+            next: 2,
+        }
+    }
+}
+
+pub mod digits {
+    pub fn num_to_digits(n: u32) -> Vec<u32> {
+        let mut n = n;
         let mut digits: Vec<u32> = Vec::new();
         let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
+
+        for _ in 0..length {
+            n /= 10;
+            digits.push(n % 10);
         }
+
         digits
     }
-    pub fn get_number(digits: &Vec<u32>) -> u32 {
-        let mut num: u32 = 0;
-        let base: u32 = 10;
-        for (i, d) in digits.iter().enumerate() {
-            num += d * base.pow(i as u32);
+    pub fn digits_to_num(digits: &Vec<u32>) -> u32 {
+        let mut n: u32 = 0;
+
+        for d in digits.iter() {
+            n *= 10;
+            n += d;
         }
-        num
+
+        n
     }
+
     pub fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        
+        v.sort();                       //   v.sort().dedup();  ===>  WHY NOT ?
         v.dedup();
-        if length != v.len() {
-            return false;
+
+        length != v.len()
+    }
+}
+
+pub mod triangle_num {
+    use super::other_func;
+
+    // An integer n is triangular exactly if 8n + 1 is a square.
+    pub fn is_triangle(n: u32) -> bool {
+        other_func::is_square(8*n + 1)
+    }
+
+    pub struct TriangleIter {
+        minimum: u32,
+        maximum: u32,
+    }
+    impl Iterator for TriangleIter {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let triangle = (self.minimum..self.maximum)
+                .find(|x| is_triangle(*x));
+
+            if triangle != None {
+                self.minimum = triangle.unwrap();
+            }
+
+            triangle
         }
-        true
+    }
+
+    pub fn triangles_range(min: u32, max: u32) -> TriangleIter {
+        TriangleIter {
+            minimum: min,
+            maximum: max,
+        }
+    }
+    pub fn triangles() -> TriangleIter {
+        TriangleIter {
+            minimum: 1,
+            maximum: u32::max_value(),
+        }
+    }
+}
+
+pub mod pentagonal_num {
+    // n is a pentagonal number only if sqrt((24*n+1) + 1)/6 is an integer
+    pub fn is_pentagon(n: u32) -> bool {
+        let n: f64 = n as f64;
+        let x: f64 = ((24.0 * n + 1.0) + 1.0).sqrt() / 6.0;
+        x - x.floor() == 0.0
+    }
+
+    pub struct PentagonIter {
+        minimum: u32,
+        maximum: u32,
+    }
+    impl Iterator for PentagonIter {
+        type Item = u32;
+        fn next(&mut self) -> Option<u32> {
+            let pentagon = (self.minimum..self.maximum)
+                .find(|x| is_pentagon(*x));
+
+            if pentagon != None {
+                self.minimum = pentagon.unwrap();
+            }
+
+            pentagon
+        }
+    }
+
+    pub fn pentagons_range(min: u32, max: u32) -> PentagonIter {
+        PentagonIter {
+            minimum: min,
+            maximum: max,
+        }
+    }
+    pub fn pentagons() -> PentagonIter {
+        PentagonIter {
+            minimum: 1,
+            maximum: u32::max_value(),
+        }
+    }
+}
+
+pub mod hexagonal_num {
+    // n is a hexagonal number if (sqrt(8*y+1) + 1)/4 is an integer
+    pub fn is_hexagon(n: u32) -> bool {
+        let n: f64 = n as f64;
+        let x: f64 = ((8.0 * n + 1.0).sqrt() + 1.0) / 4.0;
+        x - x.floor() == 0.0
+    }
+
+    pub struct HexagonIter {
+        minimum: u32,
+        maximum: u32,
+    }
+    impl Iterator for HexagonIter {
+        type Item = u32;
+        fn next(& mut self) -> Option<u32> {
+            let hexagon = (self.minimum..self.maximum)
+                .find(|x| is_hexagon(*x));
+
+            if hexagon != None {
+                self.minimum = hexagon.unwrap();
+            }
+
+            hexagon
+        }
+    }
+
+    pub fn hexagons_range(min: u32, max: u32) -> HexagonIter {
+        HexagonIter {
+            minimum: min,
+            maximum: max,
+        }
+    }
+    pub fn hexagons() -> HexagonIter {
+        HexagonIter {
+            minimum: 1,
+            maximum: u32::max_value(),
+        }
     }
 }
 
 pub mod other_func {
-    pub struct TriangleNum {
-        n: u32,
+    pub fn is_square(n: u32) -> bool {
+        let x = n as f64;
+        x.sqrt() % 1.0 == 0.0
     }
-    impl Iterator for TriangleNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (n + 1) / 2)
-        }
-    }
-    pub fn triangle_inf() -> TriangleNum {
-        TriangleNum { n: 1 }
-    }
-    // could check with a 'formula' [O(1)] instead of [O(n)]
-    pub fn is_triangle(n: u32) -> bool {
-        for i in triangle_inf() {
-            if n == i {
-                return true;
-            } else if i > n {
-                break;
-            }
-        }
-        false
-    }
-    pub struct PentagonalNum {
-        n: u32,
-    }
-    impl Iterator for PentagonalNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (3 * n - 1) / 2)
-        }
-    }
-    pub fn pentagon_inf() -> PentagonalNum {
-        PentagonalNum { n: 1 }
-    }
-    // could check with a 'formula' [O(1)] instead of [O(n)]
-    pub fn is_pentagon(n: u32) -> bool {
-        for i in pentagon_inf() {
-            if n == i {
-                return true;
-            } else if i > n {
-                break;
-            }
-        }
-        false
-    }
-    pub struct HexagonalNum {
-        n: u32,
-    }
-    impl Iterator for HexagonalNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (2 * n - 1))
-        }
-    }
-    pub fn hexagon_inf() -> HexagonalNum {
-        HexagonalNum { n: 1 }
-    }
-    // could check with a 'formula' [O(1)] instead of [O(n)]
-    pub fn is_hexagon(n: u32) -> bool {
-        for i in hexagon_inf() {
-            if n == i {
-                return true;
-            } else if i > n {
-                break;
-            }
-        }
-        false
-    }
-    pub struct FibonnacciIter {
-        curr: u32,
-        next: u32,
-    }
-    impl Iterator for FibonnacciIter {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let curr = self.curr;
-            self.curr = self.next;
-            self.next += curr;
-            Some(curr)
-        }
-    }
-    pub fn fibonnacci_inf() -> FibonnacciIter {
-        FibonnacciIter { curr: 1, next: 2 }
-    }
+
     pub fn factors(n: u32) -> Vec<u32> {
         let mut fact: Vec<u32> = Vec::new();
         for i in 1..n + 1 {

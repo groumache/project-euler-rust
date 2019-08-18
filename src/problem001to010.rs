@@ -20,55 +20,41 @@
 //   Find the product abc.
 // Problem 10: Summation of primes
 //   Find the sum of all the primes below n
+
 pub mod p001 {
-    // Functionnal programming -- O(n)
-    //  (3 + 6 + ...) + (5 + 10 + ...).except(x % 3 == 0)
-    pub fn v1(limit: u32) -> u32 {
-        let sum3: u32 = (3..limit).step_by(3).sum();
-        let sum5: u32 = (5..limit).filter(|x| x % 3 != 0).step_by(5).sum();
-        sum3 + sum5
+    pub fn v1(n: u32) -> u32 {
+        let sum_3: u32 = (3..n).step_by(3).sum();
+        let sum_5: u32 = (5..n).filter(|x| x % 3 != 0).step_by(5).sum();
+
+        sum_3 + sum_5
     }
-    // Math formula -- O(1)
-    //  \sum_{i = 1}^{n} = n * (n + 1) / 2
-    pub fn v2(limit: u32) -> u32 {
-        let n3 = (limit - 1) / 3;
-        let sum3 = 3 * n3 * (n3 + 1) / 2;
-        let n5 = (limit - 1) / 5;
-        let sum5 = 5 * n5 * (n5 + 1) / 2;
-        let n3x5 = limit / (3 * 5);
-        let sum3x5 = (3 * 5) * n3x5 * (n3x5 + 1) / 2;
-        sum3 + sum5 - sum3x5
+    // Math formula -- \sum_{i = 1}^{n} = n * (n + 1) / 2
+    pub fn v2(n: u32) -> u32 {
+        let max_3 = (n - 1) / 3;
+        let max_5 = (n - 1) / 5;
+        let max_3x5 = (n - 1) / (3 * 5);
+
+        let sum_3 = 3 * max_3 * (max_3 + 1) / 2;
+        let sum_5 = 5 * max_5 * (max_5 + 1) / 2;
+        let sum_3x5 = (3 * 5) * max_3x5 * (max_3x5 + 1) / 2;
+
+        sum_3 + sum_5 - sum_3x5
     }
 }
 
 pub mod p002 {
-    // Fibonnacci iterative algorithm -- O(n)
-    pub fn v1(nb_terms: u32) -> u32 {
-        let mut curr = 1;
-        let mut next = 2;
-        let mut even_sum = 0;
-        for _ in 1..nb_terms {
-            let tmp = next;
-            next = curr + next;
-            curr = tmp;
-            if curr % 2 == 0 {
-                even_sum += curr;
-            }
-        }
-        even_sum
-    }
-    // Fibonnacci Iterator -- O(n)
-    use crate::useful_func::other_func::*;
-    pub fn v2(nb_terms: u32) -> u32 {
-        let mut counter: u32 = 0;
+    use crate::useful_func::fibonacci::fibonacci;
+    pub fn v1(n: u32) -> u32 {
+        let n: usize = n as usize;
         let mut sum: u32 = 0;
-        for i in fibonnacci_inf() {
-            counter += 1;
-            if i % 2 == 0 {
-                sum += i;
-            }
-            if counter >= nb_terms {
+        
+        for (i, fib) in fibonacci().enumerate() {
+            if i == n {
                 break;
+            }
+            
+            if fib % 2 == 0 {
+                sum += fib;
             }
         }
         sum

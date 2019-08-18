@@ -19,6 +19,7 @@
 //   How many Sundays fell on the first of the month from 1 Jan 1901 to 31 Dec 2000 ?
 // Problem 20: Factorial digit sum
 //   Find the sum of the digits in the number n!
+
 pub mod p011 {
     pub fn v1() -> u32 {
         let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08"
@@ -294,21 +295,21 @@ pub mod p017 {
             _ => panic!(),
         };
         let letters_0to99 = |num: u32| match num {
-            0...19 => letters_0to19(num),
+            0 ..= 19 => letters_0to19(num),
             40 | 50 | 60 => 5,
-            41...49 | 51...59 | 61...69 => 5 + letters_0to19(num % 20),
+            41 ..= 49 | 51 ..= 59 | 61 ..= 69 => 5 + letters_0to19(num % 20),
             20 | 30 | 80 | 90 => 6,
-            21...29 | 31...39 | 81...89 | 91...99 => 6 + letters_0to19(num % 20),
+            21 ..= 29 | 31 ..= 39 | 81 ..= 89 | 91 ..= 99 => 6 + letters_0to19(num % 20),
             70 => 7,
-            71...79 => 7 + letters_0to19(num % 20),
+            71 ..= 79 => 7 + letters_0to19(num % 20),
             _ => panic!(),
         };
         let letters_0to999 = |num: u32| {
             let hundreds = num / 100;
             match num {
-                0...99 => letters_0to99(num),
+                0 ..= 99 => letters_0to99(num),
                 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 => 7 + letters_0to19(hundreds),
-                101...999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
+                101 ..= 999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
                 _ => panic!(),
             }
         };
@@ -322,7 +323,7 @@ pub mod p017 {
                 }
             } else {
                 n_letters = match num {
-                    0...999 => letters_0to999(num),
+                    0 ..= 999 => letters_0to999(num),
                     _ => 8 + letters_0to999(thousands) + letters_0to999(num % 1000),
                 }
             }
