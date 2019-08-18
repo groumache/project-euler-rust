@@ -7,16 +7,16 @@ pub mod prime_numbers {
         }
 
         let sqrt_n: u32 = (n as f64).sqrt() as u32;
-        let divisor = (2..sqrt_n+1).find(|x| n % x == 0);
+        let divisor = (2 ..= sqrt_n).find(|x| n % x == 0);
 
         divisor == None
     }
     pub fn primes_below(n: u32) -> Vec<u32> {
-        (2..n).filter(|x| is_prime(*x))
+        (2 .. n).filter(|x| is_prime(*x))
             .collect()
     }
     pub fn prime_factors(n: u32) -> Vec<u32> {
-        (2..n+1)
+        (2 ..= n)
             .filter(|x| n % x == 0)
             .filter(|x| is_prime(*x))
             .collect()
@@ -29,7 +29,7 @@ pub mod prime_numbers {
     impl Iterator for PrimesIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let prime = (self.minimum..self.maximum).find(|x| is_prime(*x));
+            let prime = (self.minimum .. self.maximum).find(|x| is_prime(*x));
 
             if prime != None {
                 self.minimum = prime.unwrap();
@@ -40,7 +40,7 @@ pub mod prime_numbers {
     }
     impl DoubleEndedIterator for PrimesIter {
         fn next_back(&mut self) -> Option<u32> {
-            let prime = (self.minimum..self.maximum)
+            let prime = (self.minimum .. self.maximum)
                 .rev()
                 .find(|x| is_prime(*x));
             
@@ -103,8 +103,8 @@ pub mod fibonacci {
             max = 1;
         }
 
-        let curr: u32 = (min..).find(|x| is_fibonacci(*x)).unwrap();
-        let next: u32 = (curr+1..).find(|x| is_fibonacci(*x)).unwrap();
+        let curr: u32 = (min ..).find(|x| is_fibonacci(*x)).unwrap();
+        let next: u32 = (curr+1 ..).find(|x| is_fibonacci(*x)).unwrap();
 
         FibonacciIter {
             maximum: max,
@@ -125,9 +125,9 @@ pub mod digits {
     pub fn num_to_digits(n: u32) -> Vec<u32> {
         let mut n = n;
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
+        let length = (n as f64).log10() as u32;
 
-        for _ in 0..length {
+        for _ in 0 .. length {
             n /= 10;
             digits.push(n % 10);
         }
@@ -170,7 +170,7 @@ pub mod triangle_num {
     impl Iterator for TriangleIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let triangle = (self.minimum..self.maximum)
+            let triangle = (self.minimum .. self.maximum)
                 .find(|x| is_triangle(*x));
 
             if triangle != None {
@@ -210,7 +210,7 @@ pub mod pentagonal_num {
     impl Iterator for PentagonIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let pentagon = (self.minimum..self.maximum)
+            let pentagon = (self.minimum .. self.maximum)
                 .find(|x| is_pentagon(*x));
 
             if pentagon != None {
@@ -250,7 +250,7 @@ pub mod hexagonal_num {
     impl Iterator for HexagonIter {
         type Item = u32;
         fn next(& mut self) -> Option<u32> {
-            let hexagon = (self.minimum..self.maximum)
+            let hexagon = (self.minimum .. self.maximum)
                 .find(|x| is_hexagon(*x));
 
             if hexagon != None {
@@ -283,7 +283,7 @@ pub mod other_func {
 
     pub fn factors(n: u32) -> Vec<u32> {
         let mut fact: Vec<u32> = Vec::new();
-        for i in 1..n + 1 {
+        for i in 1 ..= n {
             if n % i == 0 {
                 fact.push(i);
             }

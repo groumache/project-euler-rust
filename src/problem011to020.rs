@@ -56,10 +56,10 @@ pub mod p011 {
         let length = 20;
         let n_adj = 4;
         // Horizontal
-        for row in 0..length {
-            for col in 0..(length - n_adj) {
+        for row in 0 .. length {
+            for col in 0 .. (length - n_adj) {
                 let mut mul = 1;
-                for i in 0..n_adj {
+                for i in 0 .. n_adj {
                     let index = row * length + (col + i);
                     mul *= grid_num[index];
                 }
@@ -69,10 +69,10 @@ pub mod p011 {
             }
         }
         // Vertical
-        for col in 0..length {
-            for row in 0..(length - n_adj) {
+        for col in 0 .. length {
+            for row in 0 .. (length - n_adj) {
                 let mut mul = 1;
-                for i in 0..n_adj {
+                for i in 0 .. n_adj {
                     let index = (row + i) * length + col;
                     mul *= grid_num[index];
                 }
@@ -82,10 +82,10 @@ pub mod p011 {
             }
         }
         // Diagonal
-        for col in 0..(length - n_adj) {
-            for row in 0..(length - n_adj) {
+        for col in 0 .. (length - n_adj) {
+            for row in 0 .. (length - n_adj) {
                 let mut mul = 1;
-                for i in 0..n_adj {
+                for i in 0 .. n_adj {
                     let index = (row + i) * length + (col + i);
                     mul *= grid_num[index];
                 }
@@ -104,7 +104,7 @@ pub mod p012 {
         let mut next_tri = 2;
         loop {
             let mut counter = 0;
-            for i in 1..triangular + 1 {
+            for i in 1 ..= triangular {
                 if triangular % i == 0 {
                     counter += 1;
                 }
@@ -240,7 +240,7 @@ pub mod p014 {
     pub fn v1(n: u32) -> u32 {
         let mut start_number = 1;
         let mut max_length = 1;
-        for curr in 2..n + 1 {
+        for curr in 2 ..= n {
             let mut chain_length = 1;
             let mut i = curr;
             while i != 1 {
@@ -264,8 +264,8 @@ pub mod p014 {
 pub mod p015 {
     pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
-        let n_fact: u32 = (2..n + 1).product();
-        let two_n_fact: u32 = (2..(2 * n + 1)).product();
+        let n_fact: u32 = (2 ..= n).product();
+        let two_n_fact: u32 = (2 .. 2*n).product();
         two_n_fact / (n_fact * n_fact)
     }
 }
@@ -330,7 +330,7 @@ pub mod p017 {
             n_letters
         };
         let mut n_letters = 0;
-        for i in 1..n + 1 {
+        for i in 1 ..= n {
             n_letters += letters_0to1million(i);
         }
         n_letters
@@ -370,8 +370,8 @@ pub mod p018 {
                 triangle[size - 1].push(last_num * 10 + c.to_digit(10).unwrap());
             }
         }
-        for i in 1..triangle.len() {
-            for j in 0..i {
+        for i in 1 .. triangle.len() {
+            for j in 0 .. i {
                 if j == 0 {
                     triangle[i][j] += triangle[i - 1][j];
                 } else if j == i {
@@ -462,7 +462,7 @@ pub mod p019 {
 
 pub mod p020 {
     pub fn v1(n: u32) -> u32 {
-        let fact: u32 = (2..n + 1).product();
+        let fact: u32 = (2 ..= n).product();
         let mut sum: u32 = 0;
         for c in fact.to_string().chars() {
             sum += c.to_digit(10).unwrap();

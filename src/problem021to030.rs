@@ -26,9 +26,9 @@
 pub mod p021 {
     pub fn v1(n: u32) -> u32 {
         let divisors = |n: u32| -> Vec<u32> {
-            let half = n / 2 + 1;
+            let half = n / 2;
             let mut div: Vec<u32> = Vec::new();
-            for i in 1..half {
+            for i in 1 ..= half {
                 if n % i == 0 {
                     div.push(i);
                 }
@@ -40,7 +40,7 @@ pub mod p021 {
             divisors(n).iter().sum()
         };
         let mut amicable_numbers: Vec<u32> = Vec::new();
-        for i in 1..n {
+        for i in 1 .. n {
             if d(i) == d(d(i)) && !amicable_numbers.contains(&i) {
                 amicable_numbers.push(i);
             }
@@ -109,9 +109,9 @@ pub mod p022 {
 pub mod p023 {
     pub fn v1() -> u32 {
         let divisors = |n: u32| -> Vec<u32> {
-            let half = n / 2 + 1;
+            let half = n / 2;
             let mut div: Vec<u32> = Vec::new();
-            for i in 1..half {
+            for i in 1 ..= half {
                 if n % i == 0 {
                     div.push(i);
                 }
@@ -121,9 +121,9 @@ pub mod p023 {
         let mut abundant_numbers: Vec<u32> = Vec::new();
         let mut sum_abundant_num: Vec<u32> = Vec::new();
         let mut not_sum_abundant_num: Vec<u32> = Vec::new();
-        let limit: u32 = 28123 + 1; // it says "greater than", not "greater or equal"
+        let limit: u32 = 28123; // it says "greater than", not "greater or equal"
                                     // find abundant numbers
-        for i in 1..limit {
+        for i in 1 ..= limit {
             if i < divisors(i).iter().sum() {
                 abundant_numbers.push(i);
             }
@@ -136,8 +136,8 @@ pub mod p023 {
         }
         // find numbers that cannot be written as the sum of two abundant numbers
         //   can be replaced by:
-        //   not_sum_abundant_num = (1..limit).filter(|n| !sum_abundant_num.contains(n)).collect();
-        for i in 1..limit {
+        //   not_sum_abundant_num = (1 .. limit).filter(|n| !sum_abundant_num.contains(n)).collect();
+        for i in 1 .. limit {
             if !sum_abundant_num.contains(&i) {
                 not_sum_abundant_num.push(i);
             }
@@ -203,13 +203,13 @@ pub mod p026 {
     fn all_primes_below(n: u32) -> Vec<u32> {
         let mut sieve: Vec<bool> = vec![true; (n + 1) as usize];
         let num = n as usize;
-        let half = num / 2 + 1;
-        //                                                                                      sieve[0..1] = false;
+        let half = num / 2;
+        //                                                                                      sieve[0 ..= 1] = false;
         sieve[0] = false;
         sieve[1] = false;
-        for i in 2..half {
+        for i in 2 ..= half {
             if sieve[i] {
-                for j in (2 * i..num + 1).step_by(i) {
+                for j in (2*i ..= num).step_by(i) {
                     sieve[j] = false;
                 }
             }
@@ -234,7 +234,7 @@ pub mod p026 {
             let log = frac.log10() as u32;
             let mut digits: Vec<u8> = Vec::new();
             // we're supposed to observe a repetition of the cycle at least once
-            for j in 1..2 * n {
+            for j in 1 .. 2*n {
                 let base: u32 = 10;
                 let digit_position: f64 = base.pow(j - log) as f64;
                 let digit: u8 = ((frac * digit_position) % 10 as f64) as u8;
@@ -248,7 +248,7 @@ pub mod p026 {
                 if *digit == last_digit && j < last_occurence {
                     // find a second occurence of the digit
                     let mut eq_cycles = true;
-                    for k in j..digits.len() {
+                    for k in j .. digits.len() {
                         // check if that means that we've found a repetition of the cycle
                         if digits[k] != digits[j - k] {
                             eq_cycles = false;
@@ -274,8 +274,8 @@ pub mod p026 {
 
 pub mod p027 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -286,8 +286,8 @@ pub mod p027 {
         let max_coeff = 1000;
         let mut n_primes = 0;
         let mut max_prod = 0;
-        for a in 0..max_coeff {
-            for b in 0..max_coeff {
+        for a in 0 .. max_coeff {
+            for b in 0 .. max_coeff {
                 let mut n: u32 = 0;
                 while is_prime(n.pow(2) + a * n + b) {
                     n += 1;
@@ -304,7 +304,6 @@ pub mod p027 {
 
 pub mod p028 {
     enum Direction {
-        //      AN ENUM MIGHT BE BETTER  ===>  Direction::right  or  Direction::left  or  ...
         Right,
         Left,
         Up,
@@ -346,8 +345,8 @@ pub mod p028 {
 pub mod p029 {
     pub fn v1() -> u32 {
         let mut sequence: Vec<u32> = Vec::new();
-        for a in 2..101 as u32 {
-            for b in 2..101 as u32 {
+        for a in 2 .. 101 as u32 {
+            for b in 2 .. 101 as u32 {
                 let pow = a.pow(b);
                 if !sequence.contains(&pow) {
                     sequence.push(pow);
@@ -364,8 +363,8 @@ pub mod p030 {
         let limit: u32 = 100_000;
         let mut sum = 0;
         let mut digits: [u32; 5] = [0; 5];
-        for num in 10..limit {
-            for i in 0..5 {
+        for num in 10 .. limit {
+            for i in 0 .. 5 {
                 let base: u32 = 10;
                 digits[i] = num / base.pow(i as u32) % 10;
             }

@@ -23,8 +23,8 @@
 
 pub mod p001 {
     pub fn v1(n: u32) -> u32 {
-        let sum_3: u32 = (3..n).step_by(3).sum();
-        let sum_5: u32 = (5..n).filter(|x| x % 3 != 0).step_by(5).sum();
+        let sum_3: u32 = (3 .. n).step_by(3).sum();
+        let sum_5: u32 = (5 .. n).filter(|x| x % 3 != 0).step_by(5).sum();
 
         sum_3 + sum_5
     }
@@ -62,85 +62,6 @@ pub mod p002 {
 }
 
 pub mod p003 {
-    // (1.) find factors (2.) find primes (3.) find largest
-    pub fn v1(n: u32) -> u32 {
-        let divisors: Vec<u32> = (2..n + 1).filter(|x| n % x == 0).collect();
-        let factors: Vec<u32> = divisors.clone();
-        let mut prime: Vec<bool> = vec![true; divisors.len()];
-        for (i, div) in divisors.iter().enumerate() {
-            for x in factors.iter() {
-                if div % x == 0 && div != x {
-                    prime[i] = false;
-                }
-            }
-        }
-        let mut prime_fact: u32 = 0;
-        for (i, div) in divisors.iter().enumerate() {
-            if prime[i] {
-                prime_fact = *div;
-            }
-        }
-        prime_fact
-    }
-    // (1.) find factors (2.) find largest prime
-    pub fn v2(n: u32) -> u32 {
-        let divisors: Vec<u32> = (2..n + 1).filter(|x| n % x == 0).rev().collect();
-        let factors: Vec<u32> = divisors.clone();
-        let mut prime_fact = 0;
-        for div in divisors.iter() {
-            if factors.iter().all(|x| div % x != 0 || div == x) {
-                prime_fact = *div;
-                break;
-            }
-        }
-        prime_fact
-    }
-    // (1.) find primes (2.) find largest factor
-    pub fn v3(n: u32) -> u32 {
-        let mut sieve: Vec<bool> = vec![true; (n + 1) as usize];
-        let num = n as usize;
-        let half = num / 2 + 1;
-        for i in 2..half {
-            if sieve[i] {
-                for j in (2 * i..num + 1).step_by(i) {
-                    sieve[j] = false;
-                }
-            }
-        }
-        let mut prime_fact = 0;
-        for i in (2..num + 1).rev() {
-            if sieve[i] && num % i == 0 {
-                prime_fact = i;
-                break;
-            }
-        }
-        prime_fact as u32
-    }
-    pub fn v4(n: u32) -> u32 {
-        let divisors: Vec<u32> = (2..n + 1).filter(|x| n % x == 0).rev().collect();
-        *divisors
-            .iter()
-            .filter(|x| divisors.iter().all(|y| *x % y != 0 || *x == y))
-            .max()
-            .unwrap()
-    }
-    pub fn v5(n: u32) -> u32 {
-        let divide_number = |x: u32| n % x == 0;
-        let is_prime = |x: u32| {
-            for i in 2..x {
-                if x % i == 0 {
-                    return false;
-                }
-            }
-            true
-        }; // doesn't have to loop only up to: x.sqrt() + 1
-        let max = (2..n + 1)
-            .filter(|x| divide_number(*x)) // too bad I can't just write: .filter( divide_number )
-            .filter(|x| is_prime(*x))
-            .max()
-            .unwrap();
-        max
-    }
     use crate::useful_func::prime_numbers::*;
     pub fn v6(n: u32) -> u32 {
         let p_factors = prime_factors(n);
@@ -156,8 +77,8 @@ pub mod p004 {
         let min = base.pow(exp); // let min = 10_u32.pow(exp);
         let max = base.pow(exp + 1);
         let mut largest_palyndrome = 0;
-        for i in min..max {
-            for j in min..i + 1 {
+        for i in min .. max {
+            for j in min ..= i {
                 let prod = j * i;
                 let prod_str: String = prod.to_string();
                 let prod_rev: String = prod_str.chars().rev().collect();
@@ -174,17 +95,17 @@ pub mod p005 {
     //
     pub fn v1(n: u32) -> u32 {
         let n = n as usize;
-        let half = n / 2 + 1;
+        let half = n / 2;
         let mut sieve: Vec<bool> = vec![true; n + 1];
-        for i in 2..half {
+        for i in 2 ..= half {
             if sieve[i] {
-                for j in (2 * i..n + 1).step_by(i) {
+                for j in (2*i ..= n).step_by(i) {
                     sieve[j] = false;
                 }
             }
         }
         let mut smallest_product = 1;
-        for i in 2..n + 1 {
+        for i in 2 ..= n {
             if sieve[i] {
                 let repeat = (n as f64).log(i as f64);
                 smallest_product *= i.pow(repeat as u32);
@@ -197,8 +118,8 @@ pub mod p005 {
 pub mod p006 {
     pub fn v1(n: u32) -> u32 {
         let n: i32 = n as i32;
-        let sum_square: i32 = (1..n + 1).map(|x| x * x).sum();
-        let sum: i32 = (1..n + 1).sum();
+        let sum_square: i32 = (1 ..= n).map(|x| x * x).sum();
+        let sum: i32 = (1 ..= n).sum();
         (sum_square - sum.pow(2)).abs() as u32
     }
 }
@@ -210,7 +131,7 @@ pub mod p007 {
         while counter != n {
             number += 1;
             // if number.isprime()
-            if (2..number).all(|x| number % x != 0) {
+            if (2 .. number).all(|x| number % x != 0) {
                 counter += 1;
             }
         }
@@ -251,7 +172,7 @@ pub mod p008 {
             + "71636269561882670428252483600823257530420752963450";
         let size = num.chars().count();
         let mut adjacents: Vec<Vec<u32>> = vec![Vec::new(); size - window_size];
-        for i in 0..(size - window_size) {
+        for i in 0 .. (size - window_size) {
             let adj: String = substring(&num, i, window_size);
             for c in adj.chars() {
                 adjacents[i].push(c.to_digit(10).unwrap());
@@ -319,16 +240,16 @@ pub mod p010 {
     pub fn v1(n: u32) -> u32 {
         let n = n as usize;
         let mut sieve: Vec<bool> = vec![true; n + 1];
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if sieve[i] {
-                for j in (2 * i..n + 1).step_by(i) {
+                for j in (2*i ..= n).step_by(i) {
                     sieve[j] = false;
                 }
             }
         }
         let mut sum = 0;
-        for i in 2..n + 1 {
+        for i in 2 ..= n {
             if sieve[i] {
                 sum += i;
             }

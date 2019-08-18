@@ -26,8 +26,8 @@
 
 pub mod p041 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -36,8 +36,8 @@ pub mod p041 {
     }
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -52,8 +52,8 @@ pub mod p041 {
     }
     pub fn v1() -> u32 {
         let mut largest_pandigit: u32 = 0;
-        let max = 987654321 + 1;
-        for i in (1..max).rev() {
+        let max = 987654321;
+        for i in (1 ..= max).rev() {
             let i = i as u32;
             let mut digits = get_digits(i);
             if is_prime(i) && no_double(&mut digits) {
@@ -99,7 +99,7 @@ pub mod p042 {
         }
     }
     fn is_triangle_num(n: u32) -> bool {
-        for i in (1..).map(|n| n * (n + 1) / 2) {
+        for i in (1 ..).map(|n| n * (n + 1) / 2) {
             if n == i {
                 return true;
             } else if n > i {
@@ -138,8 +138,8 @@ pub mod p043 {
     }
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -150,7 +150,7 @@ pub mod p043 {
         if n == 0 {
             return 1;
         }
-        (1..n + 1).product()
+        (1 ..= n).product()
     }
     fn get_permutation<T>(items: Vec<T>, perm: u32) -> Option<Vec<T>> {
         let mut perm = perm;
@@ -163,7 +163,7 @@ pub mod p043 {
         }
         // find which element we have to shift
         let mut permutations: Vec<u32> = Vec::new();
-        for i in (1..n_element + 1).rev() {
+        for i in (1 ..= n_element).rev() {
             let factorial: u32 = fact(i + 1);
             permutations.push(perm / factorial);
             perm = perm % factorial;
@@ -377,8 +377,8 @@ pub mod p045 {
 
 pub mod p046 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -393,7 +393,7 @@ pub mod p046 {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
             self.n += 1;
-            for i in self.largest.. {
+            for i in self.largest .. {
                 if is_prime(i) {
                     self.largest = i;
                     break;
@@ -408,15 +408,15 @@ pub mod p046 {
     pub fn v1() -> u32 {
         // Maybe write a short explanation
         let mut smallest_odd_comp: u32 = 0;
-        for i in (33..).step_by(2) {
+        for i in (33 ..).step_by(2) {
             for p in primes() {
                 let mut equal: bool = false;
                 if p > i {
                     smallest_odd_comp = i;
                     break;
                 }
-                for j in 1.. {
-                    // for j in (1..).map(|x| x.pow(2)) {
+                for j in 1 .. {
+                    // for j in (1 ..).map(|x| x.pow(2)) {
                     let j = (j as u32).pow(2);
                     if 2 * j + p > i {
                         break;
@@ -436,8 +436,8 @@ pub mod p046 {
 
 pub mod p047 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -452,7 +452,7 @@ pub mod p047 {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
             self.n += 1;
-            for i in self.largest.. {
+            for i in self.largest .. {
                 if is_prime(i) {
                     self.largest = i;
                     break;
@@ -480,7 +480,7 @@ pub mod p047 {
     }
     fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.sort(); //                                                            v.sort().dedup();  ===>  WHY NOT ?
         v.dedup();
         if length != v.len() {
             return false;
@@ -489,9 +489,9 @@ pub mod p047 {
     }
     pub fn v1() -> u32 {
         let mut first: u32 = 0;
-        for i in 1.. {
+        for i in 1 .. {
             let mut p_fact: Vec<u32> = Vec::new();
-            for j in 0..4 {
+            for j in 0 .. 4 {
                 p_fact.append(&mut prime_factors(i + j));
             }
             if no_double(&mut p_fact) {
@@ -507,7 +507,7 @@ pub mod p048 {
     pub fn v1() -> u32 {
         let mut ten_digits: u32 = 0;
         let max: u32 = 1000;
-        for i in 1..max {
+        for i in 1 .. max {
             let base_10: u32 = 10;
             ten_digits += i.pow(i) % base_10.pow(10);
         }
@@ -518,8 +518,8 @@ pub mod p048 {
 pub mod p049 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -535,8 +535,8 @@ pub mod p049 {
         num
     }
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -551,7 +551,7 @@ pub mod p049 {
     impl Iterator for Primes {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            for i in self.p.. {
+            for i in self.p .. {
                 if !self.no_max && i > self.maximum {
                     return None;
                 }
@@ -572,7 +572,7 @@ pub mod p049 {
     }
     fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        v.sort(); //   v.sort().dedup();  ===>  WHY NOT ? because it doesn't return anything I assume but still...
+        v.sort(); //                                                            v.sort().dedup();  ===>  WHY NOT ?
         v.dedup();
         if length != v.len() {
             return false;
@@ -632,8 +632,8 @@ pub mod p049 {
 
 pub mod p050 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -648,7 +648,7 @@ pub mod p050 {
     impl Iterator for Primes {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            for i in self.minimum.. {
+            for i in self.minimum .. {
                 if !self.no_max && i > self.maximum {
                     return None;
                 }
@@ -664,7 +664,7 @@ pub mod p050 {
         impl DoubleEndedIterator for Primes {
             fn next_back(&mut self) -> Option<u32> {
                 let max = self.maximum;
-                for i in (self.minimum..self.maximum).rev() {
+                for i in (self.minimum .. self.maximum).rev() {
                     if is_prime(i) {
                         self.maximum = i;
                         break;
@@ -684,7 +684,7 @@ pub mod p050 {
     }
     fn primes_below(n: u32) -> Vec<u32> {
         let mut primes: Vec<u32> = Vec::new();
-        for i in 2..n {
+        for i in 2 .. n {
             if is_prime(i) {
                 primes.push(i);
             }

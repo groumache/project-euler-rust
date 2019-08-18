@@ -111,8 +111,8 @@ pub mod p031 {
 pub mod p032 {
     fn get_digits(n: u32) -> Vec<u8> {
         let mut digits: Vec<u8> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u8 = (n / base.pow(i) % 10) as u8;
             digits.push(digit);
@@ -121,7 +121,7 @@ pub mod p032 {
     }
     fn get_divisors(n: u32) -> Vec<u32> {
         let mut divisors: Vec<u32> = Vec::new();
-        for i in 1..n + 1 {
+        for i in 1 ..= n {
             if n % i == 0 {
                 divisors.push(i);
             }
@@ -137,7 +137,7 @@ pub mod p032 {
     // Such a number can only have 4 digits
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
-        for num in 1234..9876 + 1 {
+        for num in 1234 ..= 9876 {
             //                                                              let mut digits = get_digits(num).sort();
             //                                                              if digits.len() != digits.dedup().len() { continue; }
             let mut digits: Vec<u8> = get_digits(num);
@@ -165,8 +165,8 @@ pub mod p032 {
 pub mod p033 {
     fn get_digits(n: u32) -> Vec<u8> {
         let mut digits: Vec<u8> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u8 = (n / base.pow(i) % 10) as u8;
             digits.push(digit);
@@ -183,7 +183,7 @@ pub mod p033 {
     }
     fn get_divisors(n: u32) -> Vec<u32> {
         let mut divisors: Vec<u32> = Vec::new();
-        for i in 1..n + 1 {
+        for i in 1 ..= n {
             if n % i == 0 {
                 divisors.push(i);
             }
@@ -204,8 +204,8 @@ pub mod p033 {
     pub fn v1() -> u32 {
         let mut num: Vec<u8> = Vec::new();
         let mut den: Vec<u8> = Vec::new();
-        for numerator in (11..99).filter(|n| n % 10 != 0) {
-            for denominator in (11..99).filter(|n| n % 10 != 0) {
+        for numerator in (11 .. 99).filter(|n| n % 10 != 0) {
+            for denominator in (11 .. 99).filter(|n| n % 10 != 0) {
                 let mut digits_num = get_digits(numerator);
                 let mut digits_den = get_digits(denominator);
                 if no_double(&mut digits_den, &mut digits_num) {
@@ -250,8 +250,8 @@ pub mod p033 {
 pub mod p034 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -262,13 +262,13 @@ pub mod p034 {
         if n == 0 {
             return 1;
         }
-        (1..n + 1).product()
+        (1 ..= n).product()
     }
     // max 7 digits as (9!) * 8 has 7 digits
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
         let max = 7 * fact(9);
-        for i in 11..max {
+        for i in 11 .. max {
             let digits = get_digits(i);
             let sum_fact_digits: u32 = digits.iter().map(|d| fact(*d)).sum();
             if sum_fact_digits == i {
@@ -282,8 +282,8 @@ pub mod p034 {
 pub mod p035 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -299,8 +299,8 @@ pub mod p035 {
         num
     }
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -309,7 +309,7 @@ pub mod p035 {
     }
     fn primes_below(n: u32) -> Vec<u32> {
         let mut primes: Vec<u32> = Vec::new();
-        for i in 2..n {
+        for i in 2 .. n {
             if is_prime(i) {
                 primes.push(i);
             }
@@ -326,7 +326,7 @@ pub mod p035 {
             let mut circular_prime: bool = true;
             primes_checked.push(*p);
             // check if it's a circular prime
-            for _ in 0..digits.len() {
+            for _ in 0 .. digits.len() {
                 let d = digits.remove(0);
                 digits.push(d);
                 let num = get_number(&digits);
@@ -347,8 +347,8 @@ pub mod p035 {
 pub mod p036 {
     fn get_digits_10(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -357,8 +357,8 @@ pub mod p036 {
     }
     fn get_digits_2(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log2() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log2() as u32;
+        for i in 0 ..= length {
             let base: u32 = 2;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -366,7 +366,7 @@ pub mod p036 {
         digits
     }
     fn is_palyndromic(vec: Vec<u32>) -> bool {
-        for i in 0..vec.len() {
+        for i in 0 .. vec.len() {
             let last = vec.len() - 1;
             if vec[i] != vec[last - i] {
                 return false;
@@ -377,7 +377,7 @@ pub mod p036 {
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
         let max = 1_000_000;
-        for i in 1..max {
+        for i in 1 .. max {
             let digits_10 = get_digits_10(i);
             let digits_2 = get_digits_2(i);
             if is_palyndromic(digits_10) && is_palyndromic(digits_2) {
@@ -390,8 +390,8 @@ pub mod p036 {
 
 pub mod p037 {
     fn is_prime(n: u32) -> bool {
-        let half = n / 2 + 1;
-        for i in 2..half {
+        let half = n / 2;
+        for i in 2 ..= half {
             if n % i == 0 {
                 return false;
             }
@@ -400,8 +400,8 @@ pub mod p037 {
     }
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -419,7 +419,7 @@ pub mod p037 {
     pub fn v1() -> u32 {
         let n_truncatable = 11;
         let mut truncatables: Vec<u32> = Vec::new();
-        for i in 11.. {
+        for i in 11 .. {
             let mut num = i;
             let mut trunc: bool = true;
             while (num as f64).log10() >= 1.0 {
@@ -446,8 +446,8 @@ pub mod p037 {
 pub mod p038 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -472,10 +472,10 @@ pub mod p038 {
     pub fn v1() -> u32 {
         let mut max_pandigital = 0;
         let max = 100_000;
-        for i in 2..max {
+        for i in 2 .. max {
             let mut digits: Vec<u32> = Vec::new();
             // digits = get_pandigital()
-            for j in 1.. {
+            for j in 1 .. {
                 let num: u32 = i * j;
                 digits.append(&mut get_digits(num));
                 if digits.len() >= 9 {
@@ -499,8 +499,8 @@ pub mod p039 {
     pub fn v1() -> u32 {
         let max_p = 1001;
         let mut p_solutions: Vec<u32> = vec![0; max_p];
-        for a in 1..max_p {
-            for b in 1..max_p {
+        for a in 1 .. max_p {
+            for b in 1 .. max_p {
                 let a = a as f64;
                 let b = b as f64;
                 let c = (a.powi(2) + b.powi(2)).sqrt();
@@ -526,8 +526,8 @@ pub mod p039 {
 pub mod p040 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32 + 1;
-        for i in 0..length {
+        let length = (n as f64).log10() as u32;
+        for i in 0 ..= length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -539,7 +539,7 @@ pub mod p040 {
         let mut expression: u32 = 1;
         let d_x: [u32; 7] = [1, 10, 100, 1000, 10_000, 100_000, 1_000_000];
         let mut digit_num: u32 = 1;
-        for i in 1..1_000_000 {
+        for i in 1 .. 1_000_000 {
             let digits = get_digits(i);
             for (j, digit) in digits.iter().enumerate() {
                 let x = digit_num + j as u32;
