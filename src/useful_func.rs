@@ -32,9 +32,9 @@ pub mod prime_numbers {
             let prime = (self.minimum .. self.maximum).find(|x| is_prime(*x));
 
             if prime != None {
-                self.minimum = prime.unwrap();
+                self.minimum = 1 + prime.unwrap();
             }
-            
+
             prime
         }
     }
@@ -43,16 +43,23 @@ pub mod prime_numbers {
             let prime = (self.minimum .. self.maximum)
                 .rev()
                 .find(|x| is_prime(*x));
-            
+
             if prime != None {
                 self.maximum = prime.unwrap();
             }
-            
+
             prime
         }
     }
 
-    pub fn primes_range(min: u32, max: u32) -> PrimesIter {
+    pub fn primes_range(mut min: u32, mut max: u32) -> PrimesIter {
+        if min < 2 {
+            min = 2;
+        }
+        if max < min {
+            max = min;
+        }
+
         PrimesIter {
             minimum: min,
             maximum: max,
@@ -98,6 +105,9 @@ pub mod fibonacci {
     }
 
     pub fn fibonacci_range(mut min: u32, mut max: u32) -> FibonacciIter {
+        if min < 1 {
+            min = 1;
+        }
         if max < 2 {
             min = 1;
             max = 1;
@@ -125,11 +135,11 @@ pub mod digits {
     pub fn num_to_digits(n: u32) -> Vec<u32> {
         let mut n = n;
         let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
+        let length = 1 + (n as f64).log10() as u32;
 
         for _ in 0 .. length {
-            n /= 10;
             digits.push(n % 10);
+            n /= 10;
         }
 
         digits
@@ -137,9 +147,8 @@ pub mod digits {
     pub fn digits_to_num(digits: &Vec<u32>) -> u32 {
         let mut n: u32 = 0;
 
-        for d in digits.iter() {
-            n *= 10;
-            n += d;
+        for d in digits.iter().rev() {
+            n = n * 10 + d;
         }
 
         n
@@ -147,11 +156,11 @@ pub mod digits {
 
     pub fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
-        
-        v.sort();                       //   v.sort().dedup();  ===>  WHY NOT ?
+
+        v.sort();
         v.dedup();
 
-        length != v.len()
+        length == v.len()
     }
 }
 
@@ -160,7 +169,7 @@ pub mod triangle_num {
 
     // An integer n is triangular exactly if 8n + 1 is a square.
     pub fn is_triangle(n: u32) -> bool {
-        other_func::is_square(8*n + 1)
+        n != 0 && other_func::is_square(8*n + 1)
     }
 
     pub struct TriangleIter {
@@ -174,7 +183,7 @@ pub mod triangle_num {
                 .find(|x| is_triangle(*x));
 
             if triangle != None {
-                self.minimum = triangle.unwrap();
+                self.minimum = 1 + triangle.unwrap();
             }
 
             triangle
@@ -199,7 +208,7 @@ pub mod pentagonal_num {
     // n is a pentagonal number only if sqrt((24*n+1) + 1)/6 is an integer
     pub fn is_pentagon(n: u32) -> bool {
         let n: f64 = n as f64;
-        let x: f64 = ((24.0 * n + 1.0) + 1.0).sqrt() / 6.0;
+        let x: f64 = ((24.0 * n + 1.0).sqrt() + 1.0) / 6.0;
         x - x.floor() == 0.0
     }
 
@@ -214,7 +223,7 @@ pub mod pentagonal_num {
                 .find(|x| is_pentagon(*x));
 
             if pentagon != None {
-                self.minimum = pentagon.unwrap();
+                self.minimum = 1 + pentagon.unwrap();
             }
 
             pentagon
@@ -254,7 +263,7 @@ pub mod hexagonal_num {
                 .find(|x| is_hexagon(*x));
 
             if hexagon != None {
-                self.minimum = hexagon.unwrap();
+                self.minimum = 1 + hexagon.unwrap();
             }
 
             hexagon
@@ -278,7 +287,7 @@ pub mod hexagonal_num {
 pub mod other_func {
     pub fn is_square(n: u32) -> bool {
         let x = n as f64;
-        x.sqrt() % 1.0 == 0.0
+        x != 0.0 && x.sqrt() % 1.0 == 0.0
     }
 
     pub fn factors(n: u32) -> Vec<u32> {
@@ -289,5 +298,10 @@ pub mod other_func {
             }
         }
         fact
+    }
+
+    pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
+        let half = v.len() / 2;
+        v.iter().take(half).eq( v.iter().rev().take(half) )
     }
 }

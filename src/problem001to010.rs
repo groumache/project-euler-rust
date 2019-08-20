@@ -1,18 +1,3 @@
-// Problem 1: Multiples of 3 and 5
-//   Find the sum of all the multiples of 3 or 5 below 1000.
-// Problem 2: Even Fibonacci numbers
-//   Find the sum of the even-valued terms.
-// Problem 3: Largest prime factor
-//   Find the largest prime factor of n.
-// Problem 4: Largest palindrome product
-//   Find the largest palindrome made from the product of two 3-digit numbers.
-// Problem 5: Smallest multiple
-//   Smallest positive number that is divisible by all of the numbers from 1 to n?
-// Problem 6: Sum Square Difference
-//   Find the difference between the sum of the squares and the square of the sum of
-//   the numbers from 1 to n.
-// Problem 7: n-th prime
-//   Find the n-th prime number
 // Problem 8: Largest product in a series
 //   Find the n adjacent digits that have the greatest product.
 // Problem 9: Special Pythagorean triplet
@@ -21,6 +6,7 @@
 // Problem 10: Summation of primes
 //   Find the sum of all the primes below n
 
+// Find the sum of all the multiples of 3 or 5 below n.
 pub mod p001 {
     pub fn v1(n: u32) -> u32 {
         let sum_3: u32 = (3 .. n).step_by(3).sum();
@@ -28,6 +14,7 @@ pub mod p001 {
 
         sum_3 + sum_5
     }
+
     // Math formula -- \sum_{i = 1}^{n} = n * (n + 1) / 2
     pub fn v2(n: u32) -> u32 {
         let max_3 = (n - 1) / 3;
@@ -42,100 +29,84 @@ pub mod p001 {
     }
 }
 
+// Find the sum of the even-valued Fibonacci terms below n.
 pub mod p002 {
     use crate::useful_func::fibonacci::fibonacci;
-    pub fn v1(n: u32) -> u32 {
-        let n: usize = n as usize;
-        let mut sum: u32 = 0;
-        
-        for (i, fib) in fibonacci().enumerate() {
-            if i == n {
-                break;
-            }
-            
-            if fib % 2 == 0 {
-                sum += fib;
-            }
-        }
-        sum
-    }
-}
 
-pub mod p003 {
-    use crate::useful_func::prime_numbers::*;
-    pub fn v6(n: u32) -> u32 {
-        let p_factors = prime_factors(n);
-        *p_factors.iter().max().unwrap()
-    }
-}
-
-pub mod p004 {
-    // (1.) loop to find product (2.) check if palyndrome
-    pub fn v1(nb_digits_factors: u32) -> u32 {
-        let base = 10 as u32;
-        let exp = (nb_digits_factors - 1) as u32;
-        let min = base.pow(exp); // let min = 10_u32.pow(exp);
-        let max = base.pow(exp + 1);
-        let mut largest_palyndrome = 0;
-        for i in min .. max {
-            for j in min ..= i {
-                let prod = j * i;
-                let prod_str: String = prod.to_string();
-                let prod_rev: String = prod_str.chars().rev().collect();
-                if prod_str == prod_rev {
-                    largest_palyndrome = prod;
-                }
-            }
-        }
-        largest_palyndrome
-    }
-}
-
-pub mod p005 {
-    //
     pub fn v1(n: u32) -> u32 {
         let n = n as usize;
-        let half = n / 2;
-        let mut sieve: Vec<bool> = vec![true; n + 1];
-        for i in 2 ..= half {
-            if sieve[i] {
-                for j in (2*i ..= n).step_by(i) {
-                    sieve[j] = false;
+        fibonacci().take(n).filter(|fib| *fib % 2 == 0).sum()
+    }
+}
+
+// Find the largest prime factor of n.
+pub mod p003 {
+    use crate::useful_func::prime_numbers::prime_factors;
+
+    pub fn v1(n: u32) -> u32 {
+        *prime_factors(n).iter().max().unwrap()
+    }
+}
+
+// Find the largest palindrome made from the product of two n-digit numbers.
+pub mod p004 {
+    use crate::useful_func::other_func::is_palindrome;
+    use crate::useful_func::digits::num_to_digits;
+
+    pub fn v1(n: u32) -> u32 {
+        let min = 10_u32.pow(n-1);
+        let max = 10_u32.pow(n);
+        let mut palindrome: u32 = 0;
+
+        'o: for i in (min .. max).rev() {
+            for j in (i .. max).rev() {
+                palindrome = j * i;
+                if is_palindrome(num_to_digits(palindrome)) {
+                    break 'o;
                 }
             }
         }
-        let mut smallest_product = 1;
-        for i in 2 ..= n {
-            if sieve[i] {
-                let repeat = (n as f64).log(i as f64);
-                smallest_product *= i.pow(repeat as u32);
-            }
-        }
-        smallest_product as u32
+
+        palindrome
     }
 }
 
-pub mod p006 {
+// Find the smallest positive number that is divisible by all of the numbers from 1 to n.
+pub mod p005 {
+    use crate::useful_func::prime_numbers::primes_below;
+
     pub fn v1(n: u32) -> u32 {
+        let mut smallest_product: u32 = 1;
+
+        for p in primes_below(n+1).iter() {
+            let exp: u32 = (n as f64).log(*p as f64) as u32;
+            smallest_product *= p.pow(exp);
+        }
+
+        smallest_product
+    }
+}
+
+// Find the difference between the sum of the squares and the square of the sum of
+// the numbers from 1 to n.
+pub mod p006 {
+    pub fn v1(n: u32) -> i32 {
         let n: i32 = n as i32;
+
         let sum_square: i32 = (1 ..= n).map(|x| x * x).sum();
         let sum: i32 = (1 ..= n).sum();
-        (sum_square - sum.pow(2)).abs() as u32
+        let square_sum = sum.pow(2);
+
+        (sum_square - square_sum).abs()
     }
 }
 
+// Find the n-th prime number
 pub mod p007 {
-    pub fn v1(n: u32) -> u32 {
-        let mut counter = 1;
-        let mut number = 2;
-        while counter != n {
-            number += 1;
-            // if number.isprime()
-            if (2 .. number).all(|x| number % x != 0) {
-                counter += 1;
-            }
-        }
-        number
+    use crate::useful_func::prime_numbers::primes;
+
+    pub fn v1(n: usize) -> u32 {
+        primes().nth(n-1).unwrap()
     }
 }
 
