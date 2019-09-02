@@ -6,7 +6,7 @@ pub mod prime_numbers {
             return false;
         }
 
-        let sqrt_n: u32 = (n as f64).sqrt() as u32;
+        let sqrt_n: u32 = (f64::from(n)).sqrt() as u32;
         let divisor = (2 ..= sqrt_n).find(|x| n % x == 0);
 
         divisor == None
@@ -118,8 +118,8 @@ pub mod fibonacci {
 
         FibonacciIter {
             maximum: max,
-            curr: curr,
-            next: next,
+            curr,
+            next,
         }
     }
     pub fn fibonacci() -> FibonacciIter {
@@ -135,7 +135,7 @@ pub mod digits {
     pub fn num_to_digits(n: u32) -> Vec<u32> {
         let mut n = n;
         let mut digits: Vec<u32> = Vec::new();
-        let length = 1 + (n as f64).log10() as u32;
+        let length = 1 + (f64::from(n)).log10() as u32;
 
         for _ in 0 .. length {
             digits.push(n % 10);
@@ -144,7 +144,7 @@ pub mod digits {
 
         digits
     }
-    pub fn digits_to_num(digits: &Vec<u32>) -> u32 {
+    pub fn digits_to_num(digits: &[u32]) -> u32 {
         let mut n: u32 = 0;
 
         for d in digits.iter().rev() {
@@ -161,6 +161,38 @@ pub mod digits {
         v.dedup();
 
         length == v.len()
+    }
+
+    pub fn get_grid_digits(grid: &str, width: usize) -> Vec<Vec<u32>> {
+        let mut num_grid: Vec<Vec<u32>> = Vec::new();
+
+        for (i, num) in grid.split_whitespace().enumerate() {
+            if i % width == 0 {
+                num_grid.push(Vec::new())
+            }
+
+            let last_index = num_grid.len() - 1;
+            num_grid[last_index]
+                .push(num.parse::<u32>().unwrap());
+        }
+
+        num_grid
+    }
+    pub fn get_triangle_digits(triangle: &str) -> Vec<Vec<u32>> {
+        use super::triangle_num::is_triangle;
+        let mut num_triangle: Vec<Vec<u32>> = Vec::new();
+        num_triangle.push(Vec::new());
+
+        for (i, num) in triangle.split_whitespace().enumerate() {
+            if is_triangle(i as u32) {
+                num_triangle.push(Vec::new());
+            }
+
+            let last_index = num_triangle.len() - 1;
+            num_triangle[last_index].push(num.parse::<u32>().unwrap());
+        }
+
+        num_triangle
     }
 }
 
@@ -207,7 +239,7 @@ pub mod triangle_num {
 pub mod pentagonal_num {
     // n is a pentagonal number only if sqrt((24*n+1) + 1)/6 is an integer
     pub fn is_pentagon(n: u32) -> bool {
-        let n: f64 = n as f64;
+        let n: f64 = f64::from(n);
         let x: f64 = ((24.0 * n + 1.0).sqrt() + 1.0) / 6.0;
         x - x.floor() == 0.0
     }
@@ -247,7 +279,7 @@ pub mod pentagonal_num {
 pub mod hexagonal_num {
     // n is a hexagonal number if (sqrt(8*y+1) + 1)/4 is an integer
     pub fn is_hexagon(n: u32) -> bool {
-        let n: f64 = n as f64;
+        let n: f64 = f64::from(n);
         let x: f64 = ((8.0 * n + 1.0).sqrt() + 1.0) / 4.0;
         x - x.floor() == 0.0
     }
@@ -286,22 +318,26 @@ pub mod hexagonal_num {
 
 pub mod other_func {
     pub fn is_square(n: u32) -> bool {
-        let x = n as f64;
+        let x = f64::from(n);
         x != 0.0 && x.sqrt() % 1.0 == 0.0
     }
 
     pub fn factors(n: u32) -> Vec<u32> {
-        let mut fact: Vec<u32> = Vec::new();
-        for i in 1 ..= n {
-            if n % i == 0 {
-                fact.push(i);
-            }
-        }
-        fact
+        (1 ..= n).filter(|i| n % i == 0).collect()
     }
 
     pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
         let half = v.len() / 2;
         v.iter().take(half).eq( v.iter().rev().take(half) )
+    }
+
+    pub fn is_pythagorean_triplet(a: u32, b: u32, c: u32) -> bool {
+        a < b && b < c
+            && a.pow(2) + b.pow(2) == c.pow(2)
+    }
+
+    pub fn get_substring(string: &str, start: usize, len: usize) -> String {
+        let end = start + len;
+        string.get(start .. end).unwrap().to_string()
     }
 }
