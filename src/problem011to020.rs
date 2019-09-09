@@ -125,11 +125,11 @@ pub mod p014 {
 
 // How many such routes are there through a 'n x n' grid?
 pub mod p015 {
+    use crate::useful_func::other_func::fact;
+
     pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
-        let n_fact: u32 = (1 ..= n).product();
-        let two_n_fact: u32 = (1 ..= 2*n).product();
-        two_n_fact / (n_fact * n_fact)
+        fact(2*n) / (fact(n) * fact(n))
     }
 }
 

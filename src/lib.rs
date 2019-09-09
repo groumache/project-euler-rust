@@ -5,6 +5,7 @@ pub mod problem031to040;
 pub mod problem041to050;
 pub mod useful_func;
 
+
 #[cfg(test)]
 mod test_useful_func {
     use crate::useful_func::*;
@@ -76,6 +77,21 @@ mod test_useful_func {
             let fib: Vec<u32> = fibonacci_range(0, 10).collect();
             assert_eq!(fib, [1,2,3,5,8].to_vec());
         }
+
+        #[test]
+        #[ignore]
+        fn test_fibonacci() {
+            let mut fib: Vec<u32> = Vec::new();
+
+            for i in fibonacci() {
+                if i > 10 {
+                    break;
+                }
+                fib.push(i);
+            }
+
+            assert_eq!(fib, [1,2,3,5,8].to_vec());
+        }
     }
 
     mod tests_digits {
@@ -93,6 +109,13 @@ mod test_useful_func {
         fn test_digits_to_num() {
             assert_eq!(digits_to_num(&[7, 5, 3].to_vec()), 357);
             assert_eq!(digits_to_num(&[0].to_vec()), 0);
+        }
+
+        #[test]
+        #[ignore]
+        fn test_frac_digits() {
+            assert_eq!(frac_digits(10, 3, 5), [3, 3, 3, 3, 3].to_vec());
+            assert_eq!(frac_digits(1, 7, 6), [1, 4, 2, 8, 5, 7].to_vec());
         }
 
         #[test]
@@ -203,9 +226,51 @@ mod test_useful_func {
 
         #[test]
         #[ignore]
+        fn test_is_amicable() {
+            assert!(is_amicable(220));
+            assert!(is_amicable(63020));
+
+            assert!(! is_amicable(15));
+            assert!(! is_amicable(256));
+        }
+
+        #[test]
+        #[ignore]
+        fn test_is_perfect() {
+            assert!(is_perfect(28));
+
+            assert!(!is_perfect(14));
+        }
+
+        #[test]
+        #[ignore]
+        fn test_is_deficient() {
+            assert!(is_deficient(10));
+
+            assert!(!is_deficient(28));
+        }
+
+        #[test]
+        #[ignore]
+        fn test_is_abundant() {
+            assert!(is_abundant(12));
+
+            assert!(!is_abundant(15));
+        }
+
+        #[test]
+        #[ignore]
         fn test_factors() {
             assert_eq!(factors(5), [1, 5].to_vec());
             assert_eq!(factors(12), [1, 2, 3, 4, 6, 12].to_vec());
+        }
+
+        #[test]
+        #[ignore]
+        fn test_fact() {
+            assert_eq!(fact(0), 1);
+            assert_eq!(fact(1), 1);
+            assert_eq!(fact(5), 120);
         }
 
         #[test]
@@ -423,3 +488,56 @@ mod tests_11to20 {
         assert_eq!(p020::v1(10), 27);
     }
 }
+
+#[cfg(test)]
+mod tests_21to30 {
+    use crate::problem021to030::*;
+
+    #[test]
+    #[ignore]
+    fn test_p021() {
+        assert_eq!(p021::v1(100), 0);
+        assert_eq!(p021::v1(1000), 2);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p023() {
+        assert_eq!(p023::v1(20), 19);
+        assert_eq!(p023::v1(25), 23);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p024() {
+        assert_eq!(p024::v1(0), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].to_vec());
+        assert_eq!(p024::v1(1), [0, 1, 2, 3, 4, 5, 6, 7, 9, 8].to_vec());
+        assert_eq!(p024::v1(2), [0, 1, 2, 3, 4, 5, 6, 8, 7, 9].to_vec());
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p025() {
+        assert_eq!(p025::v1(2), 13);
+        assert_eq!(p025::v1(3), 144);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p026() {
+        assert_eq!(p026::v1(10), 7);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p027() {
+        assert_eq!(p027::v1(50), 41);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p029() {
+        assert_eq!(p029::v1(5), 15);
+    }
+}
+

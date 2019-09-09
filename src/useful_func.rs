@@ -154,6 +154,25 @@ pub mod digits {
         n
     }
 
+    pub fn frac_digits(numerator: u32, denominator: u32, length: usize) -> Vec<u32> {
+        let den: f64 = denominator as f64;
+        let mut digits: Vec<u32> = Vec::with_capacity(length);
+        let start: i32 = ((numerator as f64) / (denominator as f64)).log10().floor().abs() as i32;
+        let mut num: f64 = (numerator as f64) * 10_f64.powi(start);
+
+        for _ in 0 .. length {
+            let rem = num % den;
+            let d: u32 = (num / den) as u32;
+
+            println!("start = {}", start);
+
+            digits.push(d as u32);
+            num = rem * 10_f64;
+        }
+
+        digits
+    }
+
     pub fn no_double(v: &mut Vec<u32>) -> bool {
         let length = v.len();
 
@@ -321,9 +340,30 @@ pub mod other_func {
         let x = f64::from(n);
         x != 0.0 && x.sqrt() % 1.0 == 0.0
     }
+    pub fn is_amicable(a: u32) -> bool {
+        let b: u32     = factors(a).iter().sum::<u32>() - a;
+        let new_a: u32 = factors(b).iter().sum::<u32>() - b;
+
+        a != b && a == new_a
+    }
+    pub fn is_perfect(n: u32) -> bool {
+        2*n == factors(n).iter().sum::<u32>()
+    }
+    pub fn is_deficient(n: u32) -> bool {
+        2*n > factors(n).iter().sum::<u32>()
+    }
+    pub fn is_abundant(n: u32) -> bool {
+        2*n < factors(n).iter().sum::<u32>()
+    }
+
 
     pub fn factors(n: u32) -> Vec<u32> {
         (1 ..= n).filter(|i| n % i == 0).collect()
+    }
+
+
+    pub fn fact(n: u32) -> u32 {
+        (1 ..= n).product()
     }
 
     pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
