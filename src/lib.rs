@@ -535,6 +535,11 @@ mod tests_21to30 {
     }
 
     #[test]
+    fn test_p028() {
+        assert_eq!(p028::v1(5), 101);
+    }
+
+    #[test]
     #[ignore]
     fn test_p029() {
         assert_eq!(p029::v1(5), 15);

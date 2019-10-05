@@ -199,47 +199,33 @@ pub mod p027 {
     }
 }
 
-// What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral ?
+// What is the sum of the numbers on the diagonals in a n x n spiral ?
 pub mod p028 {
-    enum Direction {
-        Right,
-        Left,
-        Up,
-        Down,
-    }
-
-    pub fn v1() -> u32 {
-        let mut sum: u32 = 0;
-        let mut point: (i32, i32) = (0, 0);
-        let mut dir: Direction = Direction::Right;
-        let mut num: u32 = 1;
-
-        while point != (500, 500) {
-            // correspond to a 1001 x 1001 spiral
-            if point.0 == -point.1 && point.0 <= 0 {
-                dir = Direction::Right;
-            } else if point.0 == -point.1 && point.0 >= 0 {
-                dir = Direction::Left;
-            } else if point.0 == point.1 && point.0 <= 0 {
-                dir = Direction::Up;
-            } else if (point.0 + 1) == point.1 {
-                dir = Direction::Down;
-            }
-
-            if point.0.abs() == point.1.abs() {
-                sum += num;
-            }
-            num += 1;
-
-            match dir {
-                Direction::Down => point.1 -= 1,
-                Direction::Left => point.0 -= 1,
-                Direction::Right => point.0 += 1,
-                Direction::Up => point.1 += 1,
-            };
+    pub fn v1(n: u32) -> u32 {
+        // 1 - 3 5 7 9 - 13 17 21 25 - 31 37  ---  num
+        //     2          4             6     ---  diff
+        if n == 0 {
+            return 0;
         }
 
-        sum + num // add the last element to the sum
+        let mut sum: u32 = 1;
+        let mut num: u32 = 1;
+        let mut diff: u32 = 2;
+
+        'outer:
+        loop {
+            for _ in 0 .. 4 {
+                num += diff;
+                if num > (n * n) {
+                    break 'outer;
+                }
+
+                sum += num;
+            }
+            diff += 2;
+        }
+
+        sum
     }
 }
 
