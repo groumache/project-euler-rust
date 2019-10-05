@@ -366,6 +366,24 @@ pub mod other_func {
         (1 ..= n).product()
     }
 
+    pub fn get_gcd(mut n1: u32, mut n2: u32) -> u32 {
+        use crate::useful_func::prime_numbers::primes_range;
+        use std::cmp::min;
+
+        let mut gcd: u32 = 1;
+
+        for p in primes_range(0, min(n1, n2)) {
+            while n1 % p == 0 && n2 % p == 0 {
+                n1 = n1 / p;
+                n2 = n2 / p;
+
+                gcd *= p;
+            }
+        }
+
+        gcd
+    }
+
     pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
         let half = v.len() / 2;
         v.iter().take(half).eq( v.iter().rev().take(half) )
@@ -379,5 +397,31 @@ pub mod other_func {
     pub fn get_substring(string: &str, start: usize, len: usize) -> String {
         let end = start + len;
         string.get(start .. end).unwrap().to_string()
+    }
+}
+
+pub mod coins {
+    pub struct Coins {
+        pub pound2: u32,
+        pub pound1: u32,
+        pub p50: u32,
+        pub p20: u32,
+        pub p10: u32,
+        pub p5: u32,
+        pub p2: u32,
+        pub p1: u32,
+    }
+
+    impl PartialEq for Coins {
+        fn eq(&self, other: &Self) -> bool {
+            self.pound2 == other.pound2
+                && self.pound1 == other.pound1
+                && self.p50 == other.p50
+                && self.p20 == other.p20
+                && self.p10 == other.p10
+                && self.p5 == other.p5
+                && self.p2 == other.p2
+                && self.p1 == other.p1
+        }
     }
 }

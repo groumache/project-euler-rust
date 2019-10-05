@@ -1,9 +1,3 @@
-// Problem 31: Coin sums
-//   How many different ways can £2 be made using any number of coins ?
-// Problem 32: Pandigital products
-//   Find the sum of all products whose multiplicand/multiplier/product
-//   identity can be written as a 1 through 9 pandigital.
-// Problem 33: Digit cancelling fractions
 // Problem 34: Digit factorials
 //   Find the sum of all numbers which are equal to the sum of the factorial of their digits.
 // Problem 35: Circular primes
@@ -24,42 +18,17 @@
 //   find the value of the following expression:
 //   d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
 
+// How many different ways can £2 be made using any number of coins ?
 pub mod p031 {
-    struct Coins {
-        pound2: u8,
-        pound1: u8,
-        p50: u8,
-        p20: u8,
-        p10: u8,
-        p5: u8,
-        p2: u8,
-        p1: u8,
-    }
-    impl PartialEq for Coins {
-        fn eq(&self, other: &Self) -> bool {
-            self.pound2 == other.pound2
-                && self.pound1 == other.pound1
-                && self.p50 == other.p50
-                && self.p20 == other.p20
-                && self.p10 == other.p10
-                && self.p5 == other.p5
-                && self.p2 == other.p2
-                && self.p1 == other.p1
-        }
-    }
+    use crate::useful_func::coins::Coins;
+
     // We just try everything in an orderly manner.
-    pub fn v1() -> u32 {
+    pub fn v1(purse: Coins) -> u32 {
         let mut counter: u32 = 1;
-        let mut curr: Coins = Coins {
-            pound2: 1,
-            pound1: 0,
-            p50: 0,
-            p20: 0,
-            p10: 0,
-            p5: 0,
-            p2: 0,
-            p1: 0,
-        };
+        let mut curr: Coins = purse;
+        let pence = curr.p1 + curr.p2 * 2 + curr.p5 * 5 + curr.p10 * 10 + curr.p20 * 20
+            + curr.p50 * 50 + curr.pound1 * 100 + curr.pound2 * 100;
+
         let terminal = Coins {
             pound2: 0,
             pound1: 0,
@@ -68,8 +37,9 @@ pub mod p031 {
             p10: 0,
             p5: 0,
             p2: 0,
-            p1: 200,
+            p1: pence,
         };
+
         while curr != terminal {
             counter += 1;
             if curr.p2 != 0 {
@@ -104,52 +74,31 @@ pub mod p031 {
                 continue;
             }
         }
+
         counter
     }
 }
 
+// Find the sum of all products whose multiplicand/multiplier/product
+// identity can be written as a 1 through 9 pandigital.
 pub mod p032 {
-    fn get_digits(n: u32) -> Vec<u8> {
-        let mut digits: Vec<u8> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u8 = (n / base.pow(i) % 10) as u8;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_divisors(n: u32) -> Vec<u32> {
-        let mut divisors: Vec<u32> = Vec::new();
-        for i in 1 ..= n {
-            if n % i == 0 {
-                divisors.push(i);
-            }
-        }
-        divisors
-    }
-    fn no_double(digits: &mut Vec<u8>) -> bool {
-        digits.sort();
-        let length = digits.len();
-        digits.dedup();
-        length == digits.len()
-    }
+    use crate::useful_func::digits::{num_to_digits, no_double};
+    use crate::useful_func::other_func::factors;
+
     // Such a number can only have 4 digits
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
         for num in 1234 ..= 9876 {
-            //                                                              let mut digits = get_digits(num).sort();
-            //                                                              if digits.len() != digits.dedup().len() { continue; }
-            let mut digits: Vec<u8> = get_digits(num);
+            let mut digits: Vec<u32> = num_to_digits(num);
             if !no_double(&mut digits) {
                 continue;
             }
 
-            let divisors: Vec<u32> = get_divisors(num);
+            let divisors: Vec<u32> = factors(num);
             for div in divisors {
                 let quotient = num / div;
-                let mut digits_div = get_digits(div);
-                let mut digits_quo = get_digits(quotient);
+                let mut digits_div = num_to_digits(div);
+                let mut digits_quo = num_to_digits(quotient);
                 digits.append(&mut digits_div);
                 digits.append(&mut digits_quo);
 
@@ -158,90 +107,48 @@ pub mod p032 {
                 }
             }
         }
+
         sum
     }
 }
 
+// Problem 33: Digit cancelling fractions
 pub mod p033 {
-    fn get_digits(n: u32) -> Vec<u8> {
-        let mut digits: Vec<u8> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u8 = (n / base.pow(i) % 10) as u8;
-            digits.push(digit);
-        }
-        digits
+    use crate::useful_func::digits::num_to_digits;
+    use crate::useful_func::other_func::get_gcd;
+
+    pub fn no_shared_digits(v1: &Vec<u32>, v2: &Vec<u32>) -> bool {
+        v1.iter().any(|x| v2.contains(x))
     }
-    fn no_double(digits1: &mut Vec<u8>, mut digits2: &mut Vec<u8>) -> bool {
-        let mut digits: Vec<u8> = digits1.clone();
-        digits.append(&mut digits2);
-        digits.sort();
-        let length = digits.len();
-        digits.dedup();
-        length == digits.len()
-    }
-    fn get_divisors(n: u32) -> Vec<u32> {
-        let mut divisors: Vec<u32> = Vec::new();
-        for i in 1 ..= n {
-            if n % i == 0 {
-                divisors.push(i);
-            }
-        }
-        divisors
-    }
-    fn get_gcd(n1: u32, n2: u32) -> u32 {
-        let mut gcd: u32 = 1;
-        let div1 = get_divisors(n1);
-        let div2 = get_divisors(n2);
-        for d in div1.iter() {
-            if div2.contains(d) {
-                gcd *= d;
-            }
-        }
-        gcd
-    }
+
     pub fn v1() -> u32 {
-        let mut num: Vec<u8> = Vec::new();
-        let mut den: Vec<u8> = Vec::new();
+        let mut num: Vec<u32> = Vec::new();
+        let mut den: Vec<u32> = Vec::new();
+
         for numerator in (11 .. 99).filter(|n| n % 10 != 0) {
             for denominator in (11 .. 99).filter(|n| n % 10 != 0) {
-                let mut digits_num = get_digits(numerator);
-                let mut digits_den = get_digits(denominator);
-                if no_double(&mut digits_den, &mut digits_num) {
+                let digits_num = num_to_digits(numerator);
+                let digits_den = num_to_digits(denominator);
+                if no_shared_digits(&digits_den, &digits_num) {
                     continue;
                 }
-                let mut common_digit: u8 = 0;
-                let mut other_d_num: u8 = 0;
-                let mut other_d_den: u8 = 0;
-                for digit in digits_num.iter() {
-                    if digits_den.contains(digit) {
-                        common_digit = *digit;
-                    } else {
-                        other_d_num = *digit;
-                    }
-                }
-                for digit in digits_den.iter() {
-                    if *digit != common_digit {
-                        other_d_den = *digit;
-                    }
-                }
+
+                let d_num: u32 = *digits_num.iter().find(|d| !digits_den.contains(d)).unwrap();
+                let d_den: u32 = *digits_den.iter().find(|d| !digits_num.contains(d)).unwrap();
+
                 let frac1 = numerator / denominator;
-                let frac2 = other_d_num / other_d_den;
+                let frac2 = d_num / d_den;
+
                 if frac1 == frac2 as u32 {
-                    num.push(other_d_num);
-                    den.push(other_d_den);
+                    num.push(d_num);
+                    den.push(d_den);
                 }
             }
         }
-        let mut prod_num: u32 = 1;
-        let mut prod_den: u32 = 1;
-        for i in num.iter() {
-            prod_num *= *i as u32;
-        }
-        for i in den.iter() {
-            prod_den *= *i as u32;
-        }
+
+        let prod_num: u32 = num.iter().product();
+        let prod_den: u32 = den.iter().product();
+
         let gcd: u32 = get_gcd(prod_num, prod_den);
         prod_den / gcd
     }

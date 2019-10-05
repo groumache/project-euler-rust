@@ -275,6 +275,14 @@ mod test_useful_func {
 
         #[test]
         #[ignore]
+        fn test_get_gcd() {
+            assert_eq!(get_gcd(12, 24), 12);
+            assert_eq!(get_gcd(30, 20), 10);
+            assert_eq!(get_gcd(7, 9), 1);
+        }
+
+        #[test]
+        #[ignore]
         fn test_is_palindrome() {
             assert!(! is_palindrome([5,2,6].to_vec()));
 
@@ -535,6 +543,7 @@ mod tests_21to30 {
     }
 
     #[test]
+    #[ignore]
     fn test_p028() {
         assert_eq!(p028::v1(5), 101);
     }
@@ -543,6 +552,28 @@ mod tests_21to30 {
     #[ignore]
     fn test_p029() {
         assert_eq!(p029::v1(5), 15);
+    }
+}
+
+#[cfg(test)]
+mod tests_31to40 {
+    use crate::problem031to040::*;
+    use crate::useful_func::coins::Coins;
+
+    #[test]
+    #[ignore]
+    fn test_p031() {
+        let purse = Coins{
+            pound2: 0,
+            pound1: 0,
+            p50: 0,
+            p20: 0,
+            p10: 0,
+            p5: 1,
+            p2: 0,
+            p1: 0,
+        };
+        assert_eq!(p031::v1(purse), 4);
     }
 }
 
