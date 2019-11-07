@@ -1,10 +1,8 @@
 // Find the sum of all the multiples of 3 or 5 below n.
 pub mod p001 {
     pub fn v1(n: u32) -> u32 {
-        let sum_3: u32 = (3 .. n).step_by(3).sum();
-        let sum_5: u32 = (5 .. n).filter(|x| x % 3 != 0).step_by(5).sum();
-
-        sum_3 + sum_5
+        (3 .. n).filter(|x| x % 3 == 0 || x % 5 == 0)
+            .sum()
     }
 
     // Math formula -- \sum_{i = 1}^{n} = n * (n + 1) / 2

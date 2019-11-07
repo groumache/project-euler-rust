@@ -132,17 +132,23 @@ pub mod fibonacci {
 }
 
 pub mod digits {
-    pub fn num_to_digits(n: u32) -> Vec<u32> {
-        let mut n = n;
+    // return: Vec<digits>, in any given base
+    fn num_to_digits_base(mut n: u32, base: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = 1 + (f64::from(n)).log10() as u32;
+        let length = (f64::from(n)).log(base as f64) as u32;
 
-        for _ in 0 .. length {
-            digits.push(n % 10);
-            n /= 10;
+        for _ in 0 ..= length {
+            digits.push(n % base);
+            n /= base;
         }
 
         digits
+    }
+    pub fn num_to_digits(n: u32) -> Vec<u32> {
+        num_to_digits_base(n, 10)
+    }
+    pub fn num_to_binary_digits(n: u32) -> Vec<u32> {
+        num_to_digits_base(n, 2)
     }
     pub fn digits_to_num(digits: &[u32]) -> u32 {
         let mut n: u32 = 0;
@@ -355,6 +361,18 @@ pub mod other_func {
     pub fn is_abundant(n: u32) -> bool {
         2*n < factors(n).iter().sum::<u32>()
     }
+    pub fn is_circular_prime(n: u32) -> bool {
+        use crate::useful_func::digits::{num_to_digits, digits_to_num};
+        use crate::useful_func::prime_numbers::is_prime;
+
+        let mut digits: Vec<u32> = num_to_digits(n);
+        let n_len = digits.len();
+
+        (0..n_len).all(|_| {
+            digits.rotate_right(1);
+            is_prime(digits_to_num(&digits))
+        })
+    }
 
 
     pub fn factors(n: u32) -> Vec<u32> {
@@ -386,7 +404,9 @@ pub mod other_func {
 
     pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
         let half = v.len() / 2;
-        v.iter().take(half).eq( v.iter().rev().take(half) )
+        v.iter().take(half).eq(
+            v.iter().rev().take(half)
+        )
     }
 
     pub fn is_pythagorean_triplet(a: u32, b: u32, c: u32) -> bool {

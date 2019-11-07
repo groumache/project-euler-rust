@@ -1,10 +1,3 @@
-// Problem 34: Digit factorials
-//   Find the sum of all numbers which are equal to the sum of the factorial of their digits.
-// Problem 35: Circular primes
-//   How many circular primes are there below one million?
-// Problem 36: Double-base palindromes
-//   Find the sum of all numbers, less than one million, which are palindromic in
-//   base 10 and base 2.
 // Problem 37: Truncatable primes
 //   Find the sum of the only eleven primes that are both truncatable from left to
 //   right and right to left.
@@ -154,144 +147,45 @@ pub mod p033 {
     }
 }
 
+// Find the sum of all numbers which are equal to the sum of the factorial of their digits.
 pub mod p034 {
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn fact(n: u32) -> u32 {
-        if n == 0 {
-            return 1;
-        }
-        (1 ..= n).product()
-    }
+    use crate::useful_func::digits::num_to_digits;
+    use crate::useful_func::other_func::fact;
+
     // max 7 digits as (9!) * 8 has 7 digits
     pub fn v1() -> u32 {
-        let mut sum: u32 = 0;
-        let max = 7 * fact(9);
-        for i in 11 .. max {
-            let digits = get_digits(i);
-            let sum_fact_digits: u32 = digits.iter().map(|d| fact(*d)).sum();
-            if sum_fact_digits == i {
-                sum += i;
-            }
-        }
-        sum
+        let max = 8 * fact(9);
+
+        (11 .. max).filter(
+            |x| *x == num_to_digits(*x).iter()
+                .map(|d| fact(*d))
+                .sum()
+            ).sum()
     }
 }
 
+// How many circular primes are there below 'n'?
 pub mod p035 {
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_number(digits: &Vec<u32>) -> u32 {
-        let mut num: u32 = 0;
-        let base: u32 = 10;
-        for (i, d) in digits.iter().enumerate() {
-            num += d * base.pow(i as u32);
-        }
-        num
-    }
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2 ..= half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
-    }
-    fn primes_below(n: u32) -> Vec<u32> {
-        let mut primes: Vec<u32> = Vec::new();
-        for i in 2 .. n {
-            if is_prime(i) {
-                primes.push(i);
-            }
-        }
-        primes
-    }
-    pub fn v1() -> u32 {
-        let mut counter = 0;
-        let max = 1_000_000;
-        let primes = primes_below(max);
-        let mut primes_checked: Vec<u32> = Vec::new();
-        for p in &primes {
-            let mut digits = get_digits(*p);
-            let mut circular_prime: bool = true;
-            primes_checked.push(*p);
-            // check if it's a circular prime
-            for _ in 0 .. digits.len() {
-                let d = digits.remove(0);
-                digits.push(d);
-                let num = get_number(&digits);
-                primes_checked.push(num);
-                if primes_checked.contains(&num) || !&primes.contains(&num) {
-                    circular_prime = false;
-                    break;
-                }
-            }
-            if circular_prime {
-                counter += 1;
-            }
-        }
-        counter
+    use crate::useful_func::prime_numbers::primes_range;
+    use crate::useful_func::other_func::is_circular_prime;
+
+    pub fn v1(n: u32) -> u32 {
+        primes_range(0, n)
+            .filter(|x| is_circular_prime(*x))
+            .count() as u32
     }
 }
 
+// Find the sum of all palindromic numbers, in base 10 and 2, below 'n'.
 pub mod p036 {
-    fn get_digits_10(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_digits_2(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log2() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 2;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn is_palyndromic(vec: Vec<u32>) -> bool {
-        for i in 0 .. vec.len() {
-            let last = vec.len() - 1;
-            if vec[i] != vec[last - i] {
-                return false;
-            }
-        }
-        true
-    }
-    pub fn v1() -> u32 {
-        let mut sum: u32 = 0;
-        let max = 1_000_000;
-        for i in 1 .. max {
-            let digits_10 = get_digits_10(i);
-            let digits_2 = get_digits_2(i);
-            if is_palyndromic(digits_10) && is_palyndromic(digits_2) {
-                sum += i;
-            }
-        }
-        sum
+    use crate::useful_func::other_func::is_palindrome;
+    use crate::useful_func::digits::{num_to_digits, num_to_binary_digits};
+
+    pub fn v1(n: u32) -> u32 {
+        (1..n).filter(
+                |x| is_palindrome(num_to_digits(*x))
+                    && is_palindrome(num_to_binary_digits(*x))
+            ).count() as u32
     }
 }
 

@@ -106,6 +106,12 @@ mod test_useful_func {
 
         #[test]
         #[ignore]
+        fn test_num_to_binary_digits() {
+            assert_eq!(num_to_binary_digits(58), [0, 1, 0, 1, 1, 1].to_vec());
+        }
+
+        #[test]
+        #[ignore]
         fn test_digits_to_num() {
             assert_eq!(digits_to_num(&[7, 5, 3].to_vec()), 357);
             assert_eq!(digits_to_num(&[0].to_vec()), 0);
@@ -256,6 +262,16 @@ mod test_useful_func {
             assert!(is_abundant(12));
 
             assert!(!is_abundant(15));
+        }
+
+        #[test]
+        #[ignore]
+        fn test_is_circular_prime() {
+            assert!(is_circular_prime(2));
+            assert!(is_circular_prime(79));
+
+            assert!(!is_circular_prime(23));
+            assert!(!is_circular_prime(42));
         }
 
         #[test]
@@ -574,6 +590,12 @@ mod tests_31to40 {
             p1: 0,
         };
         assert_eq!(p031::v1(purse), 4);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_p035() {
+        assert_eq!(p035::v1(100), 13);
     }
 }
 
