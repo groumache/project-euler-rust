@@ -1,9 +1,3 @@
-// Problem 37: Truncatable primes
-//   Find the sum of the only eleven primes that are both truncatable from left to
-//   right and right to left.
-// Problem 38: Pandigital multiples
-//   What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
-//   concatenated product of an integer with (1,2, ... , n) where n > 1?
 // Problem 39: Integer right triangles
 //   For which value of p ≤ 1000, is the number of solutions maximised?
 // Problem 40: Champernowne's constant
@@ -19,8 +13,14 @@ pub mod p031 {
     pub fn v1(purse: Coins) -> u32 {
         let mut counter: u32 = 1;
         let mut curr: Coins = purse;
-        let pence = curr.p1 + curr.p2 * 2 + curr.p5 * 5 + curr.p10 * 10 + curr.p20 * 20
-            + curr.p50 * 50 + curr.pound1 * 100 + curr.pound2 * 100;
+        let pence = curr.p1
+            + curr.p2 * 2
+            + curr.p5 * 5
+            + curr.p10 * 10
+            + curr.p20 * 20
+            + curr.p50 * 50
+            + curr.pound1 * 100
+            + curr.pound2 * 100;
 
         let terminal = Coins {
             pound2: 0,
@@ -75,13 +75,13 @@ pub mod p031 {
 // Find the sum of all products whose multiplicand/multiplier/product
 // identity can be written as a 1 through 9 pandigital.
 pub mod p032 {
-    use crate::useful_func::digits::{num_to_digits, no_double};
+    use crate::useful_func::digits::{no_double, num_to_digits};
     use crate::useful_func::other_func::factors;
 
     // Such a number can only have 4 digits
     pub fn v1() -> u32 {
         let mut sum: u32 = 0;
-        for num in 1234 ..= 9876 {
+        for num in 1234..=9876 {
             let mut digits: Vec<u32> = num_to_digits(num);
             if !no_double(&mut digits) {
                 continue;
@@ -118,8 +118,8 @@ pub mod p033 {
         let mut num: Vec<u32> = Vec::new();
         let mut den: Vec<u32> = Vec::new();
 
-        for numerator in (11 .. 99).filter(|n| n % 10 != 0) {
-            for denominator in (11 .. 99).filter(|n| n % 10 != 0) {
+        for numerator in (11..99).filter(|n| n % 10 != 0) {
+            for denominator in (11..99).filter(|n| n % 10 != 0) {
                 let digits_num = num_to_digits(numerator);
                 let digits_den = num_to_digits(denominator);
                 if no_shared_digits(&digits_den, &digits_num) {
@@ -156,129 +156,64 @@ pub mod p034 {
     pub fn v1() -> u32 {
         let max = 8 * fact(9);
 
-        (11 .. max).filter(
-            |x| *x == num_to_digits(*x).iter()
-                .map(|d| fact(*d))
-                .sum()
-            ).sum()
+        (11..max)
+            .filter(|x| *x == num_to_digits(*x).iter().map(|d| fact(*d)).sum())
+            .sum()
     }
 }
 
 // How many circular primes are there below 'n'?
 pub mod p035 {
-    use crate::useful_func::prime_numbers::primes_range;
     use crate::useful_func::other_func::is_circular_prime;
+    use crate::useful_func::prime_numbers::primes_range;
 
     pub fn v1(n: u32) -> u32 {
-        primes_range(0, n)
-            .filter(|x| is_circular_prime(*x))
-            .count() as u32
+        primes_range(0, n).filter(|x| is_circular_prime(*x)).count() as u32
     }
 }
 
 // Find the sum of all palindromic numbers, in base 10 and 2, below 'n'.
 pub mod p036 {
+    use crate::useful_func::digits::{num_to_binary_digits, num_to_digits};
     use crate::useful_func::other_func::is_palindrome;
-    use crate::useful_func::digits::{num_to_digits, num_to_binary_digits};
 
     pub fn v1(n: u32) -> u32 {
-        (1..n).filter(
-                |x| is_palindrome(num_to_digits(*x))
-                    && is_palindrome(num_to_binary_digits(*x))
-            ).count() as u32
+        (1..n)
+            .filter(|x| is_palindrome(num_to_digits(*x)) && is_palindrome(num_to_binary_digits(*x)))
+            .count() as u32
     }
 }
 
+// Find the sum of the only 11 primes that are both truncatable from left to
+// right and right to left.
 pub mod p037 {
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2 ..= half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
-    }
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_number(digits: &Vec<u32>) -> u32 {
-        let mut num: u32 = 0;
-        let base: u32 = 10;
-        for (i, d) in digits.iter().enumerate() {
-            num += d * base.pow(i as u32);
-        }
-        num
-    }
+    use crate::useful_func::prime_numbers::{
+        is_left_truncable_prime, is_right_truncable_prime, primes,
+    };
+
     pub fn v1() -> u32 {
-        let n_truncatable = 11;
-        let mut truncatables: Vec<u32> = Vec::new();
-        for i in 11 .. {
-            let mut num = i;
-            let mut trunc: bool = true;
-            while (num as f64).log10() >= 1.0 {
-                let mut digits: Vec<u32> = get_digits(i);
-                digits.remove(0);
-                num = get_number(&digits);
-                if !is_prime(num) {
-                    trunc = false;
-                    break;
-                }
-            }
-            if trunc {
-                truncatables.push(i);
-            }
-            if truncatables.len() == n_truncatable {
-                break;
-            }
-        }
-        //
-        truncatables.iter().sum()
+        primes()
+            .filter(|x| is_right_truncable_prime(*x) && is_left_truncable_prime(*x))
+            .take(11)
+            .sum()
     }
 }
 
+// What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
+// concatenated product of an integer with (1, 2, ... , n) where n > 1 ?
 pub mod p038 {
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_number(digits: &Vec<u32>) -> u32 {
-        let mut num: u32 = 0;
-        let base: u32 = 10;
-        for (i, d) in digits.iter().enumerate() {
-            num += d * base.pow(i as u32);
-        }
-        num
-    }
-    fn no_double(digits: &mut Vec<u32>) -> bool {
-        digits.sort();
-        let length = digits.len();
-        digits.dedup();
-        length == digits.len()
-    }
+    use crate::useful_func::digits::{no_double, num_to_digits, digits_to_num};
+
     // max 4 number
     pub fn v1() -> u32 {
         let mut max_pandigital = 0;
         let max = 100_000;
-        for i in 2 .. max {
+        for i in 2..max {
             let mut digits: Vec<u32> = Vec::new();
             // digits = get_pandigital()
-            for j in 1 .. {
+            for j in 1.. {
                 let num: u32 = i * j;
-                digits.append(&mut get_digits(num));
+                digits.append(&mut num_to_digits(num));
                 if digits.len() >= 9 {
                     break;
                 }
@@ -287,21 +222,21 @@ pub mod p038 {
             if digits.len() != 9 || !no_double(&mut digits) {
                 continue;
             }
-            let new_pandigital = get_number(&mut digits);
+            let new_pandigital = digits_to_num(&mut digits);
             if new_pandigital > max_pandigital {
                 max_pandigital = new_pandigital;
             }
         }
         max_pandigital
     }
-}
+} // NOT SIMPLIFIED YET !!!!
 
 pub mod p039 {
     pub fn v1() -> u32 {
         let max_p = 1001;
         let mut p_solutions: Vec<u32> = vec![0; max_p];
-        for a in 1 .. max_p {
-            for b in 1 .. max_p {
+        for a in 1..max_p {
+            for b in 1..max_p {
                 let a = a as f64;
                 let b = b as f64;
                 let c = (a.powi(2) + b.powi(2)).sqrt();
@@ -328,7 +263,7 @@ pub mod p040 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
         let length = (n as f64).log10() as u32;
-        for i in 0 ..= length {
+        for i in 0..=length {
             let base: u32 = 10;
             let digit: u32 = n / base.pow(i) % 10;
             digits.push(digit);
@@ -340,7 +275,7 @@ pub mod p040 {
         let mut expression: u32 = 1;
         let d_x: [u32; 7] = [1, 10, 100, 1000, 10_000, 100_000, 1_000_000];
         let mut digit_num: u32 = 1;
-        for i in 1 .. 1_000_000 {
+        for i in 1..1_000_000 {
             let digits = get_digits(i);
             for (j, digit) in digits.iter().enumerate() {
                 let x = digit_num + j as u32;

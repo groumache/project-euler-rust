@@ -11,23 +11,22 @@ pub mod p011 {
 
         // Horizontal
         for row in &num_grid {
-            for col in 0 .. (width - n_adj + 1) {
-                let prod = row[col .. (col+n_adj)]
-                    .iter().product();
+            for col in 0..(width - n_adj + 1) {
+                let prod = row[col..(col + n_adj)].iter().product();
 
                 max_prod = max(prod, max_prod);
             }
         }
 
         // Vertical
-        for col in 0 .. width {
-            for row in 0 .. (height - n_adj + 1) {
+        for col in 0..width {
+            for row in 0..(height - n_adj + 1) {
                 // let prod = num_grid[row .. (row+n_adj)][col]
                 //     .iter().product();
                 let mut prod = 1;
 
-                for i in 0 .. n_adj {
-                    prod *= num_grid[row+i][col];
+                for i in 0..n_adj {
+                    prod *= num_grid[row + i][col];
                 }
 
                 max_prod = max(prod, max_prod);
@@ -35,12 +34,12 @@ pub mod p011 {
         }
 
         // Diagonal 1
-        for row in 0 .. (height - n_adj + 1) {
-            for col in 0 .. (width - n_adj + 1) {
+        for row in 0..(height - n_adj + 1) {
+            for col in 0..(width - n_adj + 1) {
                 let mut prod = 1;
 
-                for i in 0 .. n_adj {
-                    prod *= num_grid[row+i][col+i];
+                for i in 0..n_adj {
+                    prod *= num_grid[row + i][col + i];
                 }
 
                 max_prod = max(prod, max_prod);
@@ -48,12 +47,12 @@ pub mod p011 {
         }
 
         // Diagonal 2
-        for row in (n_adj - 1) .. height {
-            for col in 0 .. (width - n_adj + 1) {
+        for row in (n_adj - 1)..height {
+            for col in 0..(width - n_adj + 1) {
                 let mut prod = 1;
 
-                for i in 0 .. n_adj {
-                    prod *= num_grid[row-i][col+i];
+                for i in 0..n_adj {
+                    prod *= num_grid[row - i][col + i];
                 }
 
                 max_prod = max(prod, max_prod);
@@ -71,9 +70,8 @@ pub mod p012 {
 
     pub fn v1(n: u32) -> u32 {
         triangles()
-            .find(
-                |x| factors(*x).len() > (n as usize)
-            ).unwrap()
+            .find(|x| factors(*x).len() > (n as usize))
+            .unwrap()
     }
 }
 
@@ -98,11 +96,11 @@ pub mod p014 {
     pub fn v1(n: u32) -> u32 {
         let mut start_number = 1;
         let mut max_length = 1;
-        
-        for curr in 2 ..= n {
+
+        for curr in 2..=n {
             let mut chain_length = 1;
             let mut i = curr;
-        
+
             while i != 1 {
                 if i % 2 == 0 {
                     i /= 2;
@@ -112,13 +110,13 @@ pub mod p014 {
                     chain_length += 1;
                 }
             }
-        
+
             if chain_length > max_length {
                 max_length = chain_length;
                 start_number = curr;
             }
         }
-        
+
         start_number
     }
 }
@@ -129,7 +127,7 @@ pub mod p015 {
 
     pub fn v1(n: u32) -> u32 {
         // n choices to make among 2n -> C(2n,n) = (2n)! / n! (2n - n)!
-        fact(2*n) / (fact(n) * fact(n))
+        fact(2 * n) / (fact(n) * fact(n))
     }
 }
 
@@ -156,21 +154,21 @@ pub mod p017 {
             _ => panic!(),
         };
         let letters_0to99 = |num: u32| match num {
-            0 ..= 19 => letters_0to19(num),
+            0..=19 => letters_0to19(num),
             40 | 50 | 60 => 5,
-            41 ..= 49 | 51 ..= 59 | 61 ..= 69 => 5 + letters_0to19(num % 20),
+            41..=49 | 51..=59 | 61..=69 => 5 + letters_0to19(num % 20),
             20 | 30 | 80 | 90 => 6,
-            21 ..= 29 | 31 ..= 39 | 81 ..= 89 | 91 ..= 99 => 6 + letters_0to19(num % 20),
+            21..=29 | 31..=39 | 81..=89 | 91..=99 => 6 + letters_0to19(num % 20),
             70 => 7,
-            71 ..= 79 => 7 + letters_0to19(num % 20),
+            71..=79 => 7 + letters_0to19(num % 20),
             _ => panic!(),
         };
         let letters_0to999 = |num: u32| {
             let hundreds = num / 100;
             match num {
-                0 ..= 99 => letters_0to99(num),
+                0..=99 => letters_0to99(num),
                 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 => 7 + letters_0to19(hundreds),
-                101 ..= 999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
+                101..=999 => 7 + letters_0to19(hundreds) + 3 + letters_0to99(num % 100),
                 _ => panic!(),
             }
         };
@@ -184,14 +182,14 @@ pub mod p017 {
                 }
             } else {
                 n_letters = match num {
-                    0 ..= 999 => letters_0to999(num),
+                    0..=999 => letters_0to999(num),
                     _ => 8 + letters_0to999(thousands) + letters_0to999(num % 1000),
                 }
             }
             n_letters
         };
         let mut n_letters = 0;
-        for i in 1 ..= n {
+        for i in 1..=n {
             n_letters += letters_0to1million(i);
         }
         n_letters
@@ -207,18 +205,15 @@ pub mod p018 {
         let mut num_triangle: Vec<Vec<u32>> = get_triangle_digits(str_triangle);
         let height = num_triangle.len();
 
-        for x in 1 .. height {
+        for x in 1..height {
             let width = x + 1;
-            for y in 0 .. width {
+            for y in 0..width {
                 if y == 0 {
                     num_triangle[x][y] += num_triangle[x - 1][y];
                 } else if y == x {
                     num_triangle[x][y] += num_triangle[x - 1][y - 1];
                 } else {
-                    num_triangle[x][y] += max(
-                        num_triangle[x - 1][y],
-                        num_triangle[x - 1][y - 1]
-                    );
+                    num_triangle[x][y] += max(num_triangle[x - 1][y], num_triangle[x - 1][y - 1]);
                 }
             }
         }
@@ -302,8 +297,6 @@ pub mod p020 {
     use crate::useful_func::digits::num_to_digits;
 
     pub fn v1(n: u32) -> u32 {
-        num_to_digits(
-            (1 ..= n).product()
-        ).iter().sum()
+        num_to_digits((1..=n).product()).iter().sum()
     }
 }

@@ -3,7 +3,7 @@ pub mod p021 {
     use crate::useful_func::other_func::is_amicable;
 
     pub fn v1(n: u32) -> u32 {
-        (1 .. n).filter(|x| is_amicable(*x)).count() as u32
+        (1..n).filter(|x| is_amicable(*x)).count() as u32
     }
 }
 
@@ -71,9 +71,7 @@ pub mod p023 {
     use crate::useful_func::other_func::is_abundant;
 
     pub fn v1(n: u32) -> u32 {
-        let abundants: Vec<u32> = (1 .. n)
-            .filter(|x| is_abundant(*x))
-            .collect();
+        let abundants: Vec<u32> = (1..n).filter(|x| is_abundant(*x)).collect();
 
         let mut sum_abundants: Vec<u32> = Vec::new();
         for i in &abundants {
@@ -85,7 +83,7 @@ pub mod p023 {
             }
         }
 
-        (1 .. n).filter(|x| !sum_abundants.contains(x)).count() as u32
+        (1..n).filter(|x| !sum_abundants.contains(x)).count() as u32
     }
 }
 
@@ -98,11 +96,11 @@ pub mod p024 {
         let mut v_ini = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].to_vec();
         let mut v_fin = Vec::new();
 
-        for i in (0 .. 10).rev() {
+        for i in (0..10).rev() {
             let pos = (perm / fact(i)) as usize;
             perm = perm % fact(i);
 
-            v_fin.push( v_ini.remove(pos) );
+            v_fin.push(v_ini.remove(pos));
         }
 
         v_fin
@@ -130,8 +128,8 @@ pub mod p025 {
 
 // Find the value of p < n for which 1/p has the longest recurring cycle in its decimal fraction part.
 pub mod p026 {
-    use crate::useful_func::prime_numbers::primes_below;
     use crate::useful_func::digits::frac_digits;
+    use crate::useful_func::prime_numbers::primes_below;
 
     // largest period possible for 1/p is p-1 -- only need to check primes
     pub fn v1(n: u32) -> u32 {
@@ -145,13 +143,13 @@ pub mod p026 {
             digits = digits.split_off(length);
 
             // find cycle length
-            for i in 1 .. (p as usize) {
+            for i in 1..(p as usize) {
                 let mut is_cycle = true;
                 let mut start = i;
                 let mut end = 2 * i;
 
                 while end < digits.len() {
-                    if digits[start .. end] != digits[(start - i) .. (end - i)] {
+                    if digits[start..end] != digits[(start - i)..(end - i)] {
                         is_cycle = false;
                         break;
                     }
@@ -172,7 +170,6 @@ pub mod p026 {
     }
 }
 
-
 // Find a and b, for n^2 + a n + b, where |a| < 'max' and |b| <= 'max' that produces
 // the maximum number of primes for consecutive values of n, starting with n = 0.
 pub mod p027 {
@@ -182,9 +179,9 @@ pub mod p027 {
         let mut coeff_prod = 0;
         let mut max_n = 0;
 
-        for a in 0 .. max {
-            for b in 0 ..= max {
-                let n_primes = (0_u32 ..)
+        for a in 0..max {
+            for b in 0..=max {
+                let n_primes = (0_u32..)
                     .take_while(|n: &u32| is_prime(n.pow(2) + a * n + b))
                     .count();
 
@@ -212,9 +209,8 @@ pub mod p028 {
         let mut num: u32 = 1;
         let mut diff: u32 = 2;
 
-        'outer:
-        loop {
-            for _ in 0 .. 4 {
+        'outer: loop {
+            for _ in 0..4 {
                 num += diff;
                 if num > (n * n) {
                     break 'outer;
@@ -234,17 +230,17 @@ pub mod p028 {
 pub mod p029 {
     pub fn v1(n: u32) -> u32 {
         let mut sequence: Vec<u32> = Vec::new();
-        
-        for a in 2 ..= n as u32 {
-            for b in 2 ..= n as u32 {
+
+        for a in 2..=n as u32 {
+            for b in 2..=n as u32 {
                 let pow = a.pow(b);
-        
+
                 if !sequence.contains(&pow) {
                     sequence.push(pow);
                 }
             }
         }
-        
+
         sequence.len() as u32
     }
 }
@@ -255,8 +251,8 @@ pub mod p030 {
 
     // max 5 digits because 5 * 9^5 > 99 999 and 6 * 9^6 < 999 999
     pub fn v1() -> u32 {
-        (10 .. 100_000).filter(
-            |x| *x == num_to_digits(*x).iter().map(|d| d.pow(5)).sum()
-        ).sum()
+        (10..100_000)
+            .filter(|x| *x == num_to_digits(*x).iter().map(|d| d.pow(5)).sum())
+            .sum()
     }
 }

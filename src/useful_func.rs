@@ -7,16 +7,33 @@ pub mod prime_numbers {
         }
 
         let sqrt_n: u32 = (f64::from(n)).sqrt() as u32;
-        let divisor = (2 ..= sqrt_n).find(|x| n % x == 0);
+        let divisor = (2..=sqrt_n).find(|x| n % x == 0);
 
         divisor == None
     }
+    // when we remove the digit on the right, it stays a prime
+    pub fn is_right_truncable_prime(n: u32) -> bool {
+        if n <= 10 {
+            return false;
+        }
+
+        let n_len = 1 + f64::from(n).log10() as u32;
+        (0..n_len).all(|i| is_prime(n / 10_u32.pow(i as u32)))
+    }
+    // when we remove the digit on the left, it stays a prime
+    pub fn is_left_truncable_prime(n: u32) -> bool {
+        if n <= 10 {
+            return false;
+        }
+
+        let n_len = 1 + f64::from(n).log10() as u32;
+        (1..=n_len).all(|i| is_prime(n % 10_u32.pow(i as u32)))
+    }
     pub fn primes_below(n: u32) -> Vec<u32> {
-        (2 .. n).filter(|x| is_prime(*x))
-            .collect()
+        (2..n).filter(|x| is_prime(*x)).collect()
     }
     pub fn prime_factors(n: u32) -> Vec<u32> {
-        (2 ..= n)
+        (2..=n)
             .filter(|x| n % x == 0)
             .filter(|x| is_prime(*x))
             .collect()
@@ -29,7 +46,7 @@ pub mod prime_numbers {
     impl Iterator for PrimesIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let prime = (self.minimum .. self.maximum).find(|x| is_prime(*x));
+            let prime = (self.minimum..self.maximum).find(|x| is_prime(*x));
 
             if prime != None {
                 self.minimum = 1 + prime.unwrap();
@@ -40,9 +57,7 @@ pub mod prime_numbers {
     }
     impl DoubleEndedIterator for PrimesIter {
         fn next_back(&mut self) -> Option<u32> {
-            let prime = (self.minimum .. self.maximum)
-                .rev()
-                .find(|x| is_prime(*x));
+            let prime = (self.minimum..self.maximum).rev().find(|x| is_prime(*x));
 
             if prime != None {
                 self.maximum = prime.unwrap();
@@ -78,8 +93,7 @@ pub mod fibonacci {
 
     // n is a fibonacci number iff (5*n^2+4) or (5*n^2-4) is a square
     pub fn is_fibonacci(n: u32) -> bool {
-        other_func::is_square(5*n.pow(2) + 4)
-            || other_func::is_square(5*n.pow(2) - 4)
+        other_func::is_square(5 * n.pow(2) + 4) || other_func::is_square(5 * n.pow(2) - 4)
     }
 
     pub struct FibonacciIter {
@@ -113,8 +127,8 @@ pub mod fibonacci {
             max = 1;
         }
 
-        let curr: u32 = (min ..).find(|x| is_fibonacci(*x)).unwrap();
-        let next: u32 = (curr+1 ..).find(|x| is_fibonacci(*x)).unwrap();
+        let curr: u32 = (min..).find(|x| is_fibonacci(*x)).unwrap();
+        let next: u32 = (curr + 1..).find(|x| is_fibonacci(*x)).unwrap();
 
         FibonacciIter {
             maximum: max,
@@ -135,9 +149,9 @@ pub mod digits {
     // return: Vec<digits>, in any given base
     fn num_to_digits_base(mut n: u32, base: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
-        let length = (f64::from(n)).log(base as f64) as u32;
+        let n_len = 1 + f64::from(n).log(base as f64) as u32;
 
-        for _ in 0 ..= length {
+        for _ in 0..n_len {
             digits.push(n % base);
             n /= base;
         }
@@ -163,10 +177,13 @@ pub mod digits {
     pub fn frac_digits(numerator: u32, denominator: u32, length: usize) -> Vec<u32> {
         let den: f64 = denominator as f64;
         let mut digits: Vec<u32> = Vec::with_capacity(length);
-        let start: i32 = ((numerator as f64) / (denominator as f64)).log10().floor().abs() as i32;
+        let start: i32 = ((numerator as f64) / (denominator as f64))
+            .log10()
+            .floor()
+            .abs() as i32;
         let mut num: f64 = (numerator as f64) * 10_f64.powi(start);
 
-        for _ in 0 .. length {
+        for _ in 0..length {
             let rem = num % den;
             let d: u32 = (num / den) as u32;
 
@@ -197,8 +214,7 @@ pub mod digits {
             }
 
             let last_index = num_grid.len() - 1;
-            num_grid[last_index]
-                .push(num.parse::<u32>().unwrap());
+            num_grid[last_index].push(num.parse::<u32>().unwrap());
         }
 
         num_grid
@@ -226,7 +242,7 @@ pub mod triangle_num {
 
     // An integer n is triangular exactly if 8n + 1 is a square.
     pub fn is_triangle(n: u32) -> bool {
-        n != 0 && other_func::is_square(8*n + 1)
+        n != 0 && other_func::is_square(8 * n + 1)
     }
 
     pub struct TriangleIter {
@@ -236,8 +252,7 @@ pub mod triangle_num {
     impl Iterator for TriangleIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let triangle = (self.minimum .. self.maximum)
-                .find(|x| is_triangle(*x));
+            let triangle = (self.minimum..self.maximum).find(|x| is_triangle(*x));
 
             if triangle != None {
                 self.minimum = 1 + triangle.unwrap();
@@ -276,8 +291,7 @@ pub mod pentagonal_num {
     impl Iterator for PentagonIter {
         type Item = u32;
         fn next(&mut self) -> Option<u32> {
-            let pentagon = (self.minimum .. self.maximum)
-                .find(|x| is_pentagon(*x));
+            let pentagon = (self.minimum..self.maximum).find(|x| is_pentagon(*x));
 
             if pentagon != None {
                 self.minimum = 1 + pentagon.unwrap();
@@ -315,9 +329,8 @@ pub mod hexagonal_num {
     }
     impl Iterator for HexagonIter {
         type Item = u32;
-        fn next(& mut self) -> Option<u32> {
-            let hexagon = (self.minimum .. self.maximum)
-                .find(|x| is_hexagon(*x));
+        fn next(&mut self) -> Option<u32> {
+            let hexagon = (self.minimum..self.maximum).find(|x| is_hexagon(*x));
 
             if hexagon != None {
                 self.minimum = 1 + hexagon.unwrap();
@@ -347,22 +360,22 @@ pub mod other_func {
         x != 0.0 && x.sqrt() % 1.0 == 0.0
     }
     pub fn is_amicable(a: u32) -> bool {
-        let b: u32     = factors(a).iter().sum::<u32>() - a;
+        let b: u32 = factors(a).iter().sum::<u32>() - a;
         let new_a: u32 = factors(b).iter().sum::<u32>() - b;
 
         a != b && a == new_a
     }
     pub fn is_perfect(n: u32) -> bool {
-        2*n == factors(n).iter().sum::<u32>()
+        2 * n == factors(n).iter().sum::<u32>()
     }
     pub fn is_deficient(n: u32) -> bool {
-        2*n > factors(n).iter().sum::<u32>()
+        2 * n > factors(n).iter().sum::<u32>()
     }
     pub fn is_abundant(n: u32) -> bool {
-        2*n < factors(n).iter().sum::<u32>()
+        2 * n < factors(n).iter().sum::<u32>()
     }
     pub fn is_circular_prime(n: u32) -> bool {
-        use crate::useful_func::digits::{num_to_digits, digits_to_num};
+        use crate::useful_func::digits::{digits_to_num, num_to_digits};
         use crate::useful_func::prime_numbers::is_prime;
 
         let mut digits: Vec<u32> = num_to_digits(n);
@@ -374,14 +387,12 @@ pub mod other_func {
         })
     }
 
-
     pub fn factors(n: u32) -> Vec<u32> {
-        (1 ..= n).filter(|i| n % i == 0).collect()
+        (1..=n).filter(|i| n % i == 0).collect()
     }
 
-
     pub fn fact(n: u32) -> u32 {
-        (1 ..= n).product()
+        (1..=n).product()
     }
 
     pub fn get_gcd(mut n1: u32, mut n2: u32) -> u32 {
@@ -402,21 +413,18 @@ pub mod other_func {
         gcd
     }
 
-    pub fn is_palindrome<T: PartialEq<>>(v: Vec<T>) -> bool {
+    pub fn is_palindrome<T: PartialEq>(v: Vec<T>) -> bool {
         let half = v.len() / 2;
-        v.iter().take(half).eq(
-            v.iter().rev().take(half)
-        )
+        v.iter().take(half).eq(v.iter().rev().take(half))
     }
 
     pub fn is_pythagorean_triplet(a: u32, b: u32, c: u32) -> bool {
-        a < b && b < c
-            && a.pow(2) + b.pow(2) == c.pow(2)
+        a < b && b < c && a.pow(2) + b.pow(2) == c.pow(2)
     }
 
     pub fn get_substring(string: &str, start: usize, len: usize) -> String {
         let end = start + len;
-        string.get(start .. end).unwrap().to_string()
+        string.get(start..end).unwrap().to_string()
     }
 }
 

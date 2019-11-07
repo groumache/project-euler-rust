@@ -1,8 +1,7 @@
 // Find the sum of all the multiples of 3 or 5 below n.
 pub mod p001 {
     pub fn v1(n: u32) -> u32 {
-        (3 .. n).filter(|x| x % 3 == 0 || x % 5 == 0)
-            .sum()
+        (3..n).filter(|x| x % 3 == 0 || x % 5 == 0).sum()
     }
 
     // Math formula -- \sum_{i = 1}^{n} = n * (n + 1) / 2
@@ -40,17 +39,16 @@ pub mod p003 {
 
 // Find the largest palindrome made from the product of two n-digit numbers.
 pub mod p004 {
-    use crate::useful_func::other_func::is_palindrome;
     use crate::useful_func::digits::num_to_digits;
+    use crate::useful_func::other_func::is_palindrome;
 
     pub fn v1(n: u32) -> u32 {
-        let min = 10_u32.pow(n-1);
+        let min = 10_u32.pow(n - 1);
         let max = 10_u32.pow(n);
         let mut palindrome: u32 = 0;
 
-        'outer:
-        for i in (min .. max).rev() {
-            for j in (i .. max).rev() {
+        'outer: for i in (min..max).rev() {
+            for j in (i..max).rev() {
                 palindrome = j * i;
                 if is_palindrome(num_to_digits(palindrome)) {
                     break 'outer;
@@ -69,7 +67,7 @@ pub mod p005 {
     pub fn v1(n: u32) -> u32 {
         let mut smallest_product: u32 = 1;
 
-        for p in primes_below(n+1).iter() {
+        for p in primes_below(n + 1).iter() {
             let exp: u32 = (f64::from(n)).log(f64::from(*p)) as u32;
             smallest_product *= p.pow(exp);
         }
@@ -84,8 +82,8 @@ pub mod p006 {
     pub fn v1(n: u32) -> i32 {
         let n: i32 = n as i32;
 
-        let sum_square: i32 = (1 ..= n).map(|x| x * x).sum();
-        let sum: i32 = (1 ..= n).sum();
+        let sum_square: i32 = (1..=n).map(|x| x * x).sum();
+        let sum: i32 = (1..=n).sum();
         let square_sum = sum.pow(2);
 
         (sum_square - square_sum).abs()
@@ -97,21 +95,21 @@ pub mod p007 {
     use crate::useful_func::prime_numbers::primes;
 
     pub fn v1(n: usize) -> u32 {
-        primes().nth(n-1).unwrap()
+        primes().nth(n - 1).unwrap()
     }
 }
 
 // Find the n adjacent digits that have the greatest product.
 pub mod p008 {
-    use crate::useful_func::other_func::get_substring;
     use crate::useful_func::digits::num_to_digits;
+    use crate::useful_func::other_func::get_substring;
     use std::cmp::max;
 
     pub fn v1(win_size: usize, num_string: &str) -> u32 {
         let mut max_prod: u32 = 0;
         let n = num_string.len() - win_size;
 
-        for i in 0 .. n {
+        for i in 0..n {
             let win_string = get_substring(&num_string, i, win_size)
                 .parse::<u32>()
                 .unwrap();
@@ -132,9 +130,8 @@ pub mod p009 {
     pub fn v1() -> (u32, u32, u32) {
         let mut triplet: (u32, u32, u32) = (0, 0, 0);
 
-        'outer:
-        for a in 1 .. 1000_u32 {
-            for b in a+1 .. 1000 {
+        'outer: for a in 1..1000_u32 {
+            for b in a + 1..1000 {
                 let c = ((a.pow(2) + b.pow(2)) as f64).sqrt() as u32;
 
                 if a + b + c == 1000 && is_pythagorean_triplet(a, b, c) {

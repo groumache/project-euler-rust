@@ -5,7 +5,6 @@ pub mod problem031to040;
 pub mod problem041to050;
 pub mod useful_func;
 
-
 #[cfg(test)]
 mod test_useful_func {
     use crate::useful_func::*;
@@ -23,6 +22,15 @@ mod test_useful_func {
             assert_eq!(is_prime(4), false);
             assert_eq!(is_prime(5), true);
             assert_eq!(is_prime(17), true);
+        }
+
+        #[test]
+        #[ignore]
+        fn test_is_truncable_prime() {
+            assert!(is_right_truncable_prime(3797));
+            assert!(is_left_truncable_prime(3797));
+            assert!(!is_right_truncable_prime(8));
+            assert!(!is_right_truncable_prime(2000));
         }
 
         #[test]
@@ -75,7 +83,7 @@ mod test_useful_func {
         #[ignore]
         fn test_fibonacci_range() {
             let fib: Vec<u32> = fibonacci_range(0, 10).collect();
-            assert_eq!(fib, [1,2,3,5,8].to_vec());
+            assert_eq!(fib, [1, 2, 3, 5, 8].to_vec());
         }
 
         #[test]
@@ -90,7 +98,7 @@ mod test_useful_func {
                 fib.push(i);
             }
 
-            assert_eq!(fib, [1,2,3,5,8].to_vec());
+            assert_eq!(fib, [1, 2, 3, 5, 8].to_vec());
         }
     }
 
@@ -129,8 +137,8 @@ mod test_useful_func {
         fn test_no_double() {
             assert!(no_double(&mut [5, 7, 8].to_vec()));
             assert!(no_double(&mut [0].to_vec()));
-            assert!(! no_double(&mut [5, 5].to_vec()));
-            assert!(! no_double(&mut [4, 8, 4].to_vec()));
+            assert!(!no_double(&mut [5, 5].to_vec()));
+            assert!(!no_double(&mut [4, 8, 4].to_vec()));
         }
 
         #[test]
@@ -138,7 +146,7 @@ mod test_useful_func {
         fn test_get_grid_digits() {
             let grid = "01 02 03 04";
             let width = 2;
-            
+
             let mut num_grid: Vec<Vec<u32>> = Vec::new();
             let row1 = [1, 2].to_vec();
             let row2 = [3, 4].to_vec();
@@ -223,8 +231,8 @@ mod test_useful_func {
         #[test]
         #[ignore]
         fn test_is_square() {
-            assert!(! is_square(0));
-            assert!(! is_square(2));
+            assert!(!is_square(0));
+            assert!(!is_square(2));
 
             assert!(is_square(1));
             assert!(is_square(4));
@@ -236,8 +244,8 @@ mod test_useful_func {
             assert!(is_amicable(220));
             assert!(is_amicable(63020));
 
-            assert!(! is_amicable(15));
-            assert!(! is_amicable(256));
+            assert!(!is_amicable(15));
+            assert!(!is_amicable(256));
         }
 
         #[test]
@@ -300,10 +308,10 @@ mod test_useful_func {
         #[test]
         #[ignore]
         fn test_is_palindrome() {
-            assert!(! is_palindrome([5,2,6].to_vec()));
+            assert!(!is_palindrome([5, 2, 6].to_vec()));
 
             assert!(is_palindrome([0].to_vec()));
-            assert!(is_palindrome([5,2,4,4,2,5].to_vec()));
+            assert!(is_palindrome([5, 2, 4, 4, 2, 5].to_vec()));
         }
 
         #[test]
@@ -429,8 +437,8 @@ mod tests_11to20 {
     #[test]
     #[ignore]
     fn test_p011() {
-        let grid: String =
-            "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08".to_string()
+        let grid: String = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08"
+            .to_string()
             + " 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00"
             + " 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65"
             + " 52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91"
@@ -502,7 +510,7 @@ mod tests_11to20 {
         let triangle_1 = "01  02 03";
         let triangle_2 = "01  00 01  79 00 01";
 
-        assert_eq!(p018::v1(triangle_1),  4);
+        assert_eq!(p018::v1(triangle_1), 4);
         assert_eq!(p018::v1(triangle_2), 80);
     }
 
@@ -579,7 +587,7 @@ mod tests_31to40 {
     #[test]
     #[ignore]
     fn test_p031() {
-        let purse = Coins{
+        let purse = Coins {
             pound2: 0,
             pound1: 0,
             p50: 0,
@@ -598,4 +606,3 @@ mod tests_31to40 {
         assert_eq!(p035::v1(100), 13);
     }
 }
-
