@@ -1,7 +1,7 @@
 # project-euler-rust
 
-I solved some problems from Project Euler while learning Rust.  
-I make the problems more general in order to test them with the examples given with the problem statement.  
+Here are my solutions to some problems from Project Euler.
+I tried to make the problem statements more general in order to test my solutions. Those tests usually come from the examples given.
 ex: p003
 
 - 'Find largest prime factor of n' instead of
