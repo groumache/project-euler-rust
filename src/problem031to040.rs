@@ -1,10 +1,3 @@
-// Problem 39: Integer right triangles
-//   For which value of p ≤ 1000, is the number of solutions maximised?
-// Problem 40: Champernowne's constant
-//   If d_n represents the nth digit of the fractional part of 0.1 2 3 ... 9 10 11 ...,
-//   find the value of the following expression:
-//   d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
-
 // How many different ways can £2 be made using any number of coins ?
 pub mod p031 {
     use crate::useful_func::coins::Coins;
@@ -204,13 +197,14 @@ pub mod p037 {
 pub mod p038 {
     use crate::useful_func::digits::{no_double, num_to_digits, digits_to_num};
 
-    // max 4 number
+    // max 4 digits
     pub fn v1() -> u32 {
         let mut max_pandigital = 0;
         let max = 100_000;
+
         for i in 2..max {
             let mut digits: Vec<u32> = Vec::new();
-            // digits = get_pandigital()
+
             for j in 1.. {
                 let num: u32 = i * j;
                 digits.append(&mut num_to_digits(num));
@@ -218,75 +212,79 @@ pub mod p038 {
                     break;
                 }
             }
-            // digit.is_pandigital()
-            if digits.len() != 9 || !no_double(&mut digits) {
+
+            // is_1_to_9_pandigital(digits)
+            if digits.len() != 9 && !no_double(&mut digits) && !digits.contains(&0) {
                 continue;
             }
-            let new_pandigital = digits_to_num(&mut digits);
-            if new_pandigital > max_pandigital {
-                max_pandigital = new_pandigital;
-            }
-        }
-        max_pandigital
-    }
-} // NOT SIMPLIFIED YET !!!!
 
-pub mod p039 {
-    pub fn v1() -> u32 {
-        let max_p = 1001;
-        let mut p_solutions: Vec<u32> = vec![0; max_p];
-        for a in 1..max_p {
-            for b in 1..max_p {
-                let a = a as f64;
-                let b = b as f64;
-                let c = (a.powi(2) + b.powi(2)).sqrt();
-                let p = a + b + c;
-                if c - c.floor() > 0.0 || p >= max_p as f64 {
-                    continue;
-                }
-                p_solutions[p as usize] += 1;
-            }
+            let new_pandigital = digits_to_num(&mut digits);
+            max_pandigital = std::cmp::max(new_pandigital, max_pandigital);
         }
-        let mut max_p = 0;
-        let mut max_n: u32 = 0;
-        for (p, n) in p_solutions.iter().enumerate() {
-            if *n > max_n {
-                max_p = p;
-                max_n = *n;
-            }
-        }
-        max_p as u32
+
+        max_pandigital
     }
 }
 
-pub mod p040 {
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0..=length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
+// p = perimeter of triangle with sides {a,b,c}, where a, b, c are integers.
+// For which value of p ≤ 1000, is the number of solutions maximised ?
+pub mod p039 {
+    pub fn v1() -> u32 {
+        let mut p_max = 0;
+        let mut nb_solutions = 0;
+
+        for p in 3..=1000 {
+            let mut counter = 0;
+
+            for a in 1..p {
+                for b in a..p {
+                    for c in b..p {
+                        if a + b + c == p {
+                            counter += 1;
+                        }
+                    }
+                    // counter += (b..p).filter(|c| a + b + c == p).count();
+                }
+            }
+
+            if counter > nb_solutions {
+                nb_solutions = counter;
+                p_max = p;
+            }
         }
-        digits
+
+        p_max
     }
+}
+
+// If d_n represents the nth digit of the fractional part of 0.1 2 3 ... 9 10 11 ...,
+// find the value of the following expression:
+// d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
+pub mod p040 {
+    use crate::useful_func::digits::num_to_digits;
+
     // no need to actually compute the fraction
     pub fn v1() -> u32 {
         let mut expression: u32 = 1;
         let d_x: [u32; 7] = [1, 10, 100, 1000, 10_000, 100_000, 1_000_000];
         let mut digit_num: u32 = 1;
+
         for i in 1..1_000_000 {
-            let digits = get_digits(i);
+            let digits = num_to_digits(i);
+
             for (j, digit) in digits.iter().enumerate() {
                 let x = digit_num + j as u32;
+
                 // could make it faster by checking if 'x == 10^y' with y being
                 // incremented until 'y == 7', then break;
                 if d_x.contains(&x) {
                     expression *= digit;
                 }
             }
+
             digit_num += digits.len() as u32;
         }
+
         expression
     }
-}
+} // NOT SIMPLIFIED
