@@ -261,30 +261,25 @@ pub mod p039 {
 // find the value of the following expression:
 // d_1 × d_10 × d_100 × d_1000 × d_10000 × d_100000 × d_1000000
 pub mod p040 {
-    use crate::useful_func::digits::num_to_digits;
+    pub fn v1(d_x: Vec<u32>) -> u32 {
+        let mut prod: u32 = 1;
 
-    // no need to actually compute the fraction
-    pub fn v1() -> u32 {
-        let mut expression: u32 = 1;
-        let d_x: [u32; 7] = [1, 10, 100, 1000, 10_000, 100_000, 1_000_000];
-        let mut digit_num: u32 = 1;
+        for x in d_x {
+            // let d = match x {
+            //     1..=9 => x,
+            //     10..=99 => if x % 2 == 0 { x / 10 } else { x % 10 },
+            //     100..=999 => if x % 3 == 0 { x / 100 } else if x % 3 == 1 { (x % 100) / 10 } else { x % 10 },
+            // };
 
-        for i in 1..1_000_000 {
-            let digits = num_to_digits(i);
+            // d = (x % 10^...) / 10^...
+            let length_num = f64::from(x).log10().floor() as u32 + 1;
+            let modulo = x % length_num;
 
-            for (j, digit) in digits.iter().enumerate() {
-                let x = digit_num + j as u32;
+            let d = (x % 10_u32.pow(length_num - modulo)) / 10_u32.pow(length_num - modulo - 1);
 
-                // could make it faster by checking if 'x == 10^y' with y being
-                // incremented until 'y == 7', then break;
-                if d_x.contains(&x) {
-                    expression *= digit;
-                }
-            }
-
-            digit_num += digits.len() as u32;
+            prod *= d;
         }
 
-        expression
+        prod
     }
-} // NOT SIMPLIFIED
+}
