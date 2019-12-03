@@ -426,6 +426,23 @@ pub mod other_func {
         let end = start + len;
         string.get(start..end).unwrap().to_string()
     }
+
+    pub fn letter_value(l: char) -> u32 {
+        if ('a' > l) && (l < 'z') {
+            panic!();
+        }
+
+        (l as u32) - ('a' as u32) + 1
+    }
+    pub fn word_value(w: &str) -> u32 {
+        let mut w_value: u32 = 0;
+
+        for l in w.chars() {
+            w_value += letter_value(l);
+        }
+
+        w_value
+    }
 }
 
 pub mod coins {

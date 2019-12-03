@@ -328,6 +328,20 @@ mod test_useful_func {
             let string: String = "0123456789".to_string();
             assert_eq!(get_substring(&string, 3, 5), "34567".to_string());
         }
+
+        #[test]
+        #[ignore]
+        fn test_letter_value() {
+            assert_eq!(letter_value('a'), 1);
+            assert_eq!(letter_value('e'), 5);
+            assert_eq!(letter_value('z'), 26);
+        }
+
+        #[test]
+        #[ignore]
+        fn test_word_value() {
+            assert_eq!(word_value("sky"), 55);
+        }
     }
 }
 
