@@ -655,3 +655,14 @@ mod tests_31to40 {
         assert_eq!(p035::v1(100), 13);
     }
 }
+
+#[cfg(test)]
+mod tests_41to50 {
+    use crate::problem041to050::*;
+
+    #[test]
+    #[ignore]
+    fn test_p048() {
+        assert_eq!(p048::v1(10), 0_405_071_317);
+    }
+}

@@ -1,7 +1,3 @@
-// Problem 48: Self powers
-//   Find the last ten digits of the series, 1^1 + 2^2 + ... + 1000^1000.
-// Problem 49: Prime permutations
-//   What 12-digit number do you form by concatenating the three terms in this sequence?
 // Problem 50: Consecutive prime sum
 //   Which prime, below one-million, can be written as the sum of the most consecutive primes?
 
@@ -138,86 +134,39 @@ pub mod p046 {
 // Find the first four consecutive integers to have four distinct prime
 // factors each. What is the first of these numbers ?
 pub mod p047 {
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2..=half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
-    }
-    struct Primes {
-        n: u32,
-        largest: u32,
-    }
-    impl Iterator for Primes {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            self.n += 1;
-            for i in self.largest.. {
-                if is_prime(i) {
-                    self.largest = i;
-                    break;
-                }
-            }
-            Some(self.largest)
-        }
-    }
-    fn primes() -> Primes {
-        Primes { n: 0, largest: 1 }
-    }
-    fn prime_factors(n: u32) -> Vec<u32> {
-        let mut n = n;
-        let mut p_fact: Vec<u32> = Vec::new();
-        for i in primes() {
-            if n % i == 0 {
-                p_fact.push(i);
-                n /= i;
-            }
-            if n == 1 {
-                break;
-            }
-        }
-        p_fact
-    }
-    fn no_double(v: &mut Vec<u32>) -> bool {
-        let length = v.len();
-        v.sort();
-        v.dedup();
-        if length != v.len() {
-            return false;
-        }
-        true
-    }
+    use crate::useful_func::prime_numbers::prime_factors;
+
     pub fn v1() -> u32 {
-        let mut first: u32 = 0;
+        let mut first_num: u32 = 0;
+
         for i in 1.. {
             let mut p_fact: Vec<u32> = Vec::new();
             for j in 0..4 {
                 p_fact.append(&mut prime_factors(i + j));
             }
-            if no_double(&mut p_fact) {
-                first = i;
+
+            p_fact.sort();
+            p_fact.dedup();
+
+            if p_fact.len() == 16 {
+                first_num = i;
                 break;
             }
         }
-        first
+
+        first_num
     }
 }
 
+// Find the last ten digits of the series, 1^1 + 2^2 + ... + n^n.
 pub mod p048 {
-    pub fn v1() -> u32 {
-        let mut ten_digits: u32 = 0;
-        let max: u32 = 1000;
-        for i in 1..max {
-            let base_10: u32 = 10;
-            ten_digits += i.pow(i) % base_10.pow(10);
-        }
-        ten_digits
+    pub fn v1(n: u64) -> u64 {
+        (1..=n).map(|x| x.pow(x as u32) % 10_u64.pow(10))
+            .sum()
     }
 }
 
+// What 12-digit number do you form by concatenating the three terms in this sequence ?
 pub mod p049 {
     fn get_digits(n: u32) -> Vec<u32> {
         let mut digits: Vec<u32> = Vec::new();
