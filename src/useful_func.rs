@@ -281,7 +281,7 @@ pub mod triangle_num {
 }
 
 pub mod pentagonal_num {
-    // n is a pentagonal number only if sqrt((24*n+1) + 1)/6 is an integer
+    // n is a pentagonal number only if (sqrt(24*n+1) + 1)/6 is an integer
     pub fn is_pentagon(n: u32) -> bool {
         let n: f64 = f64::from(n);
         let x: f64 = ((24.0 * n + 1.0).sqrt() + 1.0) / 6.0;
