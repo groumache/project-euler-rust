@@ -65,6 +65,25 @@ mod test_useful_func {
             let primes: Vec<u32> = primes_range(0, 10).rev().collect();
             assert_eq!(primes, [7, 5, 3, 2].to_vec());
         }
+
+        #[test]
+        #[ignore]
+        fn test_primes() {
+            let mut p = primes();
+            assert_eq!(p.next(), Some(2));
+            assert_eq!(p.next(), Some(3));
+            assert_eq!(p.next(), Some(5));
+            assert_eq!(p.next(), Some(7));
+        }
+
+        #[test]
+        #[ignore]
+        fn test_nth_prime() {
+            assert_eq!(nth_prime(1), 2);
+            assert_eq!(nth_prime(2), 3);
+            assert_eq!(nth_prime(3), 5);
+            assert_eq!(nth_prime(4), 7);
+        }
     }
 
     mod tests_fibonacci {
@@ -341,6 +360,22 @@ mod test_useful_func {
         #[ignore]
         fn test_word_value() {
             assert_eq!(word_value("sky"), 55);
+        }
+    }
+
+    mod tests_permutations {
+        use super::permutations::*;
+
+        #[test]
+        #[ignore]
+        fn test_permutations() {
+            let mut v_iter = permutations([1, 2, 3].to_vec());
+            assert_eq!(v_iter.next().unwrap(), [1, 3, 2].to_vec());
+            assert_eq!(v_iter.next().unwrap(), [2, 1, 3].to_vec());
+            assert_eq!(v_iter.next().unwrap(), [2, 3, 1].to_vec());
+            assert_eq!(v_iter.next().unwrap(), [3, 1, 2].to_vec());
+            assert_eq!(v_iter.next().unwrap(), [3, 2, 1].to_vec());
+            assert_eq!(v_iter.next(), None);
         }
     }
 }

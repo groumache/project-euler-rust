@@ -86,6 +86,10 @@ pub mod prime_numbers {
             maximum: u32::max_value(),
         }
     }
+
+    pub fn nth_prime(n: usize) -> u32 {
+        primes().nth(n - 1).unwrap()
+    }
 }
 
 pub mod fibonacci {
@@ -392,6 +396,10 @@ pub mod other_func {
     }
 
     pub fn fact(n: u32) -> u32 {
+        if n == 0 {
+            return 1;
+        }
+
         (1..=n).product()
     }
 
@@ -467,6 +475,54 @@ pub mod coins {
                 && self.p5 == other.p5
                 && self.p2 == other.p2
                 && self.p1 == other.p1
+        }
+    }
+}
+
+pub mod permutations {
+    fn swap_vec(v: &mut Vec<u32>, i1: usize, i2: usize) -> () {
+        let temp = v[i1];
+        v[i1] = v[i2];
+        v[i2] = temp;
+    }
+
+    pub struct PermutationIter {
+        v: Vec<u32>,
+    }
+    impl Iterator for PermutationIter {
+        type Item = Vec<u32>;
+        fn next(&mut self) -> Option<Vec<u32>> {
+            let v_len = self.v.len();
+
+            // Find the largest index 'i' such that v[i] < v[i + 1].
+            let i_max = (0..v_len).rev()
+                .skip(1)
+                .find(|&i| self.v[i] < self.v[i + 1]);
+
+            // If no such index exists, this is the last permutation.
+            if i_max == None {
+                return None;
+            }
+            let i_max = i_max.unwrap();
+
+            // Find the largest index 'j' greater than 'i' such that v[i] < v[i].
+            let j_max = (i_max..v_len).rev()
+                .find(|&j| self.v[j] > self.v[i_max])
+                .unwrap();
+
+            // Swap v[i] and v[j]
+            swap_vec(&mut self.v, i_max, j_max);
+
+            // Reverse from v[i+1] to the end of v
+            self.v[i_max + 1..].reverse();
+
+            Some(self.v.clone())
+        }
+    }
+
+    pub fn permutations(v: Vec<u32>) -> PermutationIter {
+        PermutationIter {
+            v: v.clone(),
         }
     }
 }
