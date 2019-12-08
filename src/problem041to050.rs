@@ -1,11 +1,3 @@
-// Problem 45: Triangular, pentagonal, and hexagonal
-//   Find the next triangle number that is also pentagonal and hexagonal.
-// Problem 46: Goldbach's other conjecture
-//   What is the smallest odd composite that cannot be written as the sum
-//   of a prime and twice a square?
-// Problem 47: Distinct primes factors
-//   Find the first four consecutive integers to have four distinct prime
-//   factors each. What is the first of these numbers?
 // Problem 48: Self powers
 //   Find the last ten digits of the series, 1^1 + 2^2 + ... + 1000^1000.
 // Problem 49: Prime permutations
@@ -102,146 +94,49 @@ pub mod p044 {
     }
 }
 
+// Find the next triangle number that is also pentagonal and hexagonal.
 pub mod p045 {
-    struct TriangleNum {
-        n: u32,
-    }
-    impl Iterator for TriangleNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (n + 1) / 2)
-        }
-    }
-    fn triangle() -> TriangleNum {
-        TriangleNum { n: 1 }
-    }
-    struct PentagonNum {
-        n: u32,
-    }
-    impl Iterator for PentagonNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (3 * n - 1) / 2)
-        }
-    }
-    fn pentagon() -> PentagonNum {
-        PentagonNum { n: 1 }
-    }
-    // could check with a 'formula' [O(1)] instead of [O(n)]
-    fn is_pentagon(n: u32) -> bool {
-        for i in pentagon() {
-            if n == i {
-                return true;
-            } else if n > i {
-                break;
-            }
-        }
-        false
-    }
-    struct HexagonalNum {
-        n: u32,
-    }
-    impl Iterator for HexagonalNum {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            let n = self.n;
-            self.n += 1;
-            Some(n * (2 * n - 1))
-        }
-    }
-    fn hexagon() -> HexagonalNum {
-        HexagonalNum { n: 1 }
-    }
-    // could check with a 'formula' [O(1)] instead of [O(n)]
-    fn is_hexagon(n: u32) -> bool {
-        for i in hexagon() {
-            if n == i {
-                return true;
-            } else if n > i {
-                break;
-            }
-        }
-        false
-    }
+    use crate::useful_func::triangle_num::triangles;
+    use crate::useful_func::pentagonal_num::is_pentagon;
+    use crate::useful_func::hexagonal_num::is_hexagon;
+
     pub fn v1() -> u32 {
-        let mut num: u32 = 0;
-        for i in triangle() {
-            if i == 40_755 {
-                continue;
-            }
-            // i.e. 'next one'
-            else if is_pentagon(i) && is_hexagon(i) {
-                num = i;
-                break;
-            }
-        }
-        num
+        triangles()
+            .filter(|x| is_pentagon(*x) && is_hexagon(*x))
+            .next().unwrap()
     }
 }
 
+// What is the smallest odd composite that cannot be written as the sum
+// of a prime and twice a square ?
 pub mod p046 {
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2..=half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
-    }
-    struct Primes {
-        n: u32,
-        largest: u32,
-    }
-    impl Iterator for Primes {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            self.n += 1;
-            for i in self.largest.. {
-                if is_prime(i) {
-                    self.largest = i;
-                    break;
-                }
-            }
-            Some(self.largest)
-        }
-    }
-    fn primes() -> Primes {
-        Primes { n: 0, largest: 1 }
-    }
+    use crate::useful_func::prime_numbers::is_prime;
+
     pub fn v1() -> u32 {
-        // Maybe write a short explanation
-        let mut smallest_odd_comp: u32 = 0;
-        for i in (33..).step_by(2) {
-            for p in primes() {
-                let mut equal: bool = false;
-                if p > i {
-                    smallest_odd_comp = i;
-                    break;
-                }
-                for j in 1.. {
-                    // for j in (1 ..).map(|x| x.pow(2)) {
-                    let j = (j as u32).pow(2);
-                    if 2 * j + p > i {
-                        break;
-                    } else if 2 * j + p == i {
-                        equal = true;
-                        break;
-                    }
-                }
-                if equal {
+        let mut smallest_odd_comp = 0;
+
+        for i in (9..).step_by(2).filter(|&i| !is_prime(i)) {
+            // test the property
+            let mut property = false;
+            for j in (1_u32..).map(|j| 2 * j.pow(2)).take_while(|&j| j < i) {
+                if is_prime(i - j) {
+                    property = true;
                     break;
                 }
             }
+
+            if !property {
+                smallest_odd_comp = i;
+                break;
+            }
         }
+
         smallest_odd_comp
     }
 }
 
+// Find the first four consecutive integers to have four distinct prime
+// factors each. What is the first of these numbers ?
 pub mod p047 {
     fn is_prime(n: u32) -> bool {
         let half = n / 2;
