@@ -1,6 +1,3 @@
-// Problem 50: Consecutive prime sum
-//   Which prime, below one-million, can be written as the sum of the most consecutive primes?
-
 // What is the largest n-digit pandigital prime below 'max'?
 pub mod p041 {
     use crate::useful_func::prime_numbers::primes_range;
@@ -282,77 +279,65 @@ pub mod p049 {
     }
 }
 
+// Which prime, below 'n', can be written as the sum of the most consecutive primes ?
 pub mod p050 {
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2..=half {
-            if n % i == 0 {
-                return false;
+    use crate::useful_func::prime_numbers::{primes_below, primes};
+
+    // max number of consecutive primes that could sum up to 'n'
+    fn max_win_size(n: u32) -> u32 {
+        let mut sum = 0;
+        let mut max_num = 0;
+
+        for (i, p) in primes().enumerate() {
+            sum += p;
+
+            if sum >= n {
+                max_num = i + 1;
+                break;
             }
         }
-        true
+
+        max_num as u32
     }
-    struct Primes {
-        minimum: u32,
-        maximum: u32,
-        no_max: bool,
-    }
-    impl Iterator for Primes {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            for i in self.minimum.. {
-                if !self.no_max && i > self.maximum {
-                    return None;
-                }
-                if is_prime(i) {
-                    self.minimum = i;
-                    break;
-                }
-            }
-            Some(self.minimum)
-        }
-    }
-    /*
-        impl DoubleEndedIterator for Primes {
-            fn next_back(&mut self) -> Option<u32> {
-                let max = self.maximum;
-                for i in (self.minimum .. self.maximum).rev() {
-                    if is_prime(i) {
-                        self.maximum = i;
-                        break;
+
+    pub fn v1(n: u32) -> u32 {
+        let mut prime: u32 = 0;
+        let mut sum_len: u32 = 0;
+
+        for p in primes().take_while(|&x| x < n) {
+
+            // find the largest sum of primes that p can be written into
+            'outer: for w_size in (2..=max_win_size(p)).rev() {
+                for w in primes_below(n).windows(w_size as usize) {
+                    let mut w_sum = 0;
+                    for i in w {
+                        w_sum += i;
+                    }
+
+                    if w_sum == p && w_size > sum_len {
+                        prime = p;
+                        sum_len = w_size;
+                        break 'outer;
+                    } else if w_sum >= p {
+                        break 'outer;
                     }
                 }
-                if max == self.maximum { return None; }
-                Some(self.maximum)
             }
         }
-    */
-    fn primes(min: u32, max: u32) -> Primes {
-        Primes {
-            minimum: min,
-            maximum: max,
-            no_max: false,
-        }
+
+        prime
     }
-    fn primes_below(n: u32) -> Vec<u32> {
-        let mut primes: Vec<u32> = Vec::new();
-        for i in 2..n {
-            if is_prime(i) {
-                primes.push(i);
-            }
-        }
-        primes
-    }
-    pub fn v1() -> u32 {
+
+    pub fn v2(n: u32) -> u32 {
         let mut prime: u32 = 0;
         let mut sum_len: usize = 0;
-        let min = 1;
-        let max = 1_000_000;
-        for p in primes(min, max) {
+
+        for p in primes().take_while(|&x| x < n) {
             let p_below: Vec<u32> = primes_below(p + 1);
             let mut sum: u32 = 0;
             let mut start: usize = 0;
             let mut stop: usize = 0;
+
             loop {
                 if sum == p {
                     let length = stop - start + 1;
@@ -371,6 +356,7 @@ pub mod p050 {
                 }
             }
         }
+
         prime
     }
 }

@@ -665,4 +665,9 @@ mod tests_41to50 {
     fn test_p048() {
         assert_eq!(p048::v1(10), 0_405_071_317);
     }
+
+    #[test]
+    fn test_p050() {
+        assert_eq!(p050::v1(100), 41);
+    }
 }
