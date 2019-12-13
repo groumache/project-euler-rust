@@ -480,6 +480,10 @@ pub mod coins {
 }
 
 pub mod permutations {
+    pub fn is_permutation<T: Eq>(v1: &Vec<T>, v2: &Vec<T>) -> bool {
+        v1.iter().all(|x| v2.contains(x))
+    }
+
     fn swap_vec(v: &mut Vec<u32>, i1: usize, i2: usize) -> () {
         let temp = v[i1];
         v[i1] = v[i2];
@@ -495,7 +499,8 @@ pub mod permutations {
             let v_len = self.v.len();
 
             // Find the largest index 'i' such that v[i] < v[i + 1].
-            let i_max = (0..v_len).rev()
+            let i_max = (0..v_len)
+                .rev()
                 .skip(1)
                 .find(|&i| self.v[i] < self.v[i + 1]);
 
@@ -506,7 +511,8 @@ pub mod permutations {
             let i_max = i_max.unwrap();
 
             // Find the largest index 'j' greater than 'i' such that v[i] < v[i].
-            let j_max = (i_max..v_len).rev()
+            let j_max = (i_max..v_len)
+                .rev()
                 .find(|&j| self.v[j] > self.v[i_max])
                 .unwrap();
 
@@ -521,8 +527,6 @@ pub mod permutations {
     }
 
     pub fn permutations(v: Vec<u32>) -> PermutationIter {
-        PermutationIter {
-            v: v.clone(),
-        }
+        PermutationIter { v: v.clone() }
     }
 }

@@ -1,7 +1,7 @@
 // What is the largest n-digit pandigital prime below 'max'?
 pub mod p041 {
+    use crate::useful_func::digits::{no_double, num_to_digits};
     use crate::useful_func::prime_numbers::primes_range;
-    use crate::useful_func::digits::{num_to_digits, no_double};
 
     pub fn v1(max: u32) -> u32 {
         primes_range(1, max)
@@ -18,18 +18,16 @@ pub mod p041 {
 // Using words.txt, a 16K text file containing nearly two-thousand
 // common English words, how many are triangle words ?
 pub mod p042 {
-    use std::fs;
     use crate::useful_func::other_func::word_value;
     use crate::useful_func::triangle_num::is_triangle;
+    use std::fs;
 
     pub fn v1() -> u32 {
         let filename = "p042_words.txt";
         let contents = fs::read_to_string(filename).expect("Problem with reading the file");
         let words: Vec<&str> = contents.split(',').collect();
 
-        words.iter()
-            .filter(|w| is_triangle(word_value(w)))
-            .count() as u32
+        words.iter().filter(|w| is_triangle(word_value(w))).count() as u32
     }
 }
 
@@ -40,8 +38,8 @@ pub mod p042 {
 // d_6, d_7, d_8 is divisible by 11, the number formed by d_7, d_8, d_9 is
 // divisible by 13 and the number formed by d_8, d_9, d_10 is divisible by 17.
 pub mod p043 {
-    use crate::useful_func::permutations::permutations;
     use crate::useful_func::digits::digits_to_num;
+    use crate::useful_func::permutations::permutations;
     use crate::useful_func::prime_numbers::nth_prime;
 
     pub fn v1() -> u32 {
@@ -89,14 +87,15 @@ pub mod p044 {
 
 // Find the next triangle number that is also pentagonal and hexagonal.
 pub mod p045 {
-    use crate::useful_func::triangle_num::triangles;
-    use crate::useful_func::pentagonal_num::is_pentagon;
     use crate::useful_func::hexagonal_num::is_hexagon;
+    use crate::useful_func::pentagonal_num::is_pentagon;
+    use crate::useful_func::triangle_num::triangles;
 
     pub fn v1() -> u32 {
         triangles()
             .filter(|x| is_pentagon(*x) && is_hexagon(*x))
-            .next().unwrap()
+            .next()
+            .unwrap()
     }
 }
 
@@ -158,84 +157,16 @@ pub mod p047 {
 // Find the last ten digits of the series, 1^1 + 2^2 + ... + n^n.
 pub mod p048 {
     pub fn v1(n: u64) -> u64 {
-        (1..=n).map(|x| x.pow(x as u32) % 10_u64.pow(10))
-            .sum()
+        (1..=n).map(|x| x.pow(x as u32) % 10_u64.pow(10)).sum()
     }
 }
 
 // What 12-digit number do you form by concatenating the three terms in this sequence ?
 pub mod p049 {
-    fn get_digits(n: u32) -> Vec<u32> {
-        let mut digits: Vec<u32> = Vec::new();
-        let length = (n as f64).log10() as u32;
-        for i in 0..=length {
-            let base: u32 = 10;
-            let digit: u32 = n / base.pow(i) % 10;
-            digits.push(digit);
-        }
-        digits
-    }
-    fn get_number(digits: &Vec<u32>) -> u32 {
-        let mut num: u32 = 0;
-        let base: u32 = 10;
-        for (i, d) in digits.iter().enumerate() {
-            num += d * base.pow(i as u32);
-        }
-        num
-    }
-    fn is_prime(n: u32) -> bool {
-        let half = n / 2;
-        for i in 2..=half {
-            if n % i == 0 {
-                return false;
-            }
-        }
-        true
-    }
-    struct Primes {
-        p: u32,
-        maximum: u32,
-        no_max: bool,
-    }
-    impl Iterator for Primes {
-        type Item = u32;
-        fn next(&mut self) -> Option<u32> {
-            for i in self.p.. {
-                if !self.no_max && i > self.maximum {
-                    return None;
-                }
-                if is_prime(i) {
-                    self.p = i;
-                    break;
-                }
-            }
-            Some(self.p)
-        }
-    }
-    fn primes(min: u32, max: u32) -> Primes {
-        Primes {
-            p: min,
-            maximum: max,
-            no_max: false,
-        }
-    }
-    fn no_double(v: &mut Vec<u32>) -> bool {
-        let length = v.len();
-        v.sort();
-        v.dedup();
-        if length != v.len() {
-            return false;
-        }
-        true
-    }
-    fn is_permutation(v1: &mut Vec<u32>, v2: &mut Vec<u32>) -> bool {
-        v1.sort();
-        v2.sort();
-        if v1 == v2 {
-            return true;
-        }
-        false
-    }
+    use crate::useful_func::digits::{digits_to_num, no_double, num_to_digits};
+    use crate::useful_func::permutations::is_permutation;
+    use crate::useful_func::prime_numbers::primes_range;
+
     pub fn v1() -> u32 {
         // lots of code duplication...
         // could be better with:
@@ -249,20 +180,20 @@ pub mod p049 {
         let mut p3: u32 = 0;
         let max: u32 = 10_000;
         let min: u32 = 1000;
-        for i in primes(min, max) {
-            let mut digits1 = get_digits(i);
+        for i in primes_range(min, max) {
+            let mut digits1 = num_to_digits(i);
             if !no_double(&mut digits1) {
                 continue;
             }
             p1 = i;
-            for j in primes(i, max) {
-                let mut digits2 = get_digits(j);
+            for j in primes_range(i, max) {
+                let mut digits2 = num_to_digits(j);
                 if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
                     continue;
                 }
                 p2 = j;
-                for k in primes(j, max) {
-                    digits2 = get_digits(k);
+                for k in primes_range(j, max) {
+                    digits2 = num_to_digits(k);
                     if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
                         continue;
                     }
@@ -270,18 +201,18 @@ pub mod p049 {
                 }
             }
         }
-        let mut digits = get_digits(p1);
-        let mut digits2 = get_digits(p2);
+        let mut digits = num_to_digits(p1);
+        let mut digits2 = num_to_digits(p2);
         digits.append(&mut digits2);
-        let mut digits2 = get_digits(p3);
+        let mut digits2 = num_to_digits(p3);
         digits.append(&mut digits2);
-        get_number(&mut digits)
+        digits_to_num(&mut digits)
     }
 }
 
 // Which prime, below 'n', can be written as the sum of the most consecutive primes ?
 pub mod p050 {
-    use crate::useful_func::prime_numbers::{primes_below, primes};
+    use crate::useful_func::prime_numbers::{primes, primes_below};
 
     // max number of consecutive primes that could sum up to 'n'
     fn max_win_size(n: u32) -> u32 {
@@ -305,7 +236,6 @@ pub mod p050 {
         let mut sum_len: u32 = 0;
 
         for p in primes().take_while(|&x| x < n) {
-
             // find the largest sum of primes that p can be written into
             'outer: for w_size in (2..=max_win_size(p)).rev() {
                 for w in primes_below(n).windows(w_size as usize) {

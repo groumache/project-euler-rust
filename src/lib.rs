@@ -667,6 +667,7 @@ mod tests_41to50 {
     }
 
     #[test]
+    #[ignore]
     fn test_p050() {
         assert_eq!(p050::v1(100), 41);
     }

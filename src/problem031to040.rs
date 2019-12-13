@@ -195,7 +195,7 @@ pub mod p037 {
 // What is the largest 1 to 9 pandigital 9-digit number that can be formed as the
 // concatenated product of an integer with (1, 2, ... , n) where n > 1 ?
 pub mod p038 {
-    use crate::useful_func::digits::{no_double, num_to_digits, digits_to_num};
+    use crate::useful_func::digits::{digits_to_num, no_double, num_to_digits};
 
     // max 4 digits
     pub fn v1() -> u32 {
