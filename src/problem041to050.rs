@@ -6,11 +6,10 @@ pub mod p041 {
     pub fn v1(max: u32) -> u32 {
         primes_range(1, max)
             .rev()
-            .filter(|x| {
+            .find(|x| {
                 let mut digits = num_to_digits(*x);
                 no_double(&mut digits)
             })
-            .next()
             .unwrap()
     }
 }
@@ -93,8 +92,7 @@ pub mod p045 {
 
     pub fn v1() -> u32 {
         triangles()
-            .filter(|x| is_pentagon(*x) && is_hexagon(*x))
-            .next()
+            .find(|x| is_pentagon(*x) && is_hexagon(*x))
             .unwrap()
     }
 }
@@ -188,13 +186,13 @@ pub mod p049 {
             p1 = i;
             for j in primes_range(i, max) {
                 let mut digits2 = num_to_digits(j);
-                if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
+                if !no_double(&mut digits2) && is_permutation(&digits1, &digits2) {
                     continue;
                 }
                 p2 = j;
                 for k in primes_range(j, max) {
                     digits2 = num_to_digits(k);
-                    if !no_double(&mut digits2) && is_permutation(&mut digits1, &mut digits2) {
+                    if !no_double(&mut digits2) && is_permutation(&digits1, &digits2) {
                         continue;
                     }
                     p3 = k;
@@ -206,7 +204,7 @@ pub mod p049 {
         digits.append(&mut digits2);
         let mut digits2 = num_to_digits(p3);
         digits.append(&mut digits2);
-        digits_to_num(&mut digits)
+        digits_to_num(&digits)
     }
 }
 

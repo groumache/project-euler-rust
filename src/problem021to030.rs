@@ -98,7 +98,7 @@ pub mod p024 {
 
         for i in (0..10).rev() {
             let pos = (perm / fact(i)) as usize;
-            perm = perm % fact(i);
+            perm %= fact(i);
 
             v_fin.push(v_ini.remove(pos));
         }

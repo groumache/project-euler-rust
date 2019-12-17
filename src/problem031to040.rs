@@ -103,7 +103,7 @@ pub mod p033 {
     use crate::useful_func::digits::num_to_digits;
     use crate::useful_func::other_func::get_gcd;
 
-    pub fn no_shared_digits(v1: &Vec<u32>, v2: &Vec<u32>) -> bool {
+    pub fn no_shared_digits(v1: &[u32], v2: &[u32]) -> bool {
         v1.iter().any(|x| v2.contains(x))
     }
 
@@ -218,7 +218,7 @@ pub mod p038 {
                 continue;
             }
 
-            let new_pandigital = digits_to_num(&mut digits);
+            let new_pandigital = digits_to_num(&digits);
             max_pandigital = std::cmp::max(new_pandigital, max_pandigital);
         }
 

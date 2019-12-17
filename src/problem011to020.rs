@@ -11,7 +11,7 @@ pub mod p011 {
 
         // Horizontal
         for row in &num_grid {
-            for col in 0..(width - n_adj + 1) {
+            for col in 0..=(width - n_adj) {
                 let prod = row[col..(col + n_adj)].iter().product();
 
                 max_prod = max(prod, max_prod);
@@ -20,9 +20,7 @@ pub mod p011 {
 
         // Vertical
         for col in 0..width {
-            for row in 0..(height - n_adj + 1) {
-                // let prod = num_grid[row .. (row+n_adj)][col]
-                //     .iter().product();
+            for row in 0..=(height - n_adj) {
                 let mut prod = 1;
 
                 for i in 0..n_adj {
@@ -34,8 +32,8 @@ pub mod p011 {
         }
 
         // Diagonal 1
-        for row in 0..(height - n_adj + 1) {
-            for col in 0..(width - n_adj + 1) {
+        for row in 0..=(height - n_adj) {
+            for col in 0..=(width - n_adj) {
                 let mut prod = 1;
 
                 for i in 0..n_adj {
@@ -48,7 +46,7 @@ pub mod p011 {
 
         // Diagonal 2
         for row in (n_adj - 1)..height {
-            for col in 0..(width - n_adj + 1) {
+            for col in 0..=(width - n_adj) {
                 let mut prod = 1;
 
                 for i in 0..n_adj {

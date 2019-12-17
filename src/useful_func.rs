@@ -411,8 +411,8 @@ pub mod other_func {
 
         for p in primes_range(0, min(n1, n2)) {
             while n1 % p == 0 && n2 % p == 0 {
-                n1 = n1 / p;
-                n2 = n2 / p;
+                n1 /= p;
+                n2 /= p;
 
                 gcd *= p;
             }
@@ -480,14 +480,12 @@ pub mod coins {
 }
 
 pub mod permutations {
-    pub fn is_permutation<T: Eq>(v1: &Vec<T>, v2: &Vec<T>) -> bool {
+    pub fn is_permutation<T: Eq>(v1: &[T], v2: &[T]) -> bool {
         v1.iter().all(|x| v2.contains(x))
     }
 
-    fn swap_vec(v: &mut Vec<u32>, i1: usize, i2: usize) -> () {
-        let temp = v[i1];
-        v[i1] = v[i2];
-        v[i2] = temp;
+    fn swap_vec(v: &mut Vec<u32>, i1: usize, i2: usize) {
+        v.swap(i1, i2)
     }
 
     pub struct PermutationIter {
